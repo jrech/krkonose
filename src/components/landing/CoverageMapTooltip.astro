@@ -1,0 +1,29 @@
+---
+// Shared tooltip for the interactive towns (src/lib/coverage/map-hotspots.ts positions and fills it).
+// Decorative for assistive tech: each town's accessible name already carries the same text.
+---
+<div class="map-tooltip" data-map-tooltip aria-hidden="true">
+  <span class="map-tooltip-name" data-tooltip-name></span>
+  <span class="map-tooltip-status" data-tooltip-status></span>
+</div>
+<style>
+  .map-tooltip {
+    position: absolute; z-index: 2; left: 0; top: 0; display: grid; gap: 2px; padding: 10px 14px; max-width: 240px;
+    background: var(--pk-white); border: 1px solid var(--pk-line); border-radius: 8px; box-shadow: 0 12px 32px -20px rgb(9 46 50 / .45);
+    pointer-events: none; white-space: nowrap; opacity: 0; visibility: hidden;
+    transform: translate(-50%, calc(-100% + 4px));
+    transition: opacity var(--motion-fast) var(--ease-out), transform 240ms var(--ease-out), visibility 0s linear var(--motion-fast);
+  }
+  .map-tooltip.is-below { transform: translate(-50%, -4px); }
+  .map-tooltip.is-visible { opacity: 1; visibility: visible; transform: translate(-50%, -100%); transition-delay: 0s; }
+  .map-tooltip.is-below.is-visible { transform: translate(-50%, 0); }
+  .map-tooltip-name { color: var(--pk-ink); font-size: 15px; line-height: 20px; font-weight: 500; }
+  .map-tooltip-status { display: flex; align-items: center; gap: 8px; color: var(--pk-muted); font-size: 13px; line-height: 18px; }
+  .map-tooltip-status::before { content: ""; flex: 0 0 8px; height: 8px; border-radius: 50%; background: var(--pk-yellow); }
+  .map-tooltip[data-status='available'] .map-tooltip-status::before { background: var(--pk-success); }
+  .map-tooltip[data-status='unavailable'] .map-tooltip-status::before { background: var(--pk-muted); }
+  @media (prefers-reduced-motion: reduce) {
+    .map-tooltip, .map-tooltip.is-visible { transition: none; transform: translate(-50%, -100%); }
+    .map-tooltip.is-below, .map-tooltip.is-below.is-visible { transform: translate(-50%, 0); }
+  }
+</style>

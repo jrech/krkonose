@@ -1,0 +1,76 @@
+---
+import { navigation, site } from '../data/site';
+import Icon from './ui/Icon.astro';
+import Button from './ui/Button.astro';
+---
+<header class="site-header" data-site-header>
+  <div class="container header-inner">
+    <a class="brand" href="#uvod" aria-label="Prádelna Krkonoše — úvod"><img src="/logo.svg" alt="Prádelna Krkonoše" width="129" height="66" /></a>
+    <nav class="desktop-nav" aria-label="Hlavní navigace">{navigation.map(item => <a class="link-line" href={item.href}>{item.short ?? item.label}</a>)}</nav>
+    <a class="header-phone" href={site.phoneHref} aria-label={`Zavolat na ${site.phone}`}>
+      <Icon name="phone" /><span>{site.phone}</span>
+    </a>
+    <button class="menu-toggle" type="button" aria-controls="mobile-nav" aria-expanded="false" aria-label="Otevřít menu" hidden><Icon name="menu" /><span>Menu</span></button>
+  </div>
+  <nav id="mobile-nav" class="mobile-nav container" aria-label="Mobilní navigace" hidden>
+    {navigation.map(item => <a href={item.href}>{item.label}<Icon name="arrow-up-right" /></a>)}
+    <Button href="/kontakt/">Nezávazná poptávka</Button>
+  </nav>
+</header>
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const nav = document.querySelector<HTMLElement>('#mobile-nav');
+  const desktop = matchMedia('(min-width: 1200px)');
+  if (toggle && nav) {
+    toggle.hidden = false;
+    document.documentElement.classList.add('nav-ready');
+    function closeMenu(restoreFocus = false) {
+      if (!toggle || !nav) return;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Otevřít menu');
+      nav.hidden = true;
+      if (restoreFocus) toggle.focus();
+    }
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
+      nav.hidden = !open;
+    });
+    nav.addEventListener('click', event => { if ((event.target as Element).closest('a')) closeMenu(); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && !nav.hidden) closeMenu(true); });
+    desktop.addEventListener('change', event => { if (event.matches) closeMenu(); });
+  }
+</script>
+<style>
+  .site-header { border-bottom: 1px solid var(--pk-line); background: var(--pk-paper); }
+  .header-inner { display: flex; align-items: center; justify-content: flex-end; gap: 32px; min-height: 104px; }
+  .brand { margin-right: auto; }
+  .brand { flex: 0 0 auto; } .brand img { width: 97px; height: auto; }
+  .desktop-nav { display: flex; align-items: center; gap: 24px; }
+  .desktop-nav a { font-size: 16px; font-weight: 400; white-space: nowrap; padding-block: 2px; }
+  .desktop-nav a:hover { color: var(--pk-teal); }
+  .header-phone { min-height: 56px; padding-left: 32px; border-left: 1px solid var(--pk-line); display: inline-flex; align-items: center; gap: 8px; font-size: 14px; text-decoration: none; white-space: nowrap; }
+  .header-phone :global(.icon) { width: 20px; height: 20px; color: var(--pk-teal); }
+  .header-phone { transition: color var(--motion-hover) var(--ease-out); }
+  .header-phone:hover { color: var(--pk-teal); }
+  .menu-toggle { border: 1px solid var(--pk-line); border-radius: 8px; padding: 12px; background: transparent; color: var(--pk-ink); align-items: center; gap: 8px; cursor: pointer; font: inherit; }
+  .menu-toggle[hidden], .mobile-nav[hidden] { display: none; }
+  /* Overlays the page below the sticky bar, so opening it never pushes content. */
+  .mobile-nav { position: absolute; top: 100%; left: 0; right: 0; width: auto; margin: 0; padding: 16px var(--gutter) 32px; background: inherit; border-bottom: 1px solid var(--pk-line); box-shadow: 0 24px 40px -32px rgb(9 46 50 / .45); max-height: calc(100dvh - var(--header-h, 98px)); overflow-y: auto; overscroll-behavior: contain; }
+  .mobile-nav:not([hidden]) { animation: menu-in 260ms var(--ease-out); }
+  @keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } }
+  .mobile-nav > a:not(.button) { transition: color var(--motion-hover) var(--ease-out); }
+  .mobile-nav > a:not(.button):hover { color: var(--pk-teal); }
+  .mobile-nav > a:not(.button) { display: flex; justify-content: space-between; padding: 16px 0; border-top: 1px solid var(--pk-line); text-decoration: none; font-weight: 500; }
+  .mobile-nav :global(.button) { margin-top: 16px; }
+  @media (min-width: 1200px) { .menu-toggle { display: none; } }
+  @media (max-width: 1199px) {
+    .header-inner { flex-wrap: wrap; padding-block: 12px; }
+    .desktop-nav { order: 3; flex-basis: 100%; flex-wrap: wrap; padding-bottom: 8px; }
+    :global(.nav-ready) .desktop-nav { display: none; }
+    .menu-toggle:not([hidden]) { display: inline-flex; }
+    .header-phone { margin-left: auto; padding-left: 16px; }
+  }
+  @media (max-width: 600px) { .header-inner { min-height: 98px; } .header-phone { display: none; } }
+</style>

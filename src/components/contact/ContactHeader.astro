@@ -1,0 +1,39 @@
+---
+import { navigation, site } from '../../data/site';
+import Icon from '../ui/Icon.astro';
+// The Kontakt page keeps the landing navigation as plain back links. No yellow CTA here,
+// so nothing competes with sending the form (WEBSITE_SPEC §2).
+const toLanding = (href: string) => (href.startsWith('#') ? `/${href}` : href);
+const links = navigation.filter(item => !/kontakt/i.test(item.href));
+// Other sub-pages (legal, LLM info) reuse this header without marking Kontakt as current.
+interface Props { current?: boolean }
+const { current = true } = Astro.props;
+---
+<header class="contact-header" data-site-header>
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="Prádelna Krkonoše — úvod"><img src="/logo.svg" alt="Prádelna Krkonoše" width="129" height="66" /></a>
+    <nav class="back-nav" aria-label="Hlavní navigace">
+      {links.map(item => <a class="link-line" href={toLanding(item.href)}>{item.short ?? item.label}</a>)}
+      <a class="link-line" href="/kontakt/" aria-current={current ? "page" : undefined}>Kontakt</a>
+    </nav>
+    <a class="back-link" href="/"><Icon name="arrow-right" class="back-icon" />Zpět na úvod</a>
+    <a class="header-phone" href={site.phoneHref} aria-label={`Zavolat na ${site.phone}`}><Icon name="phone" /><span>{site.phone}</span></a>
+  </div>
+</header>
+<style>
+  .contact-header { border-bottom: 1px solid var(--pk-line); background: var(--pk-paper); }
+  .header-inner { display: flex; align-items: center; gap: 32px; min-height: 104px; }
+  .brand { margin-right: auto; flex: 0 0 auto; } .brand img { display: block; width: 97px; height: auto; }
+  .back-nav { display: flex; align-items: center; gap: 24px; }
+  .back-nav a, .back-link { font-size: 16px; text-decoration: none; white-space: nowrap; }
+  .back-nav a:hover, .back-link:hover, .header-phone:hover { color: var(--pk-teal); }
+  .back-nav a { padding-block: 2px; }
+  .back-nav a[aria-current] { color: var(--pk-teal); }
+  .back-link, .header-phone { transition: color var(--motion-hover) var(--ease-out); }
+  .back-link { display: none; align-items: center; gap: 8px; }
+  .back-link :global(.back-icon) { width: 20px; height: 20px; transform: scaleX(-1); color: var(--pk-teal); }
+  .header-phone { min-height: 56px; padding-left: 32px; border-left: 1px solid var(--pk-line); display: inline-flex; align-items: center; gap: 8px; font-size: 14px; text-decoration: none; white-space: nowrap; }
+  .header-phone :global(.icon) { width: 20px; height: 20px; color: var(--pk-teal); }
+  @media (max-width: 1199px) { .back-nav { display: none; } .back-link { display: inline-flex; } .header-phone { padding-left: 16px; } }
+  @media (max-width: 600px) { .header-inner { min-height: 88px; gap: 16px; } .header-phone span { display: none; } .header-phone { min-height: 48px; min-width: 48px; justify-content: center; } }
+</style>

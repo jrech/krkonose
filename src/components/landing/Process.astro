@@ -1,0 +1,39 @@
+---
+import { process } from '../../data/site';
+---
+<section class="process section" id="jak-to-funguje" aria-labelledby="process-title">
+  <div class="container">
+    <div class="process-heading">
+      <div><p class="eyebrow" data-reveal>04 / Jak to funguje</p><h2 id="process-title" data-reveal="heading"><span class="reveal-line">Tři kroky.</span> <span class="reveal-line">A o prádlo je postaráno.</span></h2></div>
+      <p class="lead" data-reveal>Od prvního kontaktu k režimu, který zapadne do vašeho provozu.</p>
+    </div>
+    <ol>{process.map((step, index) => <li data-reveal="card"><div class="step-marker" aria-hidden="true"><span class="step-number">0{index + 1}</span><span class="step-rule"></span></div><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol>
+  </div>
+</section>
+<style>
+  .process { background: var(--pk-paper); }
+  .process-heading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 390px); align-items: end; gap: clamp(32px, 6vw, 80px); }
+  h2 { margin: 0; }
+  .lead { max-width: 38ch; }
+  ol { list-style: none; padding: 0; margin: clamp(56px, 6.7vw, 96px) 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(32px, 4.5vw, 64px); }
+  .step-marker { display: flex; align-items: center; gap: 24px; margin-bottom: 24px; color: var(--pk-teal); }
+  .step-number { flex: 0 0 auto; font-size: 64px; line-height: 1; letter-spacing: -.04em; font-weight: 400; font-variant-numeric: tabular-nums; }
+  .step-rule { flex: 1 1 auto; height: 1px; background: var(--pk-line); transform-origin: left center; }
+  /* The rule draws out from the number as its step reveals. */
+  :global(.motion) li:global(.is-revealed) .step-rule { animation: step-rule var(--motion-image) var(--ease-out) calc(var(--rv-delay, 0ms) + 120ms) backwards; }
+  @keyframes step-rule { from { transform: scaleX(0); } }
+  h3 { margin-bottom: 12px; font-size: 24px; line-height: 1.3; letter-spacing: -.035em; font-weight: 600; }
+  li p { font-size: 18px; line-height: 1.55; color: var(--pk-muted); max-width: 32ch; }
+  @media (max-width: 900px) {
+    .process-heading { grid-template-columns: 1fr; gap: 16px; }
+    ol { grid-template-columns: 1fr; gap: 40px; }
+    li p { max-width: 48ch; }
+  }
+  @media (max-width: 760px) {
+    ol { margin-top: 40px; gap: 32px; }
+    .step-number { font-size: 48px; }
+    .step-marker { gap: 16px; margin-bottom: 16px; }
+    h3 { font-size: 20px; }
+    li p { font-size: 16px; }
+  }
+</style>

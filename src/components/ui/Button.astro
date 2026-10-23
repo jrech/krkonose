@@ -1,0 +1,8 @@
+---
+import Icon from './Icon.astro';
+interface Props { href: string; secondary?: boolean; arrow?: boolean; segment?: string; class?: string }
+const { href, secondary = false, arrow = true, segment, class: className } = Astro.props;
+---
+<a class:list={['button', { 'button--secondary': secondary }, className]} href={href} data-segment={segment}>
+  <span class="button-label"><span class="button-label-text"><slot /></span></span>{arrow && <Icon name="arrow-up-right" />}
+</a>

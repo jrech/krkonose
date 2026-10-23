@@ -1,0 +1,68 @@
+---
+import LegalPage from '../components/legal/LegalPage.astro';
+import { controller, cookies, legalUpdated, type CookieCategory } from '../data/legal';
+// Structure inspired by vsfg.cz/cookies: what we store, what is behind it, your choice.
+// Entries come from data/legal.ts; switch `active` there when GA or the consent banner goes live.
+const categories: { id: CookieCategory; title: string; empty: string }[] = [
+  { id: 'necessary', title: 'Nezbytné', empty: 'Web zatím nic nezbytného neukládá.' },
+  { id: 'analytics', title: 'Analytické', empty: 'Analytické cookies nepoužíváme.' },
+  { id: 'third-party', title: 'Vložený obsah třetích stran', empty: 'Žádný vložený obsah třetích stran nepoužíváme.' },
+  { id: 'marketing', title: 'Marketingové', empty: 'Marketingové ani reklamní cookies nepoužíváme a údaje inzerentům nepředáváme.' },
+];
+const toc = [
+  { id: 'co-ukladame', label: 'Co ukládáme' },
+  { id: 'co-za-tim-je', label: 'Co je za tím' },
+  { id: 'vase-volba', label: 'Vaše volba' },
+];
+---
+<LegalPage
+  title="Cookies | Prádelna Krkonoše"
+  eyebrow="Cookies"
+  heading={['Cookies']}
+  lead="Které cookies a podobná úložiště web používá, k čemu slouží a jak svůj souhlas změníte."
+  updated={legalUpdated.cookies}
+  toc={toc}
+>
+  <section id="co-ukladame">
+    <h2>01 / Co ukládáme</h2>
+    {categories.map(category => (
+      <>
+        <h3>{category.title}</h3>
+        {cookies[category.id].length === 0 ? <p>{category.empty}</p> : cookies[category.id].map(entry => (
+          <div class="cookie">
+            <p class="cookie-name">{entry.name}{!entry.active && <span class="cookie-badge">Připravujeme</span>}</p>
+            <p>{entry.purpose}</p>
+            <dl>
+              <div><dt>Úložiště</dt><dd>{entry.storage}</dd></div>
+              <div><dt>Platnost</dt><dd>{entry.validity}</dd></div>
+              <div><dt>Souhlas</dt><dd>{entry.consent}</dd></div>
+              <div><dt>Zpracovatel</dt><dd>{entry.processor}</dd></div>
+            </dl>
+          </div>
+        ))}
+      </>
+    ))}
+  </section>
+
+  <section id="co-za-tim-je">
+    <h2>02 / Co je za tím</h2>
+    <p>Cookies jsou malé textové soubory, které si web ukládá ve vašem prohlížeči. Podobně funguje localStorage, jen se jeho obsah neposílá na server s každým požadavkem. Nezbytná úložiště potřebuje web k fungování, ostatní smí použít jen s vaším souhlasem.</p>
+    <p>Písmo webu načítáme z vlastního serveru, ne z Google Fonts, takže kvůli němu se vaše data nikam neposílají.</p>
+    <p>Správcem je {controller.legalName}{controller.companyId && `, IČO ${controller.companyId}`}, {controller.address}, <a href={`mailto:${controller.email}`}>{controller.email}</a>. Víc o zpracování údajů najdete na stránce <a href="/ochrana-osobnich-udaju/">Ochrana osobních údajů</a>.</p>
+  </section>
+
+  <section id="vase-volba">
+    <h2>03 / Vaše volba</h2>
+    <p>Při první návštěvě se vás lištou zeptáme, co smíme používat. Svou volbu můžete kdykoli změnit tady nebo odkazem Nastavení cookies v patičce.</p>
+    <p><button type="button" class="button button--secondary" data-consent-open hidden><span class="button-label"><span class="button-label-text">Změnit nastavení cookies</span></span></button></p>
+    <p>Souhlas odvoláte také tím, že v prohlížeči smažete data tohoto webu. Bez souhlasu web nic neměří. Mapu Google na stránce Kontakt můžete povolit i tlačítkem přímo u ní.</p>
+  </section>
+</LegalPage>
+
+<style>
+  .cookie { display: grid; gap: 12px; padding: 24px; border-radius: 12px; background: var(--pk-white); border: 1px solid var(--pk-line); }
+  .cookie-name { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-weight: 500; }
+  .cookie-badge { padding: 2px 10px; border-radius: 999px; background: #087f8614; color: var(--pk-teal); font-size: 12px; line-height: 20px; font-weight: 400; }
+  .cookie dl { margin-top: 4px; }
+  @media (max-width: 760px) { .cookie { padding: 20px; } }
+</style>

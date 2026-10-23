@@ -1,0 +1,63 @@
+:root {
+  --pk-ink: #092e32;
+  --pk-deep-teal: #075b66;
+  --pk-teal: #087f86;
+  --pk-teal-hover: #06666c;
+  --pk-yellow: #ffd166;
+  --pk-yellow-hover: #f2be4b;
+  --pk-paper: #f5f8f6;
+  --pk-white: #fff;
+  --pk-muted: #53696b;
+  --pk-line: #d6e1de;
+  --pk-error: #b63838;
+  --pk-success: #236a4b;
+  --pk-dark-muted: #d6e1de;
+  --font-sans: 'Rethink Sans', Arial, sans-serif;
+  --text-display: clamp(2.75rem, 5.56vw, 5rem);
+  --text-h2: clamp(2rem, 3.2vw, 3rem);
+  --text-h3: clamp(1.5rem, 2vw, 1.75rem);
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+  --space-7: 4rem;
+  --space-8: 5rem;
+  --space-9: 7.5rem;
+  --space-10: 10rem;
+  --section-space: clamp(5rem, 8.4vw, 7.5rem);
+  --gutter: clamp(1.25rem, 3.34vw, 4rem);
+  --content-width: 90rem;
+  --radius-control: .5rem;
+  --radius-image: 1rem;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  /* Motion: one curve, four speeds. Reveal variants live in global.css, timing in scripts/reveal.ts. */
+  --motion-fast: 200ms;
+  --motion-hover: 400ms; /* nav and footer link hovers */
+  --motion-text: 650ms;
+  --motion-heading: 850ms;
+  --motion-card: 750ms;
+  --motion-image: 1100ms;
+  --motion-stagger: 90ms;
+  --motion-line-stagger: 110ms;
+  --motion-shift-text: 14px;
+  --motion-shift-heading: 22px;
+  --motion-shift-card: 18px;
+  --motion-image-scale: 1.04;
+  --header-entrance: 160ms; /* hero reveals start once the header has begun settling */
+}
+@media (max-width: 760px) {
+  :root {
+    --motion-text: 550ms;
+    --motion-heading: 700ms;
+    --motion-card: 600ms;
+    --motion-image: 900ms;
+    --motion-stagger: 60ms;
+    --motion-line-stagger: 80ms;
+    --motion-shift-text: 10px;
+    --motion-shift-heading: 14px;
+    --motion-shift-card: 12px;
+    --motion-image-scale: 1.02;
+  }
+}

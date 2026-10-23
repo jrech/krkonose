@@ -1,0 +1,32 @@
+---
+import { faqs } from '../../data/site';
+import { showTestimonial } from '../../data/testimonial';
+import Icon from '../ui/Icon.astro';
+---
+<section class="section faq" aria-labelledby="faq-title"><div class="container faq-layout">
+  <div><p class="eyebrow" data-reveal>{showTestimonial ? '07' : '06'} / Časté dotazy</p><h2 id="faq-title" data-reveal="heading">Před prvním svozem.</h2><p class="lead" data-reveal>Odpovědi na to, co provozy řeší nejčastěji. Konkrétní podmínky potvrdíme při poptávce.</p></div>
+  <div class="faq-list" data-reveal="card">{faqs.map((faq, i) => <details name="faq" open={i === 0}><summary>{faq.question}<Icon name="plus" /></summary><p>{faq.answer}</p></details>)}</div>
+</div></section>
+<style>
+  .faq { background: var(--pk-paper); }
+  .faq-layout { display: grid; grid-template-columns: minmax(260px, 400px) minmax(0, 1fr); gap: clamp(40px, 5.6vw, 80px); align-items: start; }
+  h2 { margin-bottom: 16px; }
+  .faq .lead { font-size: 18px; }
+  details { border-bottom: 1px solid var(--pk-line); }
+  summary { list-style: none; cursor: pointer; padding: 40px 0; display: flex; align-items: center; justify-content: space-between; gap: 24px; font-size: 24px; line-height: 1.3; letter-spacing: -.032em; font-weight: 500; }
+  summary::-webkit-details-marker { display: none; }
+  summary :global(.icon) { width: 44px; height: 24px; color: var(--pk-teal); }
+  details[open] summary { padding-bottom: 16px; }
+  details[open] summary :global(.icon path:last-child) { opacity: 0; }
+  details p { padding: 0 68px 40px 0; color: var(--pk-muted); }
+  summary :global(.icon path) { transition: opacity var(--motion-fast) var(--ease-out); }
+  summary { transition: color var(--motion-fast) var(--ease-out); } summary:hover { color: var(--pk-teal); }
+  /* Answers open and close smoothly where the browser can size to auto; elsewhere they toggle. */
+  @supports (interpolate-size: allow-keywords) {
+    details { interpolate-size: allow-keywords; }
+    details::details-content { block-size: 0; overflow-y: clip; transition: block-size 360ms var(--ease-out), content-visibility 360ms allow-discrete; }
+    details[open]::details-content { block-size: auto; }
+  }
+  @media (max-width: 900px) { .faq-layout { grid-template-columns: 1fr; gap: 24px; } }
+  @media (max-width: 760px) { summary { font-size: 20px; padding-block: 28px; } details p { padding: 0 0 28px; } }
+</style>

@@ -1,0 +1,29 @@
+---
+import { testimonial } from '../../data/testimonial';
+---
+<section class="section testimonial" aria-labelledby="testimonial-title"><div class="container">
+  <p class="eyebrow" id="testimonial-title" data-reveal>06 / Reference</p>
+  <figure class="testimonial-body">
+    <blockquote data-reveal="heading"><p>„{testimonial.quote}“</p></blockquote>
+    <figcaption data-reveal><span class="accent" aria-hidden="true"></span><span class="role">{testimonial.role}</span><span class="place">{testimonial.place}</span></figcaption>
+  </figure>
+</div></section>
+<style>
+  .testimonial { background: var(--pk-white); }
+  .testimonial .eyebrow { margin-bottom: 40px; }
+  /* Quote starts where the eyebrow text does, past its 32 px rule and 8 px gap. */
+  .testimonial-body { margin: 0 0 0 40px; max-width: 1000px; }
+  blockquote { margin: 0; }
+  blockquote p { font-size: clamp(28px, 2.8vw, 40px); line-height: 1.25; letter-spacing: -.035em; font-weight: 500; color: var(--pk-ink); text-wrap: pretty; text-indent: -.4em; }
+  figcaption { display: grid; grid-template-columns: 32px auto; column-gap: 16px; row-gap: 2px; align-items: center; justify-content: start; margin-top: 40px; }
+  .accent { grid-row: 1 / span 2; width: 32px; height: 2px; background: var(--pk-teal); }
+  .role { font-size: 18px; line-height: 28px; color: var(--pk-ink); font-weight: 500; }
+  .place { grid-column: 2; font-size: 14px; line-height: 20px; color: var(--pk-muted); }
+  @media (max-width: 760px) {
+    .testimonial .eyebrow { margin-bottom: 24px; }
+    .testimonial-body { margin-left: 0; }
+    blockquote p { text-indent: 0; }
+    figcaption { margin-top: 28px; }
+    .role { font-size: 16px; line-height: 24px; }
+  }
+</style>

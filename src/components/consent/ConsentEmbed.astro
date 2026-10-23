@@ -1,0 +1,58 @@
+---
+import Icon from '../ui/Icon.astro';
+// Third-party iframe that loads only after consent for its category. Until then it shows a
+// placeholder of the same size with a button that grants just that category.
+interface Props { category: 'maps'; src: string; title: string; text: string; button: string }
+const { category, src, title, text, button } = Astro.props;
+---
+<div class="consent-embed" data-consent-embed={category} data-src={src} data-title={title}>
+  <div class="consent-placeholder">
+    <Icon name="map-pin" class="consent-icon" />
+    <p>{text}</p>
+    <button type="button" class="button button--secondary" data-consent-grant hidden><span class="button-label"><span class="button-label-text">{button}</span></span></button>
+    <noscript><p class="consent-small">Mapa potřebuje zapnutý JavaScript.</p></noscript>
+  </div>
+</div>
+
+<script>
+  import { CONSENT_EVENT, grantConsent, hasConsent, type ConsentCategory } from '../../lib/consent/consent';
+
+  document.querySelectorAll<HTMLElement>('[data-consent-embed]').forEach(embed => {
+    const category = embed.dataset.consentEmbed as ConsentCategory;
+    const placeholder = embed.querySelector<HTMLElement>('.consent-placeholder');
+    const grant = embed.querySelector<HTMLButtonElement>('[data-consent-grant]');
+    let iframe: HTMLIFrameElement | null = null;
+
+    const sync = () => {
+      const allowed = hasConsent(category);
+      if (allowed && !iframe) {
+        iframe = document.createElement('iframe');
+        iframe.src = embed.dataset.src ?? '';
+        iframe.title = embed.dataset.title ?? '';
+        iframe.loading = 'lazy';
+        iframe.referrerPolicy = 'no-referrer-when-downgrade';
+        iframe.allowFullscreen = true;
+        embed.append(iframe);
+      } else if (!allowed && iframe) {
+        iframe.remove();
+        iframe = null;
+      }
+      if (placeholder) placeholder.hidden = allowed;
+    };
+
+    if (grant) { grant.hidden = false; grant.addEventListener('click', () => grantConsent(category)); }
+    document.addEventListener(CONSENT_EVENT, sync);
+    sync();
+  });
+</script>
+
+<style>
+  .consent-embed { position: relative; width: 100%; height: 100%; }
+  .consent-embed :global(iframe) { display: block; width: 100%; height: 100%; border: 0; animation: cc-embed-in var(--motion-text) var(--ease-out); }
+  .consent-placeholder { height: 100%; display: grid; place-content: center; justify-items: center; gap: 16px; padding: 32px; text-align: center; background: var(--pk-white); border: 1px solid var(--pk-line); border-radius: inherit; }
+  .consent-placeholder p { max-width: 44ch; color: var(--pk-muted); }
+  .consent-placeholder :global(.consent-icon) { width: 32px; height: 32px; color: var(--pk-teal); }
+  .consent-placeholder .button { min-height: 48px; }
+  .consent-small { font-size: 14px; }
+  @keyframes cc-embed-in { from { opacity: 0; } }
+</style>

@@ -1,0 +1,74 @@
+---
+import { Image } from 'astro:assets';
+import { segments } from '../../data/segments';
+import Icon from '../ui/Icon.astro';
+---
+<section class="section segments" id="pro-koho" aria-labelledby="segments-title">
+  <div class="container">
+    <div class="section-heading"><p class="eyebrow" data-reveal>02 / Pro koho pereme</p><h2 id="segments-title" data-reveal="heading"><span class="reveal-line">Každý provoz má jiné nároky.</span> <span class="reveal-line">My se jim přizpůsobíme.</span></h2><p class="lead" data-reveal>Od menších penzionů po vytížené hotely. Domluvíme způsob spolupráce podle potřeb vašeho provozu.</p></div>
+    <div class="segment-stack">{segments.map((segment, i) => <article class="segment-card" data-reveal="card" style={`--card-index: ${i}`} aria-labelledby={`segment-${segment.id}`}>
+      <div class="segment-copy">
+        <p class="segment-label">0{i + 1} / {segment.category}</p>
+        <h3 id={`segment-${segment.id}`}>{segment.title}</h3>
+        <p class="segment-lead">{segment.lead}</p>
+        <p class="segment-text">{segment.text}</p>
+        <div class="segment-textiles"><p class="textiles-label" id={`textiles-${segment.id}`}>Co pro vás vypereme</p><ul aria-labelledby={`textiles-${segment.id}`}>{segment.textiles.map(item => <li>{item}</li>)}</ul></div>
+        <a class="segment-inquiry text-link" href={`/kontakt/?provoz=${segment.id}`}>{segment.cta}<Icon name="arrow-up-right" /></a>
+      </div>
+      <div class="segment-photo reveal-frame"><Image src={segment.image} alt={segment.alt} widths={[480, 720, 1024]} sizes="(max-width: 760px) calc(100vw - 72px), 520px" format="webp" loading="lazy" /></div>
+    </article>)}</div>
+    <p class="image-note" data-reveal>Fotografie jednotlivých provozů jsou ilustrační.</p>
+  </div>
+</section>
+<style>
+  .segments { background: var(--pk-paper); }
+  .section-heading h2 { margin-bottom: 24px; }
+  .segment-stack { margin-top: 48px; display: grid; gap: 24px; }
+  .segment-card { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 520px); align-items: stretch; gap: clamp(32px, 5vw, 72px); border-radius: 10px; background: var(--pk-white); overflow: clip; padding: 40px; }
+  /* Hierarchy by spacing: category + title, benefit + description, what we wash, CTA. */
+  .segment-copy { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+  .segment-label { color: var(--pk-teal); font-size: 12px; line-height: 16px; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 16px; }
+  h3 { margin-bottom: 24px; }
+  .segment-lead { margin-bottom: 8px; }
+  .segment-textiles { margin-top: 28px; }
+  .textiles-label { font-size: 12px; line-height: 16px; letter-spacing: .08em; text-transform: uppercase; color: var(--pk-muted); margin-bottom: 12px; }
+  /* Informational labels, not buttons: no hover, no shadow. */
+  .segment-textiles ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .segment-textiles li { padding: 8px 12px; border: 1px solid #dfe9e5; border-radius: 6px; background: #f0f5f2; color: var(--pk-deep-teal); font-size: 14px; line-height: 20px; }
+  h3 { font-size: var(--text-h2); line-height: 1.145; letter-spacing: -.035em; }
+  .segment-lead { font-size: 24px; line-height: 1.3; font-weight: 500; letter-spacing: -.035em; }
+  .segment-text { color: var(--pk-muted); font-size: 18px; line-height: 1.55; max-width: 52ch; }
+  /* 12 px padding keeps a 44 px target; the margins leave a 24 px visual gap below the pills. */
+  .segment-inquiry { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; text-decoration: none; padding-block: 12px; margin: 12px 0 -12px; }
+  .segment-inquiry:hover { text-decoration: underline; }
+  .segment-inquiry :global(.icon) { width: 16px; height: 16px; }
+  .segment-photo { border-radius: 6px; --rv-radius: 6px; }
+  /* The copy sets the card height; the photo fills it without its own intrinsic height adding to it. */
+  .segment-photo { position: relative; min-height: 390px; }
+  .segment-card img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; }
+  .image-note { margin-top: 20px; color: var(--pk-muted); font-size: 12px; }
+  @media (min-width: 1000px) and (min-height: 900px) and (prefers-reduced-motion: no-preference) { .segment-card { position: sticky; top: calc(var(--header-h, 0px) + 24px + var(--card-index) * 16px); } }
+  @media (max-width: 1000px) {
+    .segment-card { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; padding: 32px; }
+    h3 { font-size: 36px; }
+    .segment-lead { font-size: 20px; }
+    .segment-text { font-size: 16px; }
+    .segment-photo { min-height: 340px; }
+  }
+  @media (max-width: 760px) {
+    .segment-stack { margin-top: 32px; gap: 16px; }
+    .segment-card { grid-template-columns: 1fr; gap: 24px; padding: 20px; border-radius: 16px; }
+    .segment-label { font-size: 13px; letter-spacing: 1px; margin-bottom: 12px; }
+    h3 { margin-bottom: 16px; }
+    .segment-textiles { margin-top: 20px; }
+    .segment-textiles ul { gap: 6px; }
+    .segment-textiles li { padding: 6px 10px; font-size: 13px; line-height: 18px; }
+    .segment-inquiry { margin-top: 8px; }
+    h3 { font-size: 32px; }
+    .segment-lead { font-size: 18px; }
+    .segment-text { font-size: 16px; }
+    .segment-photo { border-radius: 12px; --rv-radius: 12px; }
+    .segment-photo { min-height: 0; }
+    .segment-card img { position: static; height: auto; aspect-ratio: 4 / 3; }
+  }
+</style>

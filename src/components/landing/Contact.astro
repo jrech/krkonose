@@ -1,0 +1,60 @@
+---
+import { site } from '../../data/site';
+---
+<section class="contact" id="kontakt" aria-labelledby="contact-title">
+  <div class="container">
+    <p class="eyebrow" data-reveal>Další krok / Jasná domluva</p>
+    <h2 id="contact-title" data-reveal="heading"><span class="reveal-line">Vy řešte hosty.</span> <span class="reveal-line">My se postaráme o prádlo.</span></h2>
+    <div class="contact-row">
+      <p class="lead" data-reveal>Řekněte nám, jak funguje váš provoz. Společně najdeme vhodný způsob praní a svozu.</p>
+      <div class="contact-action" data-reveal>
+        <p id="contact-context" tabindex="-1" aria-live="polite" hidden></p>
+        <a class="button" href="/kontakt/" data-inquiry-link><span class="button-label"><span class="button-label-text">Nezávazná poptávka</span></span></a>
+        <p class="contact-note">Stačí obec, typ provozu a telefon nebo e-mail. Raději e-mailem? <a href={`mailto:${site.email}`}>{site.email}</a></p>
+      </div>
+      <div class="contact-call" data-reveal><p>Raději rovnou zavoláte?</p><a href={site.phoneHref}>{site.phone}</a></div>
+    </div>
+  </div>
+</section>
+<script>
+  // Inquiry links carry the address checked in Svozová oblast to /kontakt/, which prefills the form.
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-inquiry-link]');
+  const context = document.querySelector<HTMLElement>('#contact-context');
+  let locality = new URLSearchParams(location.search).get('lokalita')?.trim().slice(0, 180) || '';
+  function updateInquiry() {
+    const query = locality ? `?${new URLSearchParams({ lokalita: locality })}` : '';
+    links.forEach(link => { link.href = `/kontakt/${query}`; });
+    if (!context) return;
+    context.hidden = !locality;
+    context.textContent = locality ? `Adresa provozu: ${locality}. Ve formuláři ji už najdete vyplněnou.` : '';
+  }
+  document.addEventListener('inquiry-context', event => { locality = (event as CustomEvent<{ locality: string }>).detail.locality; updateInquiry(); });
+  updateInquiry();
+</script>
+<style>
+  .contact { background: var(--pk-deep-teal); color: var(--pk-white); padding-block: var(--section-space); }
+  .contact .eyebrow { color: var(--pk-yellow); margin-bottom: 32px; }
+  .contact .eyebrow::before { background: var(--pk-yellow); }
+  .contact h2 { font-size: clamp(44px, 7.2vw, 104px); line-height: 1.02; letter-spacing: -.045em; font-weight: 500; text-wrap: nowrap; }
+  .contact-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr); align-items: start; gap: clamp(32px, 4.5vw, 64px); margin-top: clamp(48px, 6.7vw, 96px); padding-top: 32px; border-top: 1px solid #ffffff33; }
+  .lead { color: var(--pk-dark-muted); max-width: 34ch; }
+  .contact-action { display: grid; gap: 16px; justify-items: start; }
+  #contact-context { padding: 10px 14px; border-radius: 8px; background: #ffffff14; color: var(--pk-white); font-size: 14px; line-height: 20px; }
+  .contact-note { color: var(--pk-dark-muted); font-size: 14px; line-height: 20px; max-width: 36ch; }
+  .contact-note a { color: var(--pk-white); text-underline-offset: 3px; transition: color var(--motion-hover) var(--ease-out); }
+  .contact-call { display: grid; gap: 8px; padding-left: clamp(24px, 3vw, 40px); border-left: 1px solid #ffffff33; }
+  .contact-call p { color: var(--pk-dark-muted); }
+  .contact-call a { font-size: 28px; line-height: 1.25; font-weight: 500; letter-spacing: -.035em; text-decoration: none; transition: color var(--motion-hover) var(--ease-out); }
+  @media (hover: hover) { .contact-call a:hover, .contact-note a:hover { color: var(--pk-yellow); } }
+  @media (max-width: 1000px) {
+    .contact-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .lead { grid-column: 1 / -1; max-width: 52ch; }
+  }
+  @media (max-width: 760px) {
+    .contact h2 { text-wrap: balance; }
+    .contact-row { grid-template-columns: 1fr; gap: 32px; }
+    .contact-action .button { width: 100%; }
+    .contact-action { justify-items: stretch; }
+    .contact-call { padding-left: 0; padding-top: 24px; border-left: 0; border-top: 1px solid #ffffff33; }
+  }
+</style>

@@ -1,0 +1,81 @@
+---
+import Icon from '../ui/Icon.astro';
+import { site } from '../../data/site';
+---
+<div class="address-search" data-address-search data-state="idle">
+  <!-- Without JS the form still works: GET to /kontakt/ prefills the inquiry from ?lokalita=. -->
+  <form action="/kontakt/" novalidate>
+    <label for="address-input">Adresa provozovny</label>
+    <div class="field">
+      <Icon name="search" />
+      <input id="address-input" name="lokalita" type="text" autocomplete="street-address" maxlength="180" placeholder="Např. Krkonošská 12, Vrchlabí" enterkeyhint="search" spellcheck="false" />
+      <div class="popup" data-popup hidden>
+        <ul id="address-options" role="listbox" aria-label="Návrhy adres"></ul>
+        <p class="popup-status" data-status hidden></p>
+      </div>
+    </div>
+    <button class="button" type="submit"><span class="button-label"><span class="button-label-text">Zkontrolovat adresu</span></span></button>
+  </form>
+  <p class="visually-hidden" data-announcer aria-live="polite"></p>
+  <div class="result" data-result role="status" hidden>
+    <p class="result-title" data-result-title></p>
+    <p class="result-text" data-result-text></p>
+    <p class="result-actions">
+      <a class="button result-cta" href="/kontakt/" data-inquiry-link data-result-cta hidden><span class="button-label"><span class="button-label-text">Poptat svoz</span></span></a>
+      <a class="text-link" href="/kontakt/" data-inquiry-link data-result-link>Pokračovat k poptávce</a><a class="text-link" href={site.phoneHref}>Zavolat {site.phone}</a>
+    </p>
+  </div>
+</div>
+<script>
+  import { initAddressSearch } from '../../lib/address/combobox';
+  import { getLookupClient } from '../../lib/address/client';
+  import { coverageCopy, placeCopy } from '../../data/coverage-copy';
+  import { PLACE_CLEAR, PLACE_SELECT, type PlaceSelectDetail } from '../../lib/coverage/map-hotspots';
+
+  const root = document.querySelector<HTMLElement>('[data-address-search]');
+  if (root) {
+    const search = initAddressSearch({
+      root,
+      client: getLookupClient(),
+      copy: coverageCopy,
+      // The contact section turns this into the inquiry link and e-mail ("Obec / adresa").
+      onAddress: locality => document.dispatchEvent(new CustomEvent('inquiry-context', { detail: { locality } })),
+      onEdit: () => document.dispatchEvent(new CustomEvent(PLACE_CLEAR)),
+    });
+    // A town picked on the map: the status comes from service-area.ts via the map markup.
+    document.addEventListener(PLACE_SELECT, event => {
+      const { name, status } = (event as CustomEvent<PlaceSelectDetail>).detail;
+      const copy = placeCopy[status];
+      search.setPlace(name, { title: copy.title.replace('{place}', name), text: copy.text, link: copy.cta, kind: status, primary: status === 'available' });
+    });
+  }
+</script>
+<style>
+  form { margin-top: 32px; display: grid; gap: 8px; }
+  label { font-size: 14px; line-height: 20px; }
+  .field { position: relative; }
+  .field :global(.icon) { position: absolute; left: 16px; top: 18px; width: 20px; height: 20px; color: var(--pk-muted); pointer-events: none; }
+  .field input { min-height: 56px; padding-left: 48px; }
+  .field input:focus-visible { outline-offset: 0; border-color: var(--pk-teal); }
+  form .button { width: 100%; margin-top: 16px; }
+  /* Overlays the button below instead of pushing content: no layout shift. */
+  .popup { position: absolute; z-index: 5; top: calc(100% + 4px); left: 0; right: 0; max-height: min(320px, 50vh); overflow-y: auto; overscroll-behavior: contain; background: var(--pk-white); border: 1px solid var(--pk-line); border-radius: var(--radius-control); padding: 4px; }
+  [role='listbox'] { list-style: none; margin: 0; padding: 0; }
+  [role='listbox']:empty { display: none; }
+  [role='listbox'] :global([role='option']) { display: grid; gap: 2px; min-height: 48px; align-content: center; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 15px; line-height: 20px; }
+  [role='listbox'] :global([aria-selected='true']) { background: var(--pk-paper); color: var(--pk-deep-teal); }
+  [role='listbox'] :global(.option-detail) { color: var(--pk-muted); font-size: 13px; line-height: 18px; }
+  .popup-status { margin: 0; padding: 12px; color: var(--pk-muted); font-size: 14px; line-height: 20px; }
+  .result { scroll-margin-block: calc(var(--header-h, 80px) + 16px) 16px; margin-top: 24px; padding: 20px 24px; border-radius: var(--radius-control); background: var(--pk-paper); border-left: 2px solid var(--pk-teal); }
+  .result-title { font-weight: 500; line-height: 1.4; }
+  .result-text { margin-top: 4px; color: var(--pk-muted); font-size: 15px; line-height: 1.5; }
+  .result-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 24px; margin-top: 12px; font-size: 15px; }
+  .result-actions .result-cta { min-height: 48px; padding-block: 10px; font-size: 15px; }
+  .result[data-kind='available'] { border-left-color: var(--pk-success); }
+  .address-search[aria-busy='true'] .button { cursor: progress; opacity: .8; }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  @media (max-width: 760px) {
+    form { margin-top: 24px; }
+    .result { padding: 16px; }
+  }
+</style>

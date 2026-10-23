@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Hero from '../components/landing/Hero.astro';
+import Services from '../components/landing/Services.astro';
+import Segments from '../components/landing/Segments.astro';
+import Coverage from '../components/landing/Coverage.astro';
+import Process from '../components/landing/Process.astro';
+import Quality from '../components/landing/Quality.astro';
+import Testimonial from '../components/landing/Testimonial.astro';
+import Faq from '../components/landing/Faq.astro';
+import Contact from '../components/landing/Contact.astro';
+import { showTestimonial } from '../data/testimonial';
+---
+<BaseLayout><SiteHeader /><main id="main"><Hero /><Services /><Segments /><Coverage /><Process /><Quality />{showTestimonial && <Testimonial />}<Faq /><Contact /></main><SiteFooter /></BaseLayout>

@@ -1,0 +1,161 @@
+---
+import Icon from '../ui/Icon.astro';
+// Cookie consent: a bar until the visitor chooses, and a settings dialog that any
+// [data-consent-open] button reopens (footer, /cookies/). Categories mirror data/legal.ts.
+// Without JS nothing here shows, and nothing that needs consent loads either.
+const categories = [
+  { id: 'necessary', title: 'Nezbytné', text: 'Uloží jen vaši volbu, abychom se neptali při každé návštěvě. Bez toho by lišta naskakovala pořád.', locked: true },
+  { id: 'analytics', title: 'Analytické (Google Analytics)', text: 'Anonymně měří návštěvnost a to, jak se web používá. Pomáhá nám ho zlepšovat. Zpracovatel: Google Ireland Limited.' },
+  { id: 'maps', title: 'Vložená mapa (Google Mapy)', text: 'Zobrazí mapu s polohou provozovny na stránce Kontakt. Google při jejím načtení ukládá vlastní cookies.' },
+];
+---
+<div class="cc-bar" data-cc-bar role="region" aria-label="Souhlas s cookies" hidden>
+  <div class="container cc-bar-inner">
+    <p class="cc-bar-text">Se souhlasem měříme návštěvnost přes Google Analytics a na stránce Kontakt ukážeme mapu Google. Bez souhlasu neměříme nic, uložíme si jen vaši volbu. <a href="/cookies/">Zásady cookies</a></p>
+    <div class="cc-bar-actions">
+      <button type="button" class="cc-btn" data-cc-accept><span class="button-label"><span class="button-label-text">Přijmout vše</span></span></button>
+      <button type="button" class="cc-btn" data-cc-reject><span class="button-label"><span class="button-label-text">Jen nezbytné</span></span></button>
+      <button type="button" class="cc-btn cc-btn--ghost" data-consent-open><span class="button-label"><span class="button-label-text">Nastavení</span></span></button>
+    </div>
+  </div>
+</div>
+
+<dialog class="cc-dialog" data-cc-dialog aria-labelledby="cc-title" aria-describedby="cc-desc">
+  <form method="dialog" class="cc-form" data-cc-form>
+    <div class="cc-head">
+      <h2 id="cc-title">Nastavení cookies</h2>
+      <button type="button" class="cc-close" data-cc-close aria-label="Zavřít nastavení"><Icon name="close" /></button>
+    </div>
+    <p id="cc-desc" class="cc-desc">Vyberte, co smíme používat. Volbu můžete kdykoli změnit v patičce webu nebo na stránce <a href="/cookies/">Cookies</a>.</p>
+    <ul class="cc-list">
+      {categories.map(category => (
+        <li class="cc-row">
+          <details>
+            <summary><span>{category.title}</span><Icon name="plus" class="cc-chevron" /></summary>
+            <p>{category.text}</p>
+          </details>
+          <label class="cc-switch">
+            <span class="sr-only">{category.title}</span>
+            {category.locked && <span class="cc-always" aria-hidden="true">Vždy</span>}
+            <input type="checkbox" role="switch" name={category.id} checked={category.locked} disabled={category.locked} />
+            <span class="cc-track" aria-hidden="true"></span>
+          </label>
+        </li>
+      ))}
+    </ul>
+    <div class="cc-actions">
+      <button type="button" class="button button--secondary" data-cc-accept><span class="button-label"><span class="button-label-text">Přijmout vše</span></span></button>
+      <button type="button" class="button button--secondary" data-cc-reject><span class="button-label"><span class="button-label-text">Jen nezbytné</span></span></button>
+      <button type="submit" class="button cc-save"><span class="button-label"><span class="button-label-text">Uložit volbu</span></span></button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+  import { CONSENT_EVENT, OPEN_SETTINGS_EVENT, readConsent, saveConsent, type Consent } from '../../lib/consent/consent';
+  import { syncAnalytics } from '../../lib/consent/analytics';
+
+  const bar = document.querySelector<HTMLElement>('[data-cc-bar]');
+  const dialog = document.querySelector<HTMLDialogElement>('[data-cc-dialog]');
+  const form = document.querySelector<HTMLFormElement>('[data-cc-form]');
+
+  if (bar && dialog && form) {
+    const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
+    const fillForm = () => { const c = readConsent(); field('analytics').checked = !!c?.analytics; field('maps').checked = !!c?.maps; };
+    const choose = (analytics: boolean, maps: boolean) => { saveConsent({ analytics, maps }); dialog.close(); };
+
+    const hideBar = () => {
+      if (bar.hidden) return;
+      bar.classList.add('is-leaving');
+      bar.addEventListener('animationend', () => { bar.hidden = true; bar.classList.remove('is-leaving'); }, { once: true });
+      // No animation (reduced motion): hide right away.
+      if (!bar.getAnimations().length) { bar.hidden = true; bar.classList.remove('is-leaving'); }
+    };
+    // Let the header and hero entrance play first; the bar is fixed, so it never shifts the layout.
+    if (!readConsent()) setTimeout(() => { if (!readConsent()) bar.hidden = false; }, 900);
+
+    const openSettings = () => { fillForm(); if (!dialog.open) dialog.showModal(); };
+    document.addEventListener(OPEN_SETTINGS_EVENT, openSettings);
+    document.querySelectorAll<HTMLElement>('[data-consent-open]').forEach(button => {
+      button.hidden = false;
+      button.addEventListener('click', openSettings);
+    });
+    document.querySelectorAll('[data-cc-accept]').forEach(button => button.addEventListener('click', () => choose(true, true)));
+    document.querySelectorAll('[data-cc-reject]').forEach(button => button.addEventListener('click', () => choose(false, false)));
+    document.querySelector('[data-cc-close]')?.addEventListener('click', () => dialog.close());
+    form.addEventListener('submit', () => saveConsent({ analytics: field('analytics').checked, maps: field('maps').checked }));
+    // Clicking the backdrop closes without saving, like Esc.
+    dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+
+    document.addEventListener(CONSENT_EVENT, event => { hideBar(); syncAnalytics((event as CustomEvent<Consent>).detail); });
+    syncAnalytics(readConsent());
+  }
+</script>
+
+<style>
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  .cc-bar { position: fixed; inset: auto 0 0; z-index: 40; background: var(--pk-ink); color: var(--pk-white); border-top: 1px solid #ffffff1f; animation: cc-up var(--motion-card) var(--ease-out); }
+  .cc-bar.is-leaving { animation: cc-down 300ms var(--ease-out) forwards; }
+  .cc-bar-inner { display: flex; align-items: center; gap: 16px 32px; padding-block: 16px; }
+  .cc-bar-text { flex: 1 1 auto; font-size: 14px; line-height: 20px; color: #ffffffcc; max-width: 80ch; }
+  .cc-bar-text a { color: var(--pk-white); text-underline-offset: 4px; }
+  .cc-bar-actions { flex: 0 0 auto; display: flex; gap: 8px; }
+  .cc-bar :focus-visible { outline-color: var(--pk-yellow); }
+  .cc-btn { min-height: 44px; padding: 10px 20px; border: 1px solid var(--pk-white); border-radius: var(--radius-control); background: var(--pk-white); color: var(--pk-ink); font-size: 14px; font-weight: 600; cursor: pointer; transition: background-color var(--motion-fast) var(--ease-out), border-color var(--motion-fast) var(--ease-out), color var(--motion-fast) var(--ease-out); }
+  .cc-btn:hover { background: var(--pk-yellow); border-color: var(--pk-yellow); }
+  .cc-btn--ghost { background: transparent; color: var(--pk-white); border-color: #ffffff66; }
+  .cc-btn--ghost:hover { background: transparent; color: var(--pk-white); border-color: var(--pk-white); }
+  @media (hover: hover) { .cc-btn:hover .button-label-text { transform: translateY(calc(var(--roll) * -1)); } }
+  .cc-btn:focus-visible .button-label-text { transform: translateY(calc(var(--roll) * -1)); }
+
+  .cc-dialog { width: min(560px, calc(100% - 32px)); max-height: calc(100dvh - 32px); padding: 0; border: 0; border-radius: var(--radius-image); background: var(--pk-paper); color: var(--pk-ink); }
+  .cc-dialog[open] { animation: cc-rise var(--motion-card) var(--ease-out); }
+  .cc-dialog::backdrop { background: rgb(9 46 50 / .55); }
+  .cc-dialog[open]::backdrop { animation: cc-fade 300ms var(--ease-out); }
+  .cc-form { display: grid; gap: 24px; padding: 32px; }
+  .cc-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .cc-head h2 { font-size: 32px; line-height: 1.19; letter-spacing: -.035em; }
+  .cc-close { width: 44px; height: 44px; display: grid; place-items: center; flex: 0 0 auto; border: 1px solid var(--pk-line); border-radius: var(--radius-control); background: transparent; color: var(--pk-ink); cursor: pointer; transition: border-color var(--motion-fast) var(--ease-out); }
+  .cc-close:hover { border-color: var(--pk-teal); }
+  .cc-close :global(.icon) { width: 20px; height: 20px; }
+  .cc-desc { color: var(--pk-muted); }
+  .cc-desc a { color: var(--pk-teal); text-underline-offset: 4px; }
+  .cc-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--pk-line); }
+  .cc-row { position: relative; border-bottom: 1px solid var(--pk-line); }
+  .cc-row summary { display: flex; align-items: center; gap: 12px; min-height: 64px; padding-right: 96px; font-weight: 500; cursor: pointer; list-style: none; }
+  .cc-row summary::-webkit-details-marker { display: none; }
+  .cc-row summary :global(.cc-chevron) { order: -1; width: 18px; height: 18px; color: var(--pk-teal); transition: transform 300ms var(--ease-out); }
+  .cc-row details[open] summary :global(.cc-chevron) { transform: rotate(45deg); }
+  .cc-row details p { padding: 0 96px 16px 30px; color: var(--pk-muted); font-size: 14px; line-height: 20px; }
+  .cc-switch { position: absolute; top: 18px; right: 0; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .cc-always { font-size: 12px; color: var(--pk-muted); }
+  .cc-switch input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: inherit; }
+  .cc-switch input:disabled { cursor: not-allowed; }
+  .cc-track { position: relative; width: 48px; height: 28px; border-radius: 999px; background: var(--pk-line); transition: background-color var(--motion-fast) var(--ease-out); }
+  .cc-track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--pk-white); transition: transform 300ms var(--ease-out); }
+  .cc-switch input:checked + .cc-track { background: var(--pk-teal); }
+  .cc-switch input:checked + .cc-track::after { transform: translateX(20px); }
+  .cc-switch input:disabled + .cc-track { opacity: .55; }
+  .cc-switch input:focus-visible + .cc-track { outline: 3px solid var(--pk-teal); outline-offset: 3px; }
+  .cc-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .cc-actions .button { min-height: 48px; padding-inline: 16px; }
+  .cc-save { grid-column: 1 / -1; }
+
+  @keyframes cc-up { from { transform: translateY(100%); } }
+  @keyframes cc-down { to { transform: translateY(100%); } }
+  @keyframes cc-rise { from { opacity: 0; transform: translateY(var(--motion-shift-card)); } }
+  @keyframes cc-fade { from { opacity: 0; } }
+
+  @media (max-width: 900px) {
+    .cc-bar-inner { flex-direction: column; align-items: stretch; }
+    .cc-bar-actions { display: grid; grid-template-columns: 1fr 1fr; }
+    .cc-bar-actions .cc-btn--ghost { grid-column: 1 / -1; }
+  }
+  @media (max-width: 480px) {
+    .cc-form { padding: 24px 20px; gap: 20px; }
+    .cc-head h2 { font-size: 26px; }
+    .cc-actions { grid-template-columns: 1fr; }
+    .cc-row details p { padding-right: 0; }
+  }
+</style>

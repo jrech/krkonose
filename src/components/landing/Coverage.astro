@@ -1,0 +1,53 @@
+---
+import CoverageMap from './CoverageMap.astro';
+import CoverageMapImage from './CoverageMapImage.astro';
+import { coverageMapVariant } from '../../data/map/config';
+import AddressSearch from './AddressSearch.astro';
+import { assertServiceArea } from '../../data/service-area';
+
+// Fails the build if a town is marked 'available' without the owner's approval.
+assertServiceArea();
+---
+<section class="coverage" id="svozova-oblast" aria-labelledby="coverage-title">
+  <div class="container">
+    <p class="eyebrow" data-reveal>03 / Svozová oblast</p>
+    <div class="coverage-layout">
+      {coverageMapVariant === 'image'
+        ? <><CoverageMapImage class="map-wide" /><CoverageMap class="map-narrow" /></>
+        : <CoverageMap />}
+      <div class="coverage-panel">
+        <h2 id="coverage-title" data-reveal="heading">Jezdíme i k vám?</h2>
+        <p class="lead" data-reveal>Zadejte adresu svého provozu. Ověříme možnosti svozu a navrhneme řešení podle vaší lokality.</p>
+        <div data-reveal><AddressSearch /></div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  import { initMapHotspots } from '../../lib/coverage/map-hotspots';
+  document.querySelectorAll<HTMLElement>('[data-coverage-map]').forEach(initMapHotspots);
+</script>
+<style>
+  .coverage { background: var(--pk-white); padding-block: var(--section-space); }
+  .coverage .eyebrow { margin-bottom: 40px; }
+  /* 736 : 528 ≈ 58 % map / 42 % content, as in Refresh 02. */
+  .coverage-layout { display: grid; grid-template-columns: minmax(0, 736fr) minmax(0, 528fr); gap: 48px; align-items: start; }
+  .coverage-panel { padding-top: 0; }
+  /* The map is one visual that follows the heading; its places fade in after it (CoverageMap). */
+  .coverage-layout > :global(figure) { --reveal-delay: calc(var(--motion-stagger) * 2); }
+  .coverage h2 { margin-bottom: 24px; }
+  .coverage .lead { max-width: 42ch; }
+  @media (max-width: 1100px) {
+    .coverage-layout { grid-template-columns: 1fr; gap: 40px; }
+    .coverage-panel { order: -1; max-width: 640px; }
+    .coverage-layout > :global(figure) { max-width: 736px; }
+  }
+  /* The illustrated map has baked-in labels that get unreadable when small; phones get the SVG. */
+  .coverage-layout > :global(.map-narrow) { display: none; }
+  @media (max-width: 760px) {
+    .coverage-layout > :global(.map-wide) { display: none; }
+    .coverage-layout > :global(.map-narrow) { display: block; }
+    .coverage .eyebrow { margin-bottom: 24px; }
+    .coverage-layout { gap: 32px; }
+  }
+</style>

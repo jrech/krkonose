@@ -1,0 +1,81 @@
+---
+import LegalPage from '../components/legal/LegalPage.astro';
+import { controller, hostingProvider, legalUpdated } from '../data/legal';
+// Template based on the previous site's policy, updated to the current inquiry form and the Google
+// map on /kontakt/. Needs a legal review and the TODOs in data/legal.ts filled before launch.
+const toc = [
+  { id: 'spravce', label: 'Správce údajů' },
+  { id: 'jake-udaje', label: 'Jaké údaje zpracováváme' },
+  { id: 'ucel', label: 'Účel a právní základ' },
+  { id: 'doba', label: 'Doba uchování' },
+  { id: 'prijemci', label: 'Komu údaje předáváme' },
+  { id: 'cookies', label: 'Cookies a mapa' },
+  { id: 'prava', label: 'Vaše práva' },
+];
+---
+<LegalPage
+  title="Ochrana osobních údajů | Prádelna Krkonoše"
+  eyebrow="Ochrana osobních údajů"
+  heading={['Ochrana', 'osobních údajů']}
+  lead="Jak zacházíme s údaji, které nám pošlete přes poptávku nebo e-mail. Sbíráme jen to, co potřebujeme, abychom se vám mohli ozvat."
+  updated={legalUpdated.privacy}
+  toc={toc}
+>
+  <section id="spravce">
+    <h2>1. Správce osobních údajů</h2>
+    <p>Správcem vašich osobních údajů je {controller.legalName}{controller.companyId && `, IČO ${controller.companyId}`}, se sídlem {controller.address} (provozovatel webu a služeb).</p>
+    <dl>
+      <div><dt>E-mail</dt><dd><a href={`mailto:${controller.email}`}>{controller.email}</a></dd></div>
+      <div><dt>Telefon</dt><dd><a href={controller.phoneHref}>{controller.phone}</a></dd></div>
+      <div><dt>Adresa</dt><dd>{controller.address}</dd></div>
+    </dl>
+  </section>
+
+  <section id="jake-udaje">
+    <h2>2. Jaké údaje zpracováváme</h2>
+    <p>Na tomto webu zpracováváme osobní údaje, které nám dobrovolně pošlete v nezávazné poptávce nebo e-mailem:</p>
+    <ul>
+      <li>jméno a název provozovny</li>
+      <li>telefonní číslo nebo e-mailovou adresu</li>
+      <li>obec nebo adresu provozu</li>
+      <li>typ provozu (hotel, penzion, apartmány, chata, gastro nebo jiný)</li>
+      <li>text zprávy, například co potřebujete prát a jak často</li>
+    </ul>
+    <p>Bez kontaktu a místa provozu se vám nemůžeme ozvat ani posoudit možnost svozu. Ostatní údaje jsou nepovinné.</p>
+  </section>
+
+  <section id="ucel">
+    <h2>3. Účel a právní základ zpracování</h2>
+    <p>Údaje používáme jen k vyřízení vaší poptávky, přípravě nabídky a k další komunikaci o případné spolupráci.</p>
+    <p>Právním základem je jednání o smlouvě na vaši žádost (čl. 6 odst. 1 písm. b GDPR) a náš oprávněný zájem odpovědět na obchodní poptávku (čl. 6 odst. 1 písm. f GDPR).</p>
+  </section>
+
+  <section id="doba">
+    <h2>4. Doba uchování</h2>
+    <p>Údaje z poptávky uchováváme po dobu nezbytnou k jejímu vyřízení a k případnému uzavření a plnění spolupráce, nejdéle však 3 roky od poslední komunikace, pokud nám zákon neukládá uchovávat je déle.</p>
+  </section>
+
+  <section id="prijemci">
+    <h2>5. Komu údaje předáváme</h2>
+    <p>Vaše údaje neprodáváme a nepředáváme třetím stranám pro marketingové účely. Přístup k nim mohou mít jen subjekty, které zajišťují provoz webu a komunikace, a to v rozsahu nutném pro jejich službu:</p>
+    <ul>
+      <li>poskytovatel e-mailové schránky, přes kterou poptávky přijímáme</li>
+      <li>{hostingProvider ? `poskytovatel hostingu webu (${hostingProvider})` : 'poskytovatel hostingu webu'}</li>
+    </ul>
+    <p>Komunikaci přes web chráníme šifrovaným spojením (HTTPS).</p>
+  </section>
+
+  <section id="cookies">
+    <h2>6. Cookies a vložená mapa</h2>
+    <p>Na stránce Kontakt je vložená mapa Google. Načte se až s vaším souhlasem a Google Ireland Limited při tom může zpracovávat vaši IP adresu a ukládat vlastní cookies. Analytické cookies (Google Analytics) se také načtou jen s vaším souhlasem. Souhlas můžete kdykoli odvolat v nastavení cookies v patičce webu.</p>
+    <p>Podrobnosti najdete na stránce <a href="/cookies/">Cookies</a>.</p>
+  </section>
+
+  <section id="prava">
+    <h2>7. Vaše práva</h2>
+    <p>Podle GDPR máte právo na přístup ke svým údajům, jejich opravu nebo výmaz, omezení zpracování, přenositelnost a právo vznést námitku proti zpracování. Pokud zpracování probíhá na základě souhlasu, můžete ho kdykoli odvolat.</p>
+    <p>Svá práva uplatníte e-mailem na <a href={`mailto:${controller.email}`}>{controller.email}</a> nebo dopisem na adresu správce.</p>
+    <p>Máte také právo podat stížnost u Úřadu pro ochranu osobních údajů, <a href="https://uoou.gov.cz" target="_blank" rel="noopener">uoou.gov.cz</a>.</p>
+    <p class="note">Tyto zásady můžeme podle potřeby doplnit nebo upravit. Aktuální verze je vždy zveřejněná na této stránce.</p>
+  </section>
+</LegalPage>
