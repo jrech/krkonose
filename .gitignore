@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+
+
+# Local agent settings and installed third-party skills (restore with skills-lock.json)
+.claude/
+.agents/

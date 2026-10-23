@@ -1,0 +1,8 @@
+{
+  "name": "coverage-map-builder",
+  "private": true,
+  "type": "module",
+  "description": "Regenerates src/data/map/krkonose-geometry.ts from open geographic data. Not part of the site build.",
+  "scripts": { "build": "node build.mjs" },
+  "dependencies": { "d3-contour": "4.0.2", "pngjs": "7.0.0" }
+}
