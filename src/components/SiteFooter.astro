@@ -4,21 +4,23 @@ import Icon from './ui/Icon.astro';
 // Section anchors point back to the landing page when the footer renders on another page.
 const onLanding = Astro.url.pathname === '/';
 const link = (href: string) => (!onLanding && href.startsWith('#') ? `/${href}` : href);
+const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('Kpt. Jaroše 496, 543 01 Vrchlabí')}`;
 ---
 <footer class="footer"><div class="container">
   <div class="footer-top">
     <div class="footer-brand"><a href={link("#uvod")} aria-label="Prádelna Krkonoše — úvod"><img src="/logo-white.svg" alt="Prádelna Krkonoše" width="148" height="76" loading="lazy" /></a><p>Prádelenský servis z Vrchlabí pro hotely, penziony a gastro v Krkonoších.</p></div>
     <nav aria-labelledby="footer-links"><p id="footer-links" class="footer-heading">Rychlé odkazy</p>{navigation.map(item => <a class="link-line" href={link(item.href)}>{item.label}</a>)}</nav>
-    <div class="footer-contact"><p class="footer-heading">Kontakt</p><a href={site.phoneHref}><Icon name="phone" />{site.phone}</a><a href={`mailto:${site.email}`}><Icon name="mail" />{site.email}</a><span><Icon name="map-pin" />{site.area}</span></div>
+    <div class="footer-contact"><p class="footer-heading">Kontakt</p><a href={site.phoneHref}><Icon name="phone" />{site.phone}</a><a href={`mailto:${site.email}`}><Icon name="mail" />{site.email}</a><a href={mapUrl} target="_blank" rel="noopener noreferrer"><Icon name="map-pin" />Kpt. Jaroše 496, 543 01 Vrchlabí<span class="visually-hidden"> (otevře se v novém okně)</span></a></div>
   </div>
   <p class="footer-statement">Čisté prádlo.<br />Klidnější sezóna.</p>
   <div class="footer-bottom"><span>© {new Date().getFullYear()} {site.name} · IČO: {site.companyId}</span><span class="footer-legal"><a class="link-line" href="/ochrana-osobnich-udaju/">Ochrana osobních údajů</a><a class="link-line" href="/cookies/">Cookies</a><button type="button" class="link-line footer-consent" data-consent-open hidden>Nastavení cookies</button></span><span>Vytvořeno: <a class="link-line footer-credit" href={site.creditUrl} target="_blank" rel="noopener">{site.credit}<span class="visually-hidden"> (otevře se v novém okně)</span></a></span></div>
 </div></footer>
 <style>
-  .footer { background: var(--pk-deep-teal); color: var(--pk-white); padding-block: 80px 32px; border-top: 1px solid #ffffff24; }
+  /* Darker than the final CTA so the two read as separate blocks; the CTA keeps the loud voice. */
+  .footer { background: var(--pk-ink); color: var(--pk-white); padding-block: 80px 32px; }
   /* Hierarchy: column eyebrows > 16 px links and contacts, closed by a large statement and the 13 px legal line. */
   .footer-top { display: grid; grid-template-columns: minmax(0, 1fr) 220px 300px; gap: 64px; }
-  .footer-statement { margin-block: clamp(56px, 6.7vw, 96px) clamp(40px, 4.5vw, 64px); font-size: clamp(36px, 6.4vw, 92px); letter-spacing: -.045em; line-height: 1.04; font-weight: 500; }
+  .footer-statement { margin-block: clamp(48px, 5.6vw, 80px) 32px; font-size: clamp(28px, 3.2vw, 44px); letter-spacing: -.04em; line-height: 1.1; font-weight: 500; color: #ffffff80; }
   .footer-brand { display: grid; gap: 20px; justify-items: start; align-content: start; }
   .footer-brand img { width: 148px; height: auto; display: block; }
   .footer-brand p { max-width: 34ch; color: #ffffffcc; font-size: 16px; line-height: 24px; }
@@ -33,7 +35,7 @@ const link = (href: string) => (!onLanding && href.startsWith('#') ? `/${href}` 
   @media (hover: hover) { .footer a:hover { color: var(--pk-yellow); } }
   .footer a:focus-visible { color: var(--pk-yellow); }
   .footer-contact :global(.icon) { width: 18px; height: 18px; }
-  .footer-bottom { border-top: 1px solid #ffffff33; padding-top: 24px; display: flex; justify-content: space-between; gap: 24px; color: #ffffffb8; font-size: 13px; line-height: 20px; }
+  .footer-bottom { border-top: 1px solid #ffffff26; padding-top: 24px; display: flex; justify-content: space-between; gap: 24px; color: #ffffffb8; font-size: 13px; line-height: 20px; }
   .footer-legal { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-right: auto; } .footer-legal a, .footer-consent { color: inherit; } .footer-consent { padding: 0; border: 0; background-color: transparent; font: inherit; cursor: pointer; } @media (hover: hover) { .footer-consent:hover { color: var(--pk-yellow); } }
   @media (max-width: 900px) { .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; } .footer-brand { grid-column: 1 / -1; } }
   @media (max-width: 760px) { .footer { padding-top: 64px; } }
