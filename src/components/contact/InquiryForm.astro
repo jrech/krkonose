@@ -5,7 +5,8 @@ import Icon from '../ui/Icon.astro';
 const operations = [...segments.map(segment => ({ id: segment.id, label: segment.inquiry })), { id: 'jiny', label: 'Jiný provoz' }];
 ---
 <div class="inquiry-card">
-  <form id="inquiry-form" class="inquiry-form" novalidate aria-labelledby="inquiry-title" data-email={site.email}>
+  <!-- Without JS the browser hands the inquiry to the e-mail app instead of putting it into the URL. -->
+  <form id="inquiry-form" class="inquiry-form" method="post" action={`mailto:${site.email}`} enctype="text/plain" novalidate aria-labelledby="inquiry-title" data-email={site.email}>
     <div class="form-head">
       <h2 id="inquiry-title">Napište nám</h2>
       <p>Stačí pár základních údajů. Podrobnosti probereme společně.</p>

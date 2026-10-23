@@ -1,0 +1,21 @@
+---
+import LegalPage from '../components/legal/LegalPage.astro';
+import { site } from '../data/site';
+// Served by the host for unknown URLs (dist/404.html). Never indexed.
+---
+<LegalPage
+  title="Stránka nenalezena | Prádelna Krkonoše"
+  noindex
+  eyebrow="Chyba 404"
+  heading={['Tuhle stránku', 'jsme nenašli.']}
+  lead="Odkaz je možná starý nebo v adrese chybí znak. Pokračujte na úvod, nebo nám rovnou napište."
+>
+  <section id="kam-dal">
+    <h2>Kam dál</h2>
+    <ul>
+      <li><a href="/">Úvodní stránka</a></li>
+      <li><a href="/kontakt/">Kontakt a nezávazná poptávka</a></li>
+      <li><a href={site.phoneHref}>{site.phone}</a></li>
+    </ul>
+  </section>
+</LegalPage>

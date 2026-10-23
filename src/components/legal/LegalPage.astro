@@ -6,15 +6,18 @@ import SiteFooter from '../SiteFooter.astro';
 // Sections inside the slot are plain <section id> blocks with an <h2>; .prose styles them.
 interface Props {
   title: string;
+  // Meta description; the lead is used when none is given.
+  description?: string;
+  noindex?: boolean;
   eyebrow: string;
   heading: string[];
   lead: string;
   updated?: string;
   toc?: { id: string; label: string }[];
 }
-const { title, eyebrow, heading, lead, updated, toc = [] } = Astro.props;
+const { title, description, noindex, eyebrow, heading, lead, updated, toc = [] } = Astro.props;
 ---
-<BaseLayout title={title}>
+<BaseLayout title={title} description={description ?? lead} noindex={noindex}>
   <ContactHeader current={false} />
   <main id="main">
     <section class="legal-intro container" aria-labelledby="legal-title">
