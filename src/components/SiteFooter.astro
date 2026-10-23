@@ -6,34 +6,41 @@ const onLanding = Astro.url.pathname === '/';
 const link = (href: string) => (!onLanding && href.startsWith('#') ? `/${href}` : href);
 ---
 <footer class="footer"><div class="container">
+  <div class="footer-head">
+    <p class="footer-statement">Čisté prádlo.<br />Klidnější sezóna.</p>
+    <a class="footer-top-link link-line" href={link("#uvod")}>Zpět nahoru ↑</a>
+  </div>
   <div class="footer-top">
-    <div class="footer-brand"><a href={link("#uvod")} aria-label="Prádelna Krkonoše — zpět nahoru"><img src="/logo-white.svg" alt="Prádelna Krkonoše" width="148" height="76" loading="lazy" /></a><p>Prádelenský servis z Vrchlabí pro hotely, penziony a gastro v Krkonoších.</p></div>
+    <div class="footer-brand"><a href={link("#uvod")} aria-label="Prádelna Krkonoše — úvod"><img src="/logo-white.svg" alt="Prádelna Krkonoše" width="148" height="76" loading="lazy" /></a><p>Prádelenský servis z Vrchlabí pro hotely, penziony a gastro v Krkonoších.</p></div>
     <nav aria-labelledby="footer-links"><p id="footer-links" class="footer-heading">Rychlé odkazy</p>{navigation.map(item => <a class="link-line" href={link(item.href)}>{item.label}</a>)}</nav>
     <div class="footer-contact"><p class="footer-heading">Kontakt</p><a href={site.phoneHref}><Icon name="phone" />{site.phone}</a><a href={`mailto:${site.email}`}><Icon name="mail" />{site.email}</a><span><Icon name="map-pin" />{site.area}</span></div>
   </div>
-  <p class="footer-statement">Čisté prádlo.<br />Klidnější sezóna.</p>
-  <div class="footer-bottom"><span>© {new Date().getFullYear()} {site.name} · IČO: {site.companyId}</span><span class="footer-legal"><a class="link-line" href="/ochrana-osobnich-udaju/">Ochrana osobních údajů</a><a class="link-line" href="/cookies/">Cookies</a><button type="button" class="link-line footer-consent" data-consent-open hidden>Nastavení cookies</button></span><span>Vytvořeno: {site.credit}</span></div>
+  <div class="footer-bottom"><span>© {new Date().getFullYear()} {site.name} · IČO: {site.companyId}</span><span class="footer-legal"><a class="link-line" href="/ochrana-osobnich-udaju/">Ochrana osobních údajů</a><a class="link-line" href="/cookies/">Cookies</a><button type="button" class="link-line footer-consent" data-consent-open hidden>Nastavení cookies</button></span><span>Vytvořeno: <a class="link-line footer-credit" href={site.creditUrl} target="_blank" rel="noopener">{site.credit}<span class="visually-hidden"> (otevře se v novém okně)</span></a></span></div>
 </div></footer>
 <style>
   .footer { background: var(--pk-deep-teal); color: var(--pk-white); padding-block: 80px 32px; border-top: 1px solid #ffffff24; }
-  .footer-top { display: grid; grid-template-columns: minmax(0, 1fr) 220px 300px; gap: 64px; }
-  .footer-brand { display: grid; gap: 24px; justify-items: start; }
+  /* Hierarchy: statement > column eyebrows > 16 px links and contacts > 13 px legal line. */
+  .footer-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; padding-bottom: 48px; margin-bottom: 48px; border-bottom: 1px solid #ffffff33; }
+  .footer-statement { font-size: var(--text-h2); letter-spacing: -.045em; line-height: 1.1; font-weight: 500; }
+  .footer-top-link { flex: 0 0 auto; color: #ffffffcc; text-decoration: none; padding-block: 4px; }
+  .footer-top { display: grid; grid-template-columns: minmax(0, 1fr) 220px 300px; gap: 64px; padding-bottom: 56px; }
+  .footer-brand { display: grid; gap: 20px; justify-items: start; align-content: start; }
   .footer-brand img { width: 148px; height: auto; display: block; }
-  .footer-brand p { max-width: 360px; color: #ffffffcc; }
-  nav, .footer-contact { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; font-size: 14px; line-height: 20px; }
-  .footer-heading { color: var(--pk-white); }
-  nav a, .footer-contact a, .footer-contact span { color: #ffffffcc; text-decoration: none; display: inline-flex; align-items: center; gap: 16px; padding-block: 2px; }
-  nav a { font-size: 16px; line-height: 24px; }
+  .footer-brand p { max-width: 34ch; color: #ffffffcc; font-size: 16px; line-height: 24px; }
+  nav, .footer-contact { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; font-size: 16px; line-height: 24px; }
+  .footer-heading { margin-bottom: 8px; color: var(--pk-dark-muted); font-size: 12px; line-height: 16px; letter-spacing: .08em; text-transform: uppercase; }
+  nav a, .footer-contact a, .footer-contact span { color: #ffffffcc; text-decoration: none; display: inline-flex; align-items: center; gap: 12px; padding-block: 2px; }
+  .footer-credit { color: var(--pk-white); }
+  .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
   /* Hover turns links brand yellow (5.5 : 1 on the deep teal); icon links change colour only. */
   .footer-contact a { transition: color var(--motion-hover) var(--ease-out); }
   .footer-contact :global(.icon) { transition: color var(--motion-hover) var(--ease-out); }
   @media (hover: hover) { .footer a:hover { color: var(--pk-yellow); } }
   .footer a:focus-visible { color: var(--pk-yellow); }
   .footer-contact :global(.icon) { width: 18px; height: 18px; }
-  .footer-statement { font-size: var(--text-h2); letter-spacing: -.05em; line-height: 1.145; margin-block: 56px; font-weight: 500; }
-  .footer-bottom { border-top: 1px solid #ffffff33; padding-top: 32px; display: flex; justify-content: space-between; gap: 24px; color: #ffffffb8; font-size: 12px; line-height: 17px; }
+  .footer-bottom { border-top: 1px solid #ffffff33; padding-top: 24px; display: flex; justify-content: space-between; gap: 24px; color: #ffffffb8; font-size: 13px; line-height: 20px; }
   .footer-legal { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-right: auto; } .footer-legal a, .footer-consent { color: inherit; } .footer-consent { padding: 0; border: 0; background-color: transparent; font: inherit; cursor: pointer; } @media (hover: hover) { .footer-consent:hover { color: var(--pk-yellow); } }
   @media (max-width: 900px) { .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; } .footer-brand { grid-column: 1 / -1; } }
-  @media (max-width: 760px) { .footer { padding-top: 64px; } .footer-statement { margin-block: 48px 40px; } }
-  @media (max-width: 480px) { .footer-top { grid-template-columns: 1fr; } .footer-bottom { flex-direction: column; gap: 8px; } }
+  @media (max-width: 760px) { .footer { padding-top: 64px; } .footer-head { padding-bottom: 32px; margin-bottom: 40px; } .footer-top { padding-bottom: 40px; } }
+  @media (max-width: 480px) { .footer-head { flex-direction: column; align-items: flex-start; gap: 20px; } .footer-top { grid-template-columns: 1fr; gap: 32px; } .footer-bottom { flex-direction: column; gap: 8px; } }
 </style>

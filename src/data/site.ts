@@ -8,6 +8,7 @@ export const site = {
   // IČO taken from the Refresh 02 design. Confirm against the business register before launch.
   companyId: '05593034',
   credit: 'Jonas Rech',
+  creditUrl: 'https://www.jonasrech.com',
   description: 'Prádelenský servis pro hotely, penziony, apartmány, chaty a gastro provozy. Domluvte si praní a svoz prádla v Krkonoších.',
 };
 
