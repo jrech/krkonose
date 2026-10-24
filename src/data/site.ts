@@ -21,10 +21,9 @@ export const navigation = [
 ];
 
 export const services = [
-  { title: 'Svoz a rozvoz', icon: 'truck', text: 'Prádlo vyzvedneme a čisté přivezeme zpět podle domluveného režimu.' },
-  // TODO owner: confirm which finishing (ironing, folding) the laundry provides.
-  { title: 'Praní a úprava', icon: 'shirt', text: 'Profesionální péče o provozní textil, od praní až po finální úpravu.' },
-  { title: 'Připravené prádlo', icon: 'package-check', text: 'Čisté, upravené a připravené pro další hosty či provoz.' },
+  { title: 'Svoz a rozvoz', icon: 'truck', text: 'Režim svozu domluvíme podle vašeho provozu. Sezónní vytížení a případné navýšení kapacity probereme předem.' },
+  { title: 'Praní a mandlování', icon: 'shirt', text: 'Prádlo pravidelně vypereme, usušíme a vyžehlíme na mandlu, aby bylo připravené k použití.' },
+  { title: 'Připravené prádlo', icon: 'package-check', text: 'Prádlo vracíme přehledně složené a připravené pro další hosty i provoz. Ušetří čas personálu při přípravě.' },
 ] as const;
 
 export const process = [
@@ -38,7 +37,7 @@ export const process = [
 // "Řešení podle sezóny: možnosti spolupráce přizpůsobíme vašemu vytížení."
 export const quality = [
   { title: 'Domluvený režim svozu', icon: 'clipboard-check', text: 'Předem víte, jak bude spolupráce fungovat.' },
-  { title: 'Péče o provozní textil', icon: 'shirt', text: 'Postup zvolíme podle druhu vašeho textilu.' },
+  { title: 'Péče o provozní prádlo', icon: 'shirt', text: 'Při praní dodržujeme hygienické standardy.' },
   { title: 'Domluva na sezónu', icon: 'calendar-clock', text: 'Vytížení v hlavní sezóně probereme ještě před ní.' },
 ] as const;
 
