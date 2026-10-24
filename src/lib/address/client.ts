@@ -8,6 +8,11 @@ export interface AddressLookupClient {
   check(suggestionId: string, signal?: AbortSignal): Promise<CoverageCheckResponse>;
 }
 
+/** HTTP 429: too many requests from this visitor; `retryAfterMs` comes from the Retry-After header. */
+export class RateLimitError extends Error {
+  constructor(readonly retryAfterMs: number) { super('Address API rate limited'); }
+}
+
 const isString = (value: unknown): value is string => typeof value === 'string' && value.length > 0;
 
 function parseSuggestions(data: unknown): AddressSuggestion[] {
@@ -31,6 +36,10 @@ export function createHttpLookupClient(baseUrl: string): AddressLookupClient {
   const base = baseUrl.replace(/\/$/, '');
   const request = async (path: string, init: RequestInit) => {
     const response = await fetch(`${base}${path}`, { ...init, headers: { accept: 'application/json', ...init.headers } });
+    if (response.status === 429) {
+      const seconds = Number(response.headers.get('retry-after'));
+      throw new RateLimitError((Number.isFinite(seconds) && seconds > 0 ? Math.min(seconds, 120) : 30) * 1000);
+    }
     if (!response.ok) throw new Error(`Address API ${response.status}`);
     return response.json();
   };

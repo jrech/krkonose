@@ -9,5 +9,9 @@ interface ImportMetaEnv {
 
 // Worker bindings and secrets (wrangler.jsonc, .dev.vars locally). Only the address API reads them.
 declare module 'cloudflare:workers' {
-  export const env: { MAPY_API_KEY?: string };
+  export const env: {
+    MAPY_API_KEY?: string;
+    /** Rate Limiting binding (wrangler.jsonc). Missing in plain `astro dev` without the Workers runtime. */
+    ADDRESS_LIMITER?: { limit(options: { key: string }): Promise<{ success: boolean }> };
+  };
 }

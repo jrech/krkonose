@@ -90,6 +90,8 @@ export const serviceArea: ServiceAreaConfig = {
 - Poskytovatel: `src/lib/address/providers/mapy-com.ts`. Prohlížeč dostane jen neprůhledné `id`. Server při kontrole zopakuje stejný dotaz na Mapy.com a přijme jen přesnou shodu, takže si návštěvník nemůže podstrčit vlastní souřadnice. (`/v1/geocode` jsme nepoužili, protože vracel sousední dům.)
 - Klíč `MAPY_API_KEY` je jen na serveru: lokálně v `.dev.vars` (v .gitignore, vzor `.dev.vars.example`), na Cloudflare jako secret (`npx wrangler secret put MAPY_API_KEY` nebo Dashboard → Worker → Settings → Variables and Secrets).
 - Nasazení: `npm run build` a `npx wrangler deploy`, nebo Cloudflare Workers Builds napojené na repozitář (build `npm run build`, deploy `npx wrangler deploy`). Konfigurace je ve `wrangler.jsonc`.
+- Rate limiting: binding `ADDRESS_LIMITER` ve `wrangler.jsonc` (20 požadavků za 60 s na IP z `CF-Connecting-IP`, společně pro `suggest` i `check`). Kontrola běží v endpointu před voláním Mapy.com, při překročení vrací 429 s `Retry-After`. Limit je per Cloudflare lokace. Bez bindingu se limiter přeskočí jen v `astro dev`, nasazený Worker vrátí 503.
+- Mapy.com se volá s timeoutem 3 s, našeptávač vrací nejvýše 5 návrhů, klient čeká 350 ms po posledním znaku a od 3 znaků hledá. Při 429 se v poli zobrazí „Příliš mnoho dotazů…“ a další dotazy se pozdrží o `Retry-After`.
 - V produkci logujeme jen chyby poskytovatele, ne adresy.
 
 ## Mapa: zdroje dat a licence

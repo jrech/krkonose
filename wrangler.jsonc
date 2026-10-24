@@ -3,5 +3,10 @@
 {
   "name": "pradelna-krkonose",
   "compatibility_date": "2026-10-01",
-  "compatibility_flags": ["nodejs_compat"]
+  "compatibility_flags": ["nodejs_compat"],
+  // Per-IP limit for the address API, checked before Mapy.com is called (src/pages/api/address/[action].ts).
+  // Cloudflare allows a 10 or 60 second period; the limit applies per Cloudflare location.
+  "ratelimits": [
+    { "name": "ADDRESS_LIMITER", "namespace_id": "1001", "simple": { "limit": 20, "period": 60 } }
+  ]
 }

@@ -3,7 +3,7 @@
 // - no lookup client (today): plain labelled input, submit leads to manual verification;
 // - with a client: debounced suggestions, keyboard selection, server-side coverage check.
 // A town picked on the map (setPlace) fills the field and answers for the town as a whole.
-import type { AddressLookupClient } from './client';
+import { RateLimitError, type AddressLookupClient } from './client';
 import type { AddressSuggestion, CoverageCheckResponse, CoverageStatus } from './types';
 
 export interface ResultCopy { title: string; text: string }
@@ -21,7 +21,7 @@ interface Options {
   onEdit?: () => void;
 }
 
-const DEBOUNCE_MS = 250;
+const DEBOUNCE_MS = 350;
 const MIN_QUERY = 3;
 
 export function initAddressSearch({ root, client, copy, onAddress, onEdit }: Options) {
@@ -48,6 +48,8 @@ export function initAddressSearch({ root, client, copy, onAddress, onEdit }: Opt
   let selected: AddressSuggestion | null = null;
   let timer: number | undefined;
   let pending: AbortController | undefined;
+  // Set after a 429: no suggestions are requested until then, the field keeps working as plain input.
+  let pausedUntil = 0;
 
   if (client) {
     input.setAttribute('role', 'combobox');
@@ -57,17 +59,18 @@ export function initAddressSearch({ root, client, copy, onAddress, onEdit }: Opt
     input.autocomplete = 'off';
   }
 
-  function setState(state: 'idle' | 'loading' | 'results' | 'empty' | 'error' | 'selected') {
+  function setState(state: 'idle' | 'loading' | 'results' | 'empty' | 'error' | 'paused' | 'selected') {
     root.dataset.state = state;
-    const open = state === 'loading' || state === 'results' || state === 'empty' || state === 'error';
+    const open = state === 'loading' || state === 'results' || state === 'empty' || state === 'error' || state === 'paused';
     popup.hidden = !open;
     input.setAttribute('aria-expanded', String(state === 'results'));
     status.textContent = state === 'loading' ? 'Hledám adresy…'
       : state === 'empty' ? 'Adresu jsme nenašli. Zkuste přidat obec, nebo pokračujte bez ověření.'
+      : state === 'paused' ? 'Příliš mnoho dotazů. Dopište adresu a zkuste to za chvíli, nebo ji rovnou odešlete.'
       : state === 'error' ? 'Našeptávač teď nefunguje. Adresu můžete odeslat a ověříme ji ručně.'
       : '';
     status.hidden = !status.textContent;
-    if (state === 'empty' || state === 'error') announcer.textContent = status.textContent;
+    if (state === 'empty' || state === 'error' || state === 'paused') announcer.textContent = status.textContent;
     if (state !== 'results') setActive(-1);
   }
 
@@ -122,7 +125,8 @@ export function initAddressSearch({ root, client, copy, onAddress, onEdit }: Opt
     try {
       render(await client!.suggest(query, pending.signal));
     } catch (error) {
-      if ((error as Error).name !== 'AbortError') setState('error');
+      if (error instanceof RateLimitError) { pausedUntil = Date.now() + error.retryAfterMs; setState('paused'); }
+      else if ((error as Error).name !== 'AbortError') setState('error');
     }
   }
 
@@ -172,6 +176,7 @@ export function initAddressSearch({ root, client, copy, onAddress, onEdit }: Opt
     window.clearTimeout(timer);
     const query = input.value.trim();
     if (query.length < MIN_QUERY) { pending?.abort(); setState('idle'); return; }
+    if (Date.now() < pausedUntil) { setState('paused'); return; }
     timer = window.setTimeout(() => lookup(query), DEBOUNCE_MS);
   });
 
