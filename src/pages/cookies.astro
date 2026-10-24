@@ -1,16 +1,17 @@
 ---
 import LegalPage from '../components/legal/LegalPage.astro';
-import { controller, cookies, legalUpdated, type CookieCategory } from '../data/legal';
+import { controller, cookies, gaRetention, legalUpdated, type CookieCategory } from '../data/legal';
 // Structure inspired by vsfg.cz/cookies: what we store, what is behind it, your choice.
-// Entries come from data/legal.ts; switch `active` there when GA or the consent banner goes live.
+// Entries come from data/legal.ts; `active: false` shows an entry as planned.
 const categories: { id: CookieCategory; title: string; empty: string }[] = [
   { id: 'necessary', title: 'Nezbytné', empty: 'Web zatím nic nezbytného neukládá.' },
   { id: 'analytics', title: 'Analytické', empty: 'Analytické cookies nepoužíváme.' },
   { id: 'third-party', title: 'Vložený obsah třetích stran', empty: 'Žádný vložený obsah třetích stran nepoužíváme.' },
-  { id: 'marketing', title: 'Marketingové', empty: 'Marketingové ani reklamní cookies nepoužíváme a údaje inzerentům nepředáváme.' },
+  { id: 'marketing', title: 'Marketingové', empty: 'Marketingové ani reklamní cookies zatím nepoužíváme a údaje inzerentům nepředáváme. Volba Marketingové v nastavení je oddělená od analytiky: kdybychom reklamní nástroje zavedli, spustí se jen s tímto souhlasem.' },
 ];
 const toc = [
   { id: 'co-ukladame', label: 'Co ukládáme' },
+  { id: 'google-analytics', label: 'Google Analytics' },
   { id: 'co-za-tim-je', label: 'Co je za tím' },
   { id: 'vase-volba', label: 'Vaše volba' },
 ];
@@ -44,16 +45,30 @@ const toc = [
     ))}
   </section>
 
+  <section id="google-analytics">
+    <h2>02 / Google Analytics</h2>
+    <p>Návštěvnost měříme nástrojem Google Analytics 4 od společnosti Google Ireland Limited. Načte se až ve chvíli, kdy povolíte analytické cookies. Do té doby se z prohlížeče do Googlu nic neposílá a skript Google Analytics se vůbec nestáhne.</p>
+    <p>S vaším souhlasem zaznamenáváme:</p>
+    <ul>
+      <li>zobrazené stránky,</li>
+      <li>úspěšně odeslanou poptávku (jen to, že byla odeslána, ne co v ní je),</li>
+      <li>kliknutí na náš e-mail nebo telefon (jen kde na stránce bylo, ne žádné kontaktní údaje).</li>
+    </ul>
+    <p>Google přitom zpracovává technické údaje o zařízení a prohlížeči, přibližnou polohu odvozenou z IP adresy a náhodný identifikátor z cookie _ga. Jména, e-maily, telefonní čísla ani text poptávky do Google Analytics neposíláme. Signály Google pro reklamu máme vypnuté a reklamní funkce zůstávají zakázané, dokud nepovolíte marketingové cookies.</p>
+    <p>Údaje navázané na identifikátor návštěvníka uchovává Google Analytics {gaRetention}, potom je smaže a zůstanou jen souhrnné statistiky. Google může údaje zpracovávat i v USA. Předání se opírá o rámec EU–USA pro ochranu osobních údajů (Data Privacy Framework), ke kterému je Google přihlášen.</p>
+    <p>Když souhlas odvoláte, měření se na stránce okamžitě zastaví a cookies _ga smažeme. Data, která Google získal před odvoláním, tím nezmizí; jejich výmaz si můžete vyžádat e-mailem.</p>
+  </section>
+
   <section id="co-za-tim-je">
-    <h2>02 / Co je za tím</h2>
+    <h2>03 / Co je za tím</h2>
     <p>Cookies jsou malé textové soubory, které si web ukládá ve vašem prohlížeči. Podobně funguje localStorage, jen se jeho obsah neposílá na server s každým požadavkem. Nezbytná úložiště potřebuje web k fungování, ostatní smí použít jen s vaším souhlasem.</p>
     <p>Písmo webu načítáme z vlastního serveru, ne z Google Fonts, takže kvůli němu se vaše data nikam neposílají.</p>
     <p>Správcem je {controller.legalName}{controller.companyId && `, IČO ${controller.companyId}`}, {controller.address}, <a href={`mailto:${controller.email}`}>{controller.email}</a>. Víc o zpracování údajů najdete na stránce <a href="/ochrana-osobnich-udaju/">Ochrana osobních údajů</a>.</p>
   </section>
 
   <section id="vase-volba">
-    <h2>03 / Vaše volba</h2>
-    <p>Při první návštěvě se vás lištou zeptáme, co smíme používat. Svou volbu můžete kdykoli změnit tady nebo odkazem Nastavení cookies v patičce.</p>
+    <h2>04 / Vaše volba</h2>
+    <p>Při první návštěvě se vás lištou zeptáme, co smíme používat. Odmítnout je stejně snadné jako přijmout a nic volitelného není předem zapnuté. Zavření lišty ani procházení webu souhlas neznamená. Volbu si pamatujeme 12 měsíců a můžete ji kdykoli změnit tady nebo odkazem Nastavení cookies v patičce.</p>
     <p><button type="button" class="button button--secondary" data-consent-open hidden><span class="button-label"><span class="button-label-text">Změnit nastavení cookies</span></span></button></p>
     <p>Souhlas odvoláte také tím, že v prohlížeči smažete data tohoto webu. Bez souhlasu web nic neměří. Mapu Google na stránce Kontakt můžete povolit i tlačítkem přímo u ní.</p>
   </section>

@@ -69,6 +69,7 @@ const operations = [...segments.map(segment => ({ id: segment.id, label: segment
 
 <script>
   import { formatInquiry, getInquiryTransport, validateInquiry, type Inquiry, type InquiryField } from '../../lib/inquiry/inquiry';
+  import { trackEvent } from '../../lib/consent/analytics';
 
   const form = document.querySelector<HTMLFormElement>('#inquiry-form');
   const result = document.querySelector<HTMLElement>('#form-result');
@@ -170,6 +171,8 @@ const operations = [...segments.map(segment => ({ id: segment.id, label: segment
           );
         } else {
           form.reset();
+          // Counted only here, after Formspree confirmed delivery. No form content goes to GA.
+          trackEvent('generate_lead', { form_name: 'poptavka' });
           showResult('Děkujeme, poptávka je odeslaná', 'Ozveme se vám na uvedený kontakt a společně probereme rozsah i svoz.');
         }
       } catch {

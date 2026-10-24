@@ -7,6 +7,9 @@ export const site = {
   // Formspree form that delivers inquiries to the e-mail above (recipient is set in the Formspree dashboard).
   // The form ID is public by design; PUBLIC_INQUIRY_ENDPOINT can override it, e.g. for a test form.
   inquiryEndpoint: import.meta.env.PUBLIC_INQUIRY_ENDPOINT?.trim() || 'https://formspree.io/f/xojpnvyz',
+  // Google Analytics 4 property. Loads only after analytics consent (lib/consent/analytics.ts).
+  // PUBLIC_GA_ID can override it, e.g. a test property; PUBLIC_GA_ID=off turns GA off.
+  gaId: import.meta.env.PUBLIC_GA_ID?.trim() || 'G-MH7HJD691L',
   area: 'Vrchlabí · Krkonoše',
   // IČO taken from the Refresh 02 design. Confirm against the business register before launch.
   companyId: '05593034',

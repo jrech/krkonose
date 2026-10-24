@@ -1,15 +1,15 @@
 ---
 import LegalPage from '../components/legal/LegalPage.astro';
-import { controller, hostingProvider, legalUpdated } from '../data/legal';
+import { controller, gaRetention, hostingProvider, legalUpdated } from '../data/legal';
 // Template based on the previous site's policy, updated to the current inquiry form (delivered via
-// Formspree) and the Google map on /kontakt/. Needs a legal review and the TODOs in data/legal.ts filled before launch.
+// Formspree), Google Analytics 4 (after consent) and the Google map on /kontakt/. Needs a legal review and the TODOs in data/legal.ts filled before launch.
 const toc = [
   { id: 'spravce', label: 'Správce údajů' },
   { id: 'jake-udaje', label: 'Jaké údaje zpracováváme' },
   { id: 'ucel', label: 'Účel a právní základ' },
   { id: 'doba', label: 'Doba uchování' },
   { id: 'prijemci', label: 'Komu údaje předáváme' },
-  { id: 'cookies', label: 'Cookies a mapa' },
+  { id: 'cookies', label: 'Cookies, analytika a mapa' },
   { id: 'prava', label: 'Vaše práva' },
 ];
 ---
@@ -61,14 +61,17 @@ const toc = [
     <ul>
       <li>Formspree, Inc. (USA), přes kterou formulář poptávky doručuje do naší e-mailové schránky. Předání do USA probíhá na základě standardních smluvních doložek schválených Evropskou komisí.</li>
       <li>poskytovatel e-mailové schránky, přes kterou poptávky přijímáme</li>
+      <li>Google Ireland Limited, jen pokud povolíte analytické cookies nebo mapu (údaje o návštěvě webu, ne obsah poptávky)</li>
       <li>{hostingProvider ? `poskytovatel hostingu webu (${hostingProvider})` : 'poskytovatel hostingu webu'}</li>
     </ul>
     <p>Komunikaci přes web chráníme šifrovaným spojením (HTTPS).</p>
   </section>
 
   <section id="cookies">
-    <h2>6. Cookies a vložená mapa</h2>
-    <p>Na stránce Kontakt je vložená mapa Google. Načte se až s vaším souhlasem a Google Ireland Limited při tom může zpracovávat vaši IP adresu a ukládat vlastní cookies. Analytické cookies (Google Analytics) se také načtou jen s vaším souhlasem. Souhlas můžete kdykoli odvolat v nastavení cookies v patičce webu.</p>
+    <h2>6. Cookies, měření návštěvnosti a vložená mapa</h2>
+    <p>Pokud povolíte analytické cookies, měříme návštěvnost nástrojem Google Analytics 4 (Google Ireland Limited). Zjišťujeme, které stránky se zobrazují, zda byla poptávka úspěšně odeslána a zda někdo klikl na náš e-mail nebo telefon. Google přitom zpracovává online identifikátor z cookies, technické údaje o zařízení a přibližnou polohu odvozenou z IP adresy. Obsah poptávky ani vaše kontaktní údaje do Google Analytics neposíláme. Právním základem je váš souhlas (čl. 6 odst. 1 písm. a GDPR). Údaje navázané na identifikátor se v Google Analytics uchovávají {gaRetention}. Google je může zpracovávat i v USA na základě rámce EU–USA pro ochranu osobních údajů (Data Privacy Framework).</p>
+    <p>Na stránce Kontakt je vložená mapa Google. Načte se až s vaším souhlasem a Google Ireland Limited při tom může zpracovávat vaši IP adresu a ukládat vlastní cookies.</p>
+    <p>Bez souhlasu se nic z toho nenačte. Souhlas můžete kdykoli odvolat v nastavení cookies v patičce webu; odvolání nemá vliv na zpracování před ním.</p>
     <p>Podrobnosti najdete na stránce <a href="/cookies/">Cookies</a>.</p>
   </section>
 

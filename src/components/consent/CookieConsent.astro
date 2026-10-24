@@ -6,12 +6,13 @@ import Icon from '../ui/Icon.astro';
 const categories = [
   { id: 'necessary', title: 'Nezbytné', text: 'Uloží jen vaši volbu, abychom se neptali při každé návštěvě. Bez toho by lišta naskakovala pořád.', locked: true },
   { id: 'analytics', title: 'Analytické (Google Analytics)', text: 'Anonymně měří návštěvnost a to, jak se web používá. Pomáhá nám ho zlepšovat. Zpracovatel: Google Ireland Limited.' },
+  { id: 'marketing', title: 'Marketingové', text: 'Reklamní cookies a předávání údajů reklamním službám Googlu. Zatím žádné nepoužíváme. Pokud je zavedeme, spustí se jen s tímto souhlasem, nikdy jen kvůli analytice.' },
   { id: 'maps', title: 'Vložená mapa (Google Mapy)', text: 'Zobrazí mapu s polohou provozovny na stránce Kontakt. Google při jejím načtení ukládá vlastní cookies.' },
 ];
 ---
 <div class="cc-bar" data-cc-bar role="region" aria-label="Souhlas s cookies" hidden>
   <div class="container cc-bar-inner">
-    <p class="cc-bar-text">Se souhlasem měříme návštěvnost přes Google Analytics a na stránce Kontakt ukážeme mapu Google. Bez souhlasu neměříme nic, uložíme si jen vaši volbu. <a href="/cookies/">Zásady cookies</a></p>
+    <p class="cc-bar-text">Se souhlasem měříme návštěvnost přes Google Analytics a na stránce Kontakt ukážeme mapu Google. Bez souhlasu neměříme nic a Google se nenačte, uložíme si jen vaši volbu. <a href="/cookies/">Zásady cookies</a></p>
     <div class="cc-bar-actions">
       <button type="button" class="cc-btn" data-cc-accept><span class="button-label"><span class="button-label-text">Přijmout vše</span></span></button>
       <button type="button" class="cc-btn" data-cc-reject><span class="button-label"><span class="button-label-text">Jen nezbytné</span></span></button>
@@ -52,8 +53,8 @@ const categories = [
 </dialog>
 
 <script>
-  import { CONSENT_EVENT, OPEN_SETTINGS_EVENT, readConsent, saveConsent, type Consent } from '../../lib/consent/consent';
-  import { syncAnalytics } from '../../lib/consent/analytics';
+  import { CONSENT_EVENT, OPEN_SETTINGS_EVENT, OPTIONAL_CATEGORIES, readConsent, saveConsent, type Consent } from '../../lib/consent/consent';
+  import { syncAnalytics, trackContactClicks } from '../../lib/consent/analytics';
 
   const bar = document.querySelector<HTMLElement>('[data-cc-bar]');
   const dialog = document.querySelector<HTMLDialogElement>('[data-cc-dialog]');
@@ -61,11 +62,18 @@ const categories = [
 
   if (bar && dialog && form) {
     const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
-    const fillForm = () => { const c = readConsent(); field('analytics').checked = !!c?.analytics; field('maps').checked = !!c?.maps; };
-    const choose = (analytics: boolean, maps: boolean) => { saveConsent({ analytics, maps }); dialog.close(); };
+    // Nothing is preselected: switches show the saved choice, or all off on a first visit.
+    const fillForm = () => { const c = readConsent(); OPTIONAL_CATEGORIES.forEach(name => { field(name).checked = !!c?.[name]; }); };
+    const all = (on: boolean) => ({ analytics: on, marketing: on, maps: on });
+    const choose = (on: boolean) => { saveConsent(all(on)); dialog.close(); };
 
     const hideBar = () => {
       if (bar.hidden) return;
+      // The focused bar button is about to disappear: hand focus to the page instead of <body>.
+      if (bar.contains(document.activeElement)) {
+        const main = document.getElementById('main');
+        if (main) { main.tabIndex = -1; main.focus({ preventScroll: true }); }
+      }
       bar.classList.add('is-leaving');
       bar.addEventListener('animationend', () => { bar.hidden = true; bar.classList.remove('is-leaving'); }, { once: true });
       // No animation (reduced motion): hide right away.
@@ -80,15 +88,16 @@ const categories = [
       button.hidden = false;
       button.addEventListener('click', openSettings);
     });
-    document.querySelectorAll('[data-cc-accept]').forEach(button => button.addEventListener('click', () => choose(true, true)));
-    document.querySelectorAll('[data-cc-reject]').forEach(button => button.addEventListener('click', () => choose(false, false)));
+    document.querySelectorAll('[data-cc-accept]').forEach(button => button.addEventListener('click', () => choose(true)));
+    document.querySelectorAll('[data-cc-reject]').forEach(button => button.addEventListener('click', () => choose(false)));
     document.querySelector('[data-cc-close]')?.addEventListener('click', () => dialog.close());
-    form.addEventListener('submit', () => saveConsent({ analytics: field('analytics').checked, maps: field('maps').checked }));
-    // Clicking the backdrop closes without saving, like Esc.
+    form.addEventListener('submit', () => saveConsent({ analytics: field('analytics').checked, marketing: field('marketing').checked, maps: field('maps').checked }));
+    // Closing (X, Esc, backdrop) never counts as consent: nothing is saved and the bar stays.
     dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
 
     document.addEventListener(CONSENT_EVENT, event => { hideBar(); syncAnalytics((event as CustomEvent<Consent>).detail); });
     syncAnalytics(readConsent());
+    trackContactClicks();
   }
 </script>
 

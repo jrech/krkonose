@@ -3,7 +3,7 @@ interface ImportMetaEnv {
   readonly PUBLIC_ADDRESS_API_URL?: string;
   /** Endpoint accepting the inquiry as JSON (POST). Unset = the form prepares an e-mail instead. */
   readonly PUBLIC_INQUIRY_ENDPOINT?: string;
-  /** Google Analytics 4 measurement ID (G-…). Loads only after analytics consent. Unset = no GA. */
+  /** Overrides the GA4 measurement ID in data/site.ts (G-…); "off" disables GA. Loads only after analytics consent. */
   readonly PUBLIC_GA_ID?: string;
 }
 

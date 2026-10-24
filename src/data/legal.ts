@@ -20,6 +20,10 @@ export const hostingProvider: string | null = 'Cloudflare, Inc.';
 // Shown as "Poslední aktualizace" on both legal pages. Update whenever the content changes.
 export const legalUpdated = { privacy: 'říjen 2026', cookies: 'říjen 2026' };
 
+// Retention of user-level data in Google Analytics (Admin > Data collection > Data retention).
+// TODO: keep in sync with the property setting. GA4 default is 2 months; 14 months is the other option.
+export const gaRetention = '2 měsíce';
+
 export type CookieCategory = 'necessary' | 'analytics' | 'third-party' | 'marketing';
 
 export interface CookieEntry {
@@ -33,16 +37,15 @@ export interface CookieEntry {
   active: boolean;
 }
 
-// Single source of truth for what the site stores. When Google Analytics is added:
-// 1. set PUBLIC_GA_ID (G-XXXXXXXXXX); lib/consent/analytics.ts loads GA only after analytics consent,
-// 2. switch the analytics entry below to `active: true`.
+// Single source of truth for what the site stores. GA4 (site.gaId) loads only after analytics
+// consent, see lib/consent/analytics.ts.
 // The consent bar itself lives in components/consent/CookieConsent.astro.
 export const cookies: Record<CookieCategory, CookieEntry[]> = {
   necessary: [
     {
       name: 'Uložení vaší volby',
       purpose: 'Pamatuje si, jaké cookies jste povolili, abychom se vás neptali při každé návštěvě.',
-      storage: 'localStorage ve vašem prohlížeči (pk-consent)',
+      storage: 'localStorage ve vašem prohlížeči (pk-consent): jen vaše volba, čas a náhodný identifikátor záznamu',
       validity: '12 měsíců, potom se zeptáme znovu',
       consent: 'Není potřeba, bez něj nejde volbu uložit',
       processor: site.name,
@@ -51,13 +54,22 @@ export const cookies: Record<CookieCategory, CookieEntry[]> = {
   ],
   analytics: [
     {
-      name: '_ga, _ga_<ID> (Google Analytics 4)',
-      purpose: 'Anonymní měření návštěvnosti a toho, jak se web používá. Pomáhá nám web zlepšovat.',
-      storage: 'Cookies prohlížeče',
-      validity: '2 roky',
-      consent: 'Ano, načte se až po vašem souhlasu',
+      name: '_ga (Google Analytics 4)',
+      purpose: 'Rozliší návštěvníky pomocí náhodného identifikátoru, abychom viděli, kolik lidí web navštívilo a jestli se vracejí.',
+      storage: 'Cookie prohlížeče',
+      validity: '2 roky, po odvolání souhlasu ji smažeme',
+      consent: 'Ano, Google Analytics se načte až po vašem souhlasu',
       processor: 'Google Ireland Limited',
-      active: false,
+      active: true,
+    },
+    {
+      name: `_ga_${site.gaId.replace(/^G-/, '')} (Google Analytics 4)`,
+      purpose: 'Udržuje stav návštěvy (relace), aby se zobrazené stránky a události počítaly k jedné návštěvě.',
+      storage: 'Cookie prohlížeče',
+      validity: '2 roky, po odvolání souhlasu ji smažeme',
+      consent: 'Ano, Google Analytics se načte až po vašem souhlasu',
+      processor: 'Google Ireland Limited',
+      active: true,
     },
   ],
   'third-party': [
