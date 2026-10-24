@@ -1,5 +1,5 @@
 // Browser side of the address lookup. It only talks to our own endpoints (never to a provider
-// directly), so no API key ever reaches the page. Without PUBLIC_ADDRESS_API_URL there is no client
+// directly), so no API key ever reaches the page. With PUBLIC_ADDRESS_API_URL=off there is no client
 // and the form falls back to manual verification.
 import { coverageStatuses, type AddressSuggestion, type CoverageCheckResponse } from './types';
 
@@ -35,15 +35,18 @@ export function createHttpLookupClient(baseUrl: string): AddressLookupClient {
     return response.json();
   };
   return {
-    suggest: async (query, signal) => parseSuggestions(await request(`/suggest?q=${encodeURIComponent(query)}`, { signal })),
-    check: async (id, signal) => parseCheck(await request('/check', {
+    suggest: async (query, signal) => parseSuggestions(await request(`/suggest/?q=${encodeURIComponent(query)}`, { signal })),
+    check: async (id, signal) => parseCheck(await request('/check/', {
       method: 'POST', signal, body: JSON.stringify({ id }), headers: { 'content-type': 'application/json' },
     })),
   };
 }
 
-/** Returns null until the lookup endpoint is deployed and configured. */
+/**
+ * Our own endpoint (src/pages/api/address/[action].ts) by default. PUBLIC_ADDRESS_API_URL overrides it;
+ * set it to "off" to fall back to manual verification only.
+ */
 export function getLookupClient(): AddressLookupClient | null {
-  const baseUrl = import.meta.env.PUBLIC_ADDRESS_API_URL;
-  return typeof baseUrl === 'string' && baseUrl.trim() ? createHttpLookupClient(baseUrl.trim()) : null;
+  const baseUrl = (import.meta.env.PUBLIC_ADDRESS_API_URL ?? '/api/address').trim();
+  return baseUrl && baseUrl !== 'off' ? createHttpLookupClient(baseUrl) : null;
 }

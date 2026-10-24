@@ -5,23 +5,26 @@
 // - geonames: GeoNames cities1000 via the cities.json npm package, CC BY 4.0.
 // - obce-cr: 33bcdd/souradnice-mest (Czech municipality points, "volně k použití"); used where
 //   GeoNames cities1000 has no entry. Cross-checked against Wikipedia, difference under 300 m.
+// - wikipedia: town centre coordinates from the Czech Wikipedia article; replace with RÚIAN if precision matters.
 
 export type LabelSide = 'left' | 'right';
 
-export type MapPlaceId = 'vrchlabi' | 'spindleruv-mlyn' | 'pec-pod-snezkou' | 'janske-lazne' | 'jilemnice' | 'harrachov' | 'trutnov' | 'hostinne';
+export type MapPlaceId = 'vrchlabi' | 'spindleruv-mlyn' | 'pec-pod-snezkou' | 'janske-lazne' | 'jilemnice' | 'harrachov' | 'rokytnice-nad-jizerou' | 'trutnov' | 'hostinne';
 
 export interface MapPlace {
   id: MapPlaceId;
   name: string;
   lat: number;
   lon: number;
-  source: 'geonames' | 'obce-cr';
+  source: 'geonames' | 'obce-cr' | 'wikipedia';
   /** Visually emphasised (the laundry's home town). */
   primary?: boolean;
   /** Which side of the marker the name sits on; pick the side with free space. */
   label: LabelSide;
   /** Override for narrow screens, where the map is cropped and labels are larger. */
   compactLabel?: 'below';
+  /** Shorter name for narrow screens, where the full one would run off the cropped map. */
+  compactName?: string;
 }
 
 export const mapPlaces: MapPlace[] = [
@@ -30,6 +33,7 @@ export const mapPlaces: MapPlace[] = [
   { id: 'pec-pod-snezkou', name: 'Pec pod Sněžkou', lat: 50.693981, lon: 15.733267, source: 'obce-cr', label: 'right' },
   { id: 'janske-lazne', name: 'Janské Lázně', lat: 50.631188, lon: 15.781916, source: 'obce-cr', label: 'right' },
   { id: 'jilemnice', name: 'Jilemnice', lat: 50.6089, lon: 15.50653, source: 'geonames', label: 'left', compactLabel: 'below' },
+  { id: 'rokytnice-nad-jizerou', name: 'Rokytnice nad Jizerou', lat: 50.72611, lon: 15.47222, source: 'wikipedia', label: 'left', compactLabel: 'below', compactName: 'Rokytnice n. J.' },
   { id: 'harrachov', name: 'Harrachov', lat: 50.77209, lon: 15.43141, source: 'geonames', label: 'right' },
   { id: 'trutnov', name: 'Trutnov', lat: 50.56101, lon: 15.9127, source: 'geonames', label: 'right' },
   { id: 'hostinne', name: 'Hostinné', lat: 50.54066, lon: 15.72334, source: 'geonames', label: 'right' },

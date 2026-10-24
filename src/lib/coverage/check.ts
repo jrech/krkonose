@@ -12,13 +12,13 @@ const normaliseName = (value: string) => value.normalize('NFD').replace(/\p{Diac
 const fromMunicipality: Record<MunicipalityStatus, CoverageStatus> = {
   available: 'available',
   unavailable: 'unavailable',
-  requires_confirmation: 'manual_review',
+  individual: 'manual_review',
 };
 
 /**
  * Decides coverage from coordinates and business-approved rules only.
  * Order: valid coordinates → approved area (postcode exceptions → manual-review zones → available zones)
- * → municipality rule → outside the approved area, or `unknown` while no area is approved.
+ * → municipality rule → `area.outsideZones`, or `unknown` while no area is approved.
  * This function never guesses `available`: it needs an approved zone or an approved municipality.
  */
 export function checkCoverage(address: ResolvedAddress, area: ServiceAreaConfig): CoverageResult {
@@ -43,7 +43,7 @@ export function checkCoverage(address: ResolvedAddress, area: ServiceAreaConfig)
   if (rule) return { status: fromMunicipality[municipalityStatus(rule)], reason: 'municipality_rule', areaVersion };
 
   return areaApproved
-    ? { status: 'unavailable', reason: 'outside_zones', areaVersion }
+    ? { status: area.outsideZones, reason: 'outside_zones', areaVersion }
     : { status: 'unknown', reason: 'area_not_approved', areaVersion };
 }
 

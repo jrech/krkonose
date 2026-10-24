@@ -12,18 +12,19 @@ export interface IllustrationMarker {
   fill: string;
 }
 
-export const illustrationFrame = { width: 1448, height: 1000 };
+export const illustrationFrame = { width: 1663, height: 945 };
 
-const mountain = '#365656';
-const lowland = '#6c8482';
+const mountain = '#163c4a';
+const lowland = '#3c5a5f';
 
 export const illustrationMarkers: Record<MapPlaceId, IllustrationMarker> = {
-  vrchlabi: { x: 600.6, y: 657.4, r: 9.5, fill: '#022f37' },
-  'spindleruv-mlyn': { x: 582.2, y: 414.1, r: 7, fill: mountain },
-  'pec-pod-snezkou': { x: 804, y: 497.4, r: 7, fill: mountain },
-  'janske-lazne': { x: 925.4, y: 637.4, r: 7, fill: mountain },
-  jilemnice: { x: 405.3, y: 730.6, r: 7, fill: lowland },
-  harrachov: { x: 272.1, y: 286.6, r: 7, fill: mountain },
-  trutnov: { x: 1143.1, y: 819.5, r: 7, fill: lowland },
-  hostinne: { x: 802, y: 866.8, r: 7, fill: lowland },
+  vrchlabi: { x: 644.9, y: 633.5, r: 9, fill: mountain },
+  'spindleruv-mlyn': { x: 625.4, y: 386.3, r: 9, fill: mountain },
+  'pec-pod-snezkou': { x: 861, y: 475.4, r: 9, fill: mountain },
+  'janske-lazne': { x: 992.3, y: 614.3, r: 9, fill: mountain },
+  harrachov: { x: 297.5, y: 262.4, r: 9, fill: mountain },
+  'rokytnice-nad-jizerou': { x: 197.6, y: 583, r: 9, fill: mountain },
+  jilemnice: { x: 433.8, y: 708.4, r: 9, fill: lowland },
+  trutnov: { x: 1224.8, y: 800.4, r: 9, fill: lowland },
+  hostinne: { x: 860, y: 845.3, r: 9, fill: lowland },
 };

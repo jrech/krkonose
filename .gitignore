@@ -9,3 +9,7 @@ dist/
 # Local agent settings and installed third-party skills (restore with skills-lock.json)
 .claude/
 .agents/
+
+# Cloudflare local secrets (MAPY_API_KEY) and wrangler state
+.dev.vars
+.wrangler/

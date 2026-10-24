@@ -1,0 +1,7 @@
+// Cloudflare Workers config. The adapter fills in `main` and the static-assets binding at build time.
+// Secret MAPY_API_KEY: `npx wrangler secret put MAPY_API_KEY` or Cloudflare dashboard → Settings → Variables and Secrets.
+{
+  "name": "pradelna-krkonose",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"]
+}

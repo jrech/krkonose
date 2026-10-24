@@ -40,6 +40,7 @@ export function initAddressSearch({ root, client, copy, onAddress, onEdit }: Opt
   const resultLinkLabel = resultLink.textContent;
   const resultCta = result.querySelector<HTMLAnchorElement>('[data-result-cta]')!;
   const resultCtaText = resultCta.querySelector<HTMLElement>('.button-label-text')!;
+  const resultCtaLabel = resultCtaText.textContent;
   let placePicked = false;
 
   let suggestions: AddressSuggestion[] = [];
@@ -138,7 +139,9 @@ export function initAddressSearch({ root, client, copy, onAddress, onEdit }: Opt
 
   function showResult(key: ResultKey, address?: string) {
     const { title, text } = copy[key];
-    renderResult({ title, text: address ? `${address}. ${text}` : text, kind: key, link: resultLinkLabel ?? '', primary: false });
+    // A confirmed address gets the yellow inquiry CTA; everything else the plain link.
+    const primary = key === 'available';
+    renderResult({ title, text: address ? `${address}. ${text}` : text, kind: key, link: (primary ? resultCtaLabel : resultLinkLabel) ?? '', primary });
   }
 
   /** Fills the field with a town picked on the map and shows that town's answer. */
