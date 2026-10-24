@@ -4,6 +4,9 @@ export const site = {
   phone: '+420 773 798 008',
   phoneHref: 'tel:+420773798008',
   email: 'info@pradelnakrkonose.cz',
+  // Formspree form that delivers inquiries to the e-mail above (recipient is set in the Formspree dashboard).
+  // The form ID is public by design; PUBLIC_INQUIRY_ENDPOINT can override it, e.g. for a test form.
+  inquiryEndpoint: import.meta.env.PUBLIC_INQUIRY_ENDPOINT?.trim() || 'https://formspree.io/f/xojpnvyz',
   area: 'Vrchlabí · Krkonoše',
   // IČO taken from the Refresh 02 design. Confirm against the business register before launch.
   companyId: '05593034',

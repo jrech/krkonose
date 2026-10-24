@@ -1,8 +1,8 @@
 ---
 import LegalPage from '../components/legal/LegalPage.astro';
 import { controller, hostingProvider, legalUpdated } from '../data/legal';
-// Template based on the previous site's policy, updated to the current inquiry form and the Google
-// map on /kontakt/. Needs a legal review and the TODOs in data/legal.ts filled before launch.
+// Template based on the previous site's policy, updated to the current inquiry form (delivered via
+// Formspree) and the Google map on /kontakt/. Needs a legal review and the TODOs in data/legal.ts filled before launch.
 const toc = [
   { id: 'spravce', label: 'Správce údajů' },
   { id: 'jake-udaje', label: 'Jaké údaje zpracováváme' },
@@ -59,6 +59,7 @@ const toc = [
     <h2>5. Komu údaje předáváme</h2>
     <p>Vaše údaje neprodáváme a nepředáváme třetím stranám pro marketingové účely. Přístup k nim mohou mít jen subjekty, které zajišťují provoz webu a komunikace, a to v rozsahu nutném pro jejich službu:</p>
     <ul>
+      <li>Formspree, Inc. (USA), přes kterou formulář poptávky doručuje do naší e-mailové schránky. Předání do USA probíhá na základě standardních smluvních doložek schválených Evropskou komisí.</li>
       <li>poskytovatel e-mailové schránky, přes kterou poptávky přijímáme</li>
       <li>{hostingProvider ? `poskytovatel hostingu webu (${hostingProvider})` : 'poskytovatel hostingu webu'}</li>
     </ul>

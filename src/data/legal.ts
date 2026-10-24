@@ -14,8 +14,8 @@ export const controller = {
   phoneHref: site.phoneHref,
 };
 
-// TODO: hosting provider once the deploy target is decided (Cloudflare Pages / Vercel / other).
-export const hostingProvider: string | null = null;
+// The site is deployed to Cloudflare Workers (wrangler.jsonc).
+export const hostingProvider: string | null = 'Cloudflare, Inc.';
 
 // Shown as "Poslední aktualizace" on both legal pages. Update whenever the content changes.
 export const legalUpdated = { privacy: 'říjen 2026', cookies: 'říjen 2026' };

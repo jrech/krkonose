@@ -1,6 +1,6 @@
-// Inquiry form logic shared by the Kontakt page. There is no backend yet: without
-// PUBLIC_INQUIRY_ENDPOINT the inquiry is handed to the visitor's e-mail app as a prepared message,
-// and the page says so honestly instead of claiming it was sent.
+// Inquiry form logic shared by the Kontakt page. Inquiries go to Formspree (site.inquiryEndpoint),
+// which e-mails them to the owner. Without an endpoint the inquiry is handed to the visitor's e-mail
+// app as a prepared message, and the page says so honestly instead of claiming it was sent.
 
 export interface Inquiry {
   name: string;
@@ -48,10 +48,27 @@ export function formatInquiry(inquiry: Inquiry): { subject: string; body: string
   return { subject, body };
 }
 
-export type InquiryResult = { delivery: 'sent' } | { delivery: 'mail-app'; href: string };
+// 'form-post': the endpoint refused a background submission (Formspree does that while reCAPTCHA is on
+// for the form), so the page should fall back to a regular form post.
+export type InquiryResult = { delivery: 'sent' } | { delivery: 'form-post' } | { delivery: 'mail-app'; href: string };
 
 export interface InquiryTransport {
   submit(inquiry: Inquiry): Promise<InquiryResult>;
+}
+
+/** Formspree payload: readable Czech field names for the owner's inbox, reply-to when the contact is an e-mail. */
+export function formspreePayload(inquiry: Inquiry): Record<string, string> {
+  const { subject } = formatInquiry(inquiry);
+  const contact = inquiry.contact.trim();
+  return {
+    'Jméno / provozovna': inquiry.name.trim(),
+    'Kontakt': contact,
+    'Obec / adresa provozu': inquiry.locality.trim(),
+    'Typ provozu': inquiry.operation || 'neuvedeno',
+    'Co potřebují prát': inquiry.details.trim() || 'neuvedeno',
+    _subject: subject,
+    ...(contactKind(contact) === 'email' ? { _replyto: contact } : {}),
+  };
 }
 
 export function createHttpTransport(endpoint: string): InquiryTransport {
@@ -60,8 +77,9 @@ export function createHttpTransport(endpoint: string): InquiryTransport {
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: { 'content-type': 'application/json', accept: 'application/json' },
-        body: JSON.stringify(inquiry),
+        body: JSON.stringify(formspreePayload(inquiry)),
       });
+      if (response.status === 403) return { delivery: 'form-post' };
       if (!response.ok) throw new Error(`Inquiry API ${response.status}`);
       return { delivery: 'sent' };
     },
@@ -77,8 +95,7 @@ export function createMailtoTransport(email: string): InquiryTransport {
   };
 }
 
-/** Uses the HTTP endpoint once it is deployed and configured, otherwise the e-mail fallback. */
-export function getInquiryTransport(fallbackEmail: string): InquiryTransport {
-  const endpoint = import.meta.env.PUBLIC_INQUIRY_ENDPOINT;
-  return typeof endpoint === 'string' && endpoint.trim() ? createHttpTransport(endpoint.trim()) : createMailtoTransport(fallbackEmail);
+/** Uses the HTTP endpoint when one is configured, otherwise the e-mail fallback. */
+export function getInquiryTransport(endpoint: string, fallbackEmail: string): InquiryTransport {
+  return endpoint.trim() ? createHttpTransport(endpoint.trim()) : createMailtoTransport(fallbackEmail);
 }

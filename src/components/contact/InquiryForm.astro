@@ -5,8 +5,10 @@ import Icon from '../ui/Icon.astro';
 const operations = [...segments.map(segment => ({ id: segment.id, label: segment.inquiry })), { id: 'jiny', label: 'Jiný provoz' }];
 ---
 <div class="inquiry-card">
-  <!-- Without JS the browser hands the inquiry to the e-mail app instead of putting it into the URL. -->
-  <form id="inquiry-form" class="inquiry-form" method="post" action={`mailto:${site.email}`} enctype="text/plain" novalidate aria-labelledby="inquiry-title" data-email={site.email}>
+  <!-- Without JS the browser posts straight to Formspree (native validation applies) and shows its thank-you page.
+       With JS the script takes over: own validation, fetch, and the result panel below. -->
+  <form id="inquiry-form" class="inquiry-form" method="post" action={site.inquiryEndpoint} aria-labelledby="inquiry-title" data-email={site.email} data-endpoint={site.inquiryEndpoint}>
+    <input type="hidden" name="_subject" value="Poptávka spolupráce z webu" />
     <div class="form-head">
       <h2 id="inquiry-title">Napište nám</h2>
       <p>Stačí pár základních údajů. Podrobnosti probereme společně.</p>
@@ -45,8 +47,8 @@ const operations = [...segments.map(segment => ({ id: segment.id, label: segment
       <label for="inquiry-details">Co potřebujete prát? <span class="optional">(nepovinné)</span></label>
       <textarea id="inquiry-details" name="details" rows="4" maxlength="2000" placeholder="Např. ložní prádlo, ručníky a přibližná četnost svozu…"></textarea>
     </div>
-    <!-- Spam trap: hidden from people and assistive tech, bots tend to fill it. -->
-    <div class="trap" aria-hidden="true"><label for="inquiry-website">Web</label><input id="inquiry-website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+    <!-- Spam trap: hidden from people and assistive tech, bots tend to fill it. Formspree drops submissions with _gotcha set. -->
+    <div class="trap" aria-hidden="true"><label for="inquiry-website">Web</label><input id="inquiry-website" name="_gotcha" type="text" tabindex="-1" autocomplete="off" /></div>
     <div class="form-submit">
       <button class="button" type="submit"><span class="button-label"><span class="button-label-text">Odeslat poptávku</span></span></button>
       <p class="required-note">* Povinné údaje</p>
@@ -66,13 +68,14 @@ const operations = [...segments.map(segment => ({ id: segment.id, label: segment
 </div>
 
 <script>
-  import { getInquiryTransport, validateInquiry, type Inquiry, type InquiryField } from '../../lib/inquiry/inquiry';
+  import { formatInquiry, getInquiryTransport, validateInquiry, type Inquiry, type InquiryField } from '../../lib/inquiry/inquiry';
 
   const form = document.querySelector<HTMLFormElement>('#inquiry-form');
   const result = document.querySelector<HTMLElement>('#form-result');
   if (form && result) {
     const email = form.dataset.email || '';
-    const transport = getInquiryTransport(email);
+    const transport = getInquiryTransport(form.dataset.endpoint || '', email);
+    form.noValidate = true;
     const summary = form.querySelector<HTMLElement>('#form-error')!;
     const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
     const submitLabel = submit.querySelector('.button-label-text') ?? submit;
@@ -136,7 +139,7 @@ const operations = [...segments.map(segment => ({ id: segment.id, label: segment
     form.addEventListener('submit', async event => {
       event.preventDefault();
       attempted = true;
-      if (input('website').value) return;
+      if (input('_gotcha').value) return;
       const inquiry = read();
       const errors = validateInquiry(inquiry);
       showErrors(errors);
@@ -152,6 +155,12 @@ const operations = [...segments.map(segment => ({ id: segment.id, label: segment
       submitLabel.textContent = 'Odesílám…';
       try {
         const outcome = await transport.submit(inquiry);
+        if (outcome.delivery === 'form-post') {
+          // Same as the no-JS path: Formspree takes over (spam check, then its thank-you page).
+          (form.querySelector('[name="_subject"]') as HTMLInputElement).value = formatInquiry(inquiry).subject;
+          HTMLFormElement.prototype.submit.call(form);
+          return;
+        }
         if (outcome.delivery === 'mail-app') {
           window.location.href = outcome.href;
           showResult(
