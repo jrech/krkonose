@@ -1,13 +1,11 @@
 import { defineConfig } from 'astro/config';
-import cloudflare from '@astrojs/cloudflare';
+import node from '@astrojs/node';
 
-// Set SITE_URL only after the production domain and business content are approved.
-// Pages stay prerendered (static); only src/pages/api/* runs as a Cloudflare Worker.
+// Pages stay prerendered (static); only src/pages/api/* runs on the Node server.
 export default defineConfig({
   site: process.env.SITE_URL || undefined,
   output: 'static',
-  adapter: cloudflare({ imageService: 'compile' }),
-  // No sessions: otherwise the adapter provisions a SESSION KV namespace on deploy.
+  adapter: node({ mode: 'standalone' }),
   session: false,
   trailingSlash: 'always',
   devToolbar: { enabled: false },

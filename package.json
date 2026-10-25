@@ -7,14 +7,16 @@
     "dev": "astro dev --host 127.0.0.1",
     "build": "astro build",
     "preview": "astro preview --host 127.0.0.1",
-    "check": "astro check"
+    "check": "astro check",
+    "start": "node ./dist/server/entry.mjs"
   },
   "dependencies": {
-    "@astrojs/cloudflare": "14.4.2",
+    "@astrojs/node": "11.1.9",
     "astro": "7.4.2"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
+    "@types/node": "24.19.2",
     "typescript": "6.0.3"
   }
 }

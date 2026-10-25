@@ -1,0 +1,25 @@
+zerops:
+  - setup: web
+    build:
+      base: nodejs@24
+      buildCommands:
+        - npm ci
+        - SITE_URL=https://www.pradelnakrkonose.cz npm run build
+      deployFiles:
+        - dist
+        - package.json
+        - node_modules
+    run:
+      base: nodejs@24
+      ports:
+        - port: 3000
+          httpSupport: true
+      envVariables:
+        HOST: 0.0.0.0
+        PORT: 3000
+        NODE_ENV: production
+      start: npm start
+      healthCheck:
+        httpGet:
+          port: 3000
+          path: /
