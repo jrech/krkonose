@@ -6,11 +6,13 @@
 // so a visitor can never send their own coordinates to the coverage check. (Re-geocoding the label
 // is not reliable: /v1/geocode can return a neighbouring house.)
 import type { AddressSuggestion, ResolvedAddress } from '../types';
+import type { SearchArea } from '../../../data/service-area';
 import type { AddressAutocompleteProvider, AddressResolutionProvider, LookupOptions } from '../server';
 
 const API = 'https://api.mapy.cz/v1/suggest';
-// Bias results towards Krkonoše; anything in Czechia can still be found.
+// Rank Krkonoše first, then keep only matches inside the search area (the API has no hard area filter).
 const PREFER_NEAR = '15.61,50.63';
+const FETCH_LIMIT = 15;
 
 interface MapyItem {
   name: string;
@@ -33,12 +35,16 @@ function decodeId(id: string): SuggestionKey | null {
   }
 }
 
-export function mapyComProvider(apiKey: string): AddressAutocompleteProvider & AddressResolutionProvider {
+export function mapyComProvider(apiKey: string, searchArea: SearchArea): AddressAutocompleteProvider & AddressResolutionProvider {
   if (!apiKey) throw new Error('MAPY_API_KEY is not set');
 
-  async function suggest(query: string, { limit, signal }: LookupOptions): Promise<MapyItem[]> {
+  const inside = (item: MapyItem) => Boolean(item.position)
+    && item.position!.lon >= searchArea.west && item.position!.lon <= searchArea.east
+    && item.position!.lat >= searchArea.south && item.position!.lat <= searchArea.north;
+
+  async function suggest(query: string, { signal }: Pick<LookupOptions, 'signal'>): Promise<MapyItem[]> {
     const params = new URLSearchParams({
-      query, lang: 'cs', limit: String(limit), type: 'regional.address', locality: 'cz',
+      query, lang: 'cs', limit: String(FETCH_LIMIT), type: 'regional.address', locality: 'cz',
       preferNear: PREFER_NEAR, preferNearPrecision: '20000', apikey: apiKey,
     });
     const response = await fetch(`${API}?${params}`, { signal, headers: { accept: 'application/json' } });
@@ -48,18 +54,20 @@ export function mapyComProvider(apiKey: string): AddressAutocompleteProvider & A
   }
 
   return {
-    async suggest(query, options): Promise<AddressSuggestion[]> {
-      return (await suggest(query, options)).map(item => ({
+    async suggest(query, { limit, signal }) {
+      const found = await suggest(query, { signal });
+      const local = found.filter(inside).slice(0, limit);
+      return { outsideArea: found.length > 0 && local.length === 0, suggestions: local.map((item): AddressSuggestion => ({
         id: encodeId({ q: query, name: item.name, location: item.location ?? '' }),
         label: item.name,
         detail: [item.location?.replace(/, Česko$/, ''), item.zip].filter(Boolean).join(' · ') || undefined,
-      }));
+      })) };
     },
 
     async resolve(id, { signal }): Promise<ResolvedAddress | null> {
       const key = decodeId(id);
       if (!key) return null;
-      const item = (await suggest(key.q, { limit: 10, signal })).find(entry => entry.name === key.name && (entry.location ?? '') === key.location);
+      const item = (await suggest(key.q, { signal })).find(entry => entry.name === key.name && (entry.location ?? '') === key.location);
       if (!item?.position) return null;
       const region = item.regionalStructure ?? [];
       const country = region.find(part => part.type === 'regional.country')?.isoCode?.toLowerCase() ?? '';

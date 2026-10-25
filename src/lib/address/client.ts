@@ -3,8 +3,10 @@
 // and the form falls back to manual verification.
 import { coverageStatuses, type AddressSuggestion, type CoverageCheckResponse } from './types';
 
+export interface SuggestResult { suggestions: AddressSuggestion[]; outsideArea: boolean }
+
 export interface AddressLookupClient {
-  suggest(query: string, signal: AbortSignal): Promise<AddressSuggestion[]>;
+  suggest(query: string, signal: AbortSignal): Promise<SuggestResult>;
   check(suggestionId: string, signal?: AbortSignal): Promise<CoverageCheckResponse>;
 }
 
@@ -15,12 +17,13 @@ export class RateLimitError extends Error {
 
 const isString = (value: unknown): value is string => typeof value === 'string' && value.length > 0;
 
-function parseSuggestions(data: unknown): AddressSuggestion[] {
+function parseSuggestions(data: unknown): SuggestResult {
   const list = (data as { suggestions?: unknown })?.suggestions;
   if (!Array.isArray(list)) throw new Error('Malformed suggestions');
-  return list
+  const suggestions = list
     .filter((item): item is AddressSuggestion => isString(item?.id) && isString(item?.label))
     .map(({ id, label, detail }) => ({ id, label, detail: isString(detail) ? detail : undefined }));
+  return { suggestions, outsideArea: (data as { outsideArea?: unknown }).outsideArea === true };
 }
 
 // Anything that does not look exactly like a check result is rejected, so a broken or spoofed

@@ -12,7 +12,7 @@ export const prerender = false;
 let api: ReturnType<typeof createAddressApi> | undefined;
 function getApi() {
   if (!api) {
-    const provider = mapyComProvider(process.env.MAPY_API_KEY ?? '');
+    const provider = mapyComProvider(process.env.MAPY_API_KEY ?? '', serviceArea.searchArea);
     api = createAddressApi({ autocomplete: provider, resolver: provider, checker: serviceAreaChecker(serviceArea) });
   }
   return api;

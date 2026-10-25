@@ -31,6 +31,7 @@ export interface CoverageResult {
     | 'manual_zone'
     | 'postcode_rule'
     | 'municipality_rule'
+    | 'outside_search_area'
     | 'area_not_approved'
     | 'lookup_not_configured'
     | 'lookup_failed';

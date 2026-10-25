@@ -3,7 +3,7 @@
 // - no lookup client (today): plain labelled input, submit leads to manual verification;
 // - with a client: debounced suggestions, keyboard selection, server-side coverage check.
 // A town picked on the map (setPlace) fills the field and answers for the town as a whole.
-import { RateLimitError, type AddressLookupClient } from './client';
+import { RateLimitError, type AddressLookupClient, type SuggestResult } from './client';
 import type { AddressSuggestion, CoverageCheckResponse, CoverageStatus } from './types';
 
 export interface ResultCopy { title: string; text: string }
@@ -59,18 +59,19 @@ export function initAddressSearch({ root, client, copy, onAddress, onEdit }: Opt
     input.autocomplete = 'off';
   }
 
-  function setState(state: 'idle' | 'loading' | 'results' | 'empty' | 'error' | 'paused' | 'selected') {
+  function setState(state: 'idle' | 'loading' | 'results' | 'empty' | 'error' | 'paused' | 'outside' | 'selected') {
     root.dataset.state = state;
-    const open = state === 'loading' || state === 'results' || state === 'empty' || state === 'error' || state === 'paused';
+    const open = state === 'loading' || state === 'results' || state === 'empty' || state === 'error' || state === 'paused' || state === 'outside';
     popup.hidden = !open;
     input.setAttribute('aria-expanded', String(state === 'results'));
     status.textContent = state === 'loading' ? 'Hledám adresy…'
+      : state === 'outside' ? 'Do této lokality nesvážíme. Hledáme jen adresy v Krkonoších a Podkrkonoší. Máte-li dotaz, napište nám přes kontaktní formulář.'
       : state === 'empty' ? 'Adresu jsme nenašli. Zkuste přidat obec, nebo pokračujte bez ověření.'
       : state === 'paused' ? 'Příliš mnoho dotazů. Dopište adresu a zkuste to za chvíli, nebo ji rovnou odešlete.'
       : state === 'error' ? 'Našeptávač teď nefunguje. Adresu můžete odeslat a ověříme ji ručně.'
       : '';
     status.hidden = !status.textContent;
-    if (state === 'empty' || state === 'error' || state === 'paused') announcer.textContent = status.textContent;
+    if (state === 'empty' || state === 'error' || state === 'paused' || state === 'outside') announcer.textContent = status.textContent;
     if (state !== 'results') setActive(-1);
   }
 
@@ -87,7 +88,7 @@ export function initAddressSearch({ root, client, copy, onAddress, onEdit }: Opt
     else input.removeAttribute('aria-activedescendant');
   }
 
-  function render(list: AddressSuggestion[]) {
+  function render({ suggestions: list, outsideArea }: SuggestResult) {
     suggestions = list;
     listbox.replaceChildren(...list.map((item, i) => {
       const option = document.createElement('li');
@@ -105,7 +106,7 @@ export function initAddressSearch({ root, client, copy, onAddress, onEdit }: Opt
       }
       return option;
     }));
-    setState(list.length ? 'results' : 'empty');
+    setState(list.length ? 'results' : outsideArea ? 'outside' : 'empty');
     announcer.textContent = list.length ? `${list.length} ${list.length === 1 ? 'návrh' : list.length < 5 ? 'návrhy' : 'návrhů'} adres. Vyberte šipkami.` : '';
   }
 
