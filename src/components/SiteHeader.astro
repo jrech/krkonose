@@ -13,32 +13,40 @@ import Button from './ui/Button.astro';
     <button class="menu-toggle" type="button" aria-controls="mobile-nav" aria-expanded="false" aria-label="Otevřít menu" hidden><Icon name="menu" /><span>Menu</span></button>
   </div>
   <nav id="mobile-nav" class="mobile-nav container" aria-label="Mobilní navigace" hidden>
-    {navigation.map(item => <a href={item.href}>{item.label}<Icon name="arrow-up-right" /></a>)}
-    <Button href="/kontakt/">Nezávazná poptávka</Button>
+    {navigation.map((item, i) => <a href={item.href} style={`--i: ${i}`}>{item.label}<Icon name="arrow-up-right" /></a>)}
+    <Button href="/kontakt/" style={`--i: ${navigation.length}`}>Nezávazná poptávka</Button>
   </nav>
 </header>
 <script>
   const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
   const nav = document.querySelector<HTMLElement>('#mobile-nav');
   const desktop = matchMedia('(min-width: 1200px)');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   if (toggle && nav) {
     toggle.hidden = false;
     document.documentElement.classList.add('nav-ready');
-    function closeMenu(restoreFocus = false) {
+    // Closing plays menu-out first and hides the panel when it ends; the timer covers a missed animationend.
+    let closeTimer = 0;
+    const finishClose = () => { if (!nav || nav.dataset.state !== 'closing') return; clearTimeout(closeTimer); nav.hidden = true; delete nav.dataset.state; };
+    nav.addEventListener('animationend', event => { if (event.target === nav && event.animationName.includes('menu-out')) finishClose(); });
+    function setOpen(open: boolean) {
       if (!toggle || !nav) return;
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.setAttribute('aria-label', 'Otevřít menu');
-      nav.hidden = true;
-      if (restoreFocus) toggle.focus();
-    }
-    toggle.addEventListener('click', () => {
-      const open = toggle.getAttribute('aria-expanded') !== 'true';
       toggle.setAttribute('aria-expanded', String(open));
       toggle.setAttribute('aria-label', open ? 'Zavřít menu' : 'Otevřít menu');
-      nav.hidden = !open;
-    });
+      clearTimeout(closeTimer);
+      if (open) { delete nav.dataset.state; nav.hidden = false; return; }
+      if (nav.hidden) return;
+      if (reduced.matches || desktop.matches) { nav.dataset.state = 'closing'; finishClose(); return; }
+      nav.dataset.state = 'closing';
+      closeTimer = window.setTimeout(finishClose, 400);
+    }
+    function closeMenu(restoreFocus = false) {
+      setOpen(false);
+      if (restoreFocus) toggle?.focus();
+    }
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
     nav.addEventListener('click', event => { if ((event.target as Element).closest('a')) closeMenu(); });
-    document.addEventListener('keydown', event => { if (event.key === 'Escape' && !nav.hidden) closeMenu(true); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') closeMenu(true); });
     desktop.addEventListener('change', event => { if (event.matches) closeMenu(); });
   }
 </script>
@@ -58,12 +66,29 @@ import Button from './ui/Button.astro';
   .menu-toggle[hidden], .mobile-nav[hidden] { display: none; }
   /* Overlays the page below the sticky bar, so opening it never pushes content. */
   .mobile-nav { position: absolute; top: 100%; left: 0; right: 0; width: auto; margin: 0; padding: 16px var(--gutter) 32px; background: inherit; border-bottom: 1px solid var(--pk-line); box-shadow: 0 24px 40px -32px rgb(9 46 50 / .45); max-height: calc(100dvh - var(--header-h, 98px)); overflow-y: auto; overscroll-behavior: contain; }
-  .mobile-nav:not([hidden]) { animation: menu-in 260ms var(--ease-out); }
-  @keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } }
-  .mobile-nav > a:not(.button) { transition: color var(--motion-hover) var(--ease-out); }
+  .mobile-nav > a:not(.button) { position: relative; display: flex; justify-content: space-between; padding: 16px 0; text-decoration: none; font-weight: 500; transition: color var(--motion-hover) var(--ease-out); }
+  /* Separator as a pseudo-element so it can draw in from the left when the menu opens. */
+  .mobile-nav > a:not(.button)::before { content: ''; position: absolute; inset: 0 0 auto; height: 1px; background: var(--pk-line); transform-origin: left; }
   .mobile-nav > a:not(.button):hover { color: var(--pk-teal); }
-  .mobile-nav > a:not(.button) { display: flex; justify-content: space-between; padding: 16px 0; border-top: 1px solid var(--pk-line); text-decoration: none; font-weight: 500; }
   .mobile-nav :global(.button) { margin-top: 16px; }
+  /* Hamburger folds into a cross while the menu is open. */
+  .menu-toggle :global(path) { transform-box: view-box; transform-origin: 12px 12px; transition: transform 450ms var(--ease-out), opacity 200ms var(--ease-out); }
+  .menu-toggle[aria-expanded="true"] :global(path:nth-child(1)) { transform: rotate(45deg) translateY(7px); }
+  .menu-toggle[aria-expanded="true"] :global(path:nth-child(2)) { opacity: 0; transform: scaleX(.2); }
+  .menu-toggle[aria-expanded="true"] :global(path:nth-child(3)) { transform: rotate(-45deg) translateY(-7px); }
+  /* Open: the panel unrolls from under the bar, then rows rise in one by one and their lines draw across.
+     Close: one quick fold upwards. Reduced motion skips all of it (global.css), and the script closes at once. */
+  @media (prefers-reduced-motion: no-preference) {
+    .mobile-nav:not([hidden]) { animation: menu-in 560ms var(--ease-out); }
+    .mobile-nav:not([hidden]) > :global(*) { --rv-delay: calc(90ms + var(--i, 0) * 45ms); animation: menu-item-in var(--motion-text) var(--ease-out) var(--rv-delay) backwards; }
+    .mobile-nav:not([hidden]) > a:not(.button)::before { animation: menu-line-in calc(var(--motion-text) + 250ms) var(--ease-out) var(--rv-delay) backwards; }
+    .mobile-nav[data-state="closing"] { pointer-events: none; animation: menu-out 260ms cubic-bezier(.4, 0, .6, 1) forwards; }
+    .mobile-nav[data-state="closing"] > :global(*), .mobile-nav[data-state="closing"] > a::before { animation: none; }
+  }
+  @keyframes menu-in { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 -64px 0); } }
+  @keyframes menu-out { from { clip-path: inset(0 0 -64px 0); } to { clip-path: inset(0 0 100% 0); opacity: .6; } }
+  @keyframes menu-item-in { from { opacity: 0; transform: translate3d(0, calc(var(--motion-shift-text) * -1.2), 0); } }
+  @keyframes menu-line-in { from { transform: scaleX(0); } }
   @media (min-width: 1200px) { .menu-toggle { display: none; } }
   @media (max-width: 1199px) {
     .header-inner { flex-wrap: wrap; padding-block: 12px; }
