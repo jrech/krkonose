@@ -2,7 +2,7 @@
 import { site } from '../../data/site';
 ---
 <section class="contact" id="kontakt" aria-labelledby="contact-title">
-  <div class="contact-card">
+  <div class="container contact-card">
     <p class="eyebrow" data-reveal>Další krok / Jasná domluva</p>
     <h2 id="contact-title" data-reveal="heading"><span class="reveal-line">Vy řešte hosty.</span> <span class="reveal-line">My se postaráme o prádlo.</span></h2>
     <div class="contact-row">
@@ -32,11 +32,10 @@ import { site } from '../../data/site';
   updateInquiry();
 </script>
 <style>
-  /* The CTA is a rounded card on the footer ink, so the page ends in one dark block instead of two
-     full-bleed colour bands. Inset + inner padding = --gutter, so the card text lines up with the
-     container above and below it on desktop. */
-  .contact { --cta-inset: clamp(.5rem, 1.67vw, 1.5rem); background: var(--pk-ink); color: var(--pk-white); padding: var(--cta-inset) var(--cta-inset) 0; }
-  .contact-card { max-width: calc(var(--content-width) + (var(--gutter) - var(--cta-inset)) * 2); margin-inline: auto; padding: var(--section-space-s) max(var(--gutter) - var(--cta-inset), 1.25rem); border-radius: var(--radius-card); background: var(--pk-deep-teal); }
+  /* The CTA is a card in the content container that straddles the seam between the paper FAQ and
+     the footer ink: the page ends in one dark block, and the card reads as its own element. */
+  .contact { --cta-overlap: clamp(7.5rem, 14vw, 12.5rem); background: linear-gradient(var(--pk-paper) var(--cta-overlap), var(--pk-ink) 0); color: var(--pk-white); padding-bottom: clamp(1.5rem, 3.34vw, 3rem); }
+  .contact-card { padding: clamp(3.5rem, 6.7vw, 6rem) clamp(1.5rem, 5.6vw, 5rem); border-radius: var(--radius-image); background: var(--pk-deep-teal); }
   .contact .eyebrow { color: var(--pk-yellow); margin-bottom: 32px; }
   .contact .eyebrow::before { background: var(--pk-yellow); }
   .contact h2 { font-size: clamp(40px, 5.6vw, 80px); line-height: 1.05; letter-spacing: -.045em; font-weight: 500; text-wrap: nowrap; }
@@ -55,7 +54,6 @@ import { site } from '../../data/site';
     .lead { grid-column: 1 / -1; max-width: 52ch; }
   }
   @media (max-width: 760px) {
-    .contact-card { border-radius: var(--radius-image); }
     .contact h2 { text-wrap: balance; }
     .contact-row { grid-template-columns: 1fr; gap: 32px; }
     .contact-action .button { width: 100%; }
