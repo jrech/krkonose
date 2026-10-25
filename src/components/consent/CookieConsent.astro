@@ -75,9 +75,11 @@ const categories = [
         if (main) { main.tabIndex = -1; main.focus({ preventScroll: true }); }
       }
       bar.classList.add('is-leaving');
-      bar.addEventListener('animationend', () => { bar.hidden = true; bar.classList.remove('is-leaving'); }, { once: true });
-      // No animation (reduced motion): hide right away.
-      if (!bar.getAnimations().length) { bar.hidden = true; bar.classList.remove('is-leaving'); }
+      const done = () => { bar.hidden = true; bar.classList.remove('is-leaving'); };
+      bar.addEventListener('animationend', done, { once: true });
+      // No animation (reduced motion), or a background tab that never fires animationend: hide anyway,
+      // so the offscreen buttons can't keep keyboard focus.
+      if (!bar.getAnimations().length) done(); else setTimeout(done, 500);
     };
     // Let the header and hero entrance play first; the bar is fixed, so it never shifts the layout.
     if (!readConsent()) setTimeout(() => { if (!readConsent()) bar.hidden = false; }, 900);
