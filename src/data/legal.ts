@@ -14,8 +14,8 @@ export const controller = {
   phoneHref: site.phoneHref,
 };
 
-// The site is deployed to Cloudflare Workers (wrangler.jsonc).
-export const hostingProvider: string | null = 'Cloudflare, Inc.';
+// The site is hosted on Zerops (deploys from codex/zerops-deploy). Add the company name once confirmed.
+export const hostingProvider: string | null = 'Zerops';
 
 // Shown as "Poslední aktualizace" on both legal pages. Update whenever the content changes.
 export const legalUpdated = { privacy: 'říjen 2026', cookies: 'říjen 2026' };
