@@ -79,6 +79,7 @@
 
 - Tlačítka a formulářová pole: radius 8 px.
 - Fotografie: radius 12–16 px; důsledně opakovat zvolenou hodnotu v rámci jedné sekce.
+- Velké barevné panely (závěrečná CTA karta na tmavém pozadí patičky): `--radius-card` 24 px, na mobilu 16 px.
 - Linky: 1 px, barva `--pk-line`.
 - Stíny pouze pro prvek, který se skutečně vznáší nad obsahem (například sticky navigace); žádné plošné stínování všech karet.
 - Ikonografie: střídmé outline ikony dle exportu, velikost 24 px a jednotná tloušťka. Používat funkčně; ikona nesmí nahrazovat srozumitelný popisek.

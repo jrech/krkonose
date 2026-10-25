@@ -35,6 +35,7 @@
   --content-width: 90rem;
   --radius-control: .5rem;
   --radius-image: 1rem;
+  --radius-card: 1.5rem; /* large colour panels such as the closing CTA */
   --ease-out: cubic-bezier(.22, 1, .36, 1);
   /* Motion: one curve, four speeds. Reveal variants live in global.css, timing in scripts/reveal.ts. */
   --motion-fast: 200ms;
