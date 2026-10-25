@@ -8,7 +8,7 @@ import Icon from '../ui/Icon.astro';
   <div class="faq-list" data-reveal="card">{faqs.map((faq, i) => <details name="faq" open={i === 0}><summary>{faq.question}<Icon name="plus" /></summary><p>{faq.answer}</p></details>)}</div>
 </div></section>
 <style>
-  .faq { background: var(--pk-paper); }
+  .faq { background: var(--pk-paper); padding-block: var(--section-space-s); }
   .faq-layout { display: grid; grid-template-columns: minmax(260px, 400px) minmax(0, 1fr); gap: clamp(40px, 5.6vw, 80px); align-items: start; }
   h2 { margin-bottom: 16px; }
   .faq .lead { font-size: 18px; }

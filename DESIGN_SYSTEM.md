@@ -71,7 +71,7 @@
 - Tablet: 8 sloupců, mezera 24 px, okraje 32 px.
 - Mobil: 4 sloupce, mezera 16 px, okraje 20–24 px.
 - Maximální šířka obsahu podle exportu: 1440 px. Obsah centrovat; na širokém monitoru neprotahovat fotografie ani text přes celou plochu.
-- Vertikální odstup sekcí: desktop 120–160 px, tablet 80–96 px, mobil 64–80 px.
+- Vertikální odstup sekcí: desktop 120–160 px, tablet 80–96 px, mobil 64–80 px. V kódu tři tokeny v `tokens.css`: `--section-space-s` (120 px, husté seznamy typu FAQ), `--section-space` (144 px, výchozí) a `--section-space-l` (160 px, krátké sekce s jedním sdělením: Kvalita, Reference, Kontakt).
 - Vnitřní rytmus sekcí: 16/24/32/48 px. Větší mezery používej jen pro skutečné skupiny obsahu.
 - Při přepočtu layoutu upřednostni čitelnou délku řádku a skutečný obsah před mechanickým zachováním 12sloupcové mřížky.
 

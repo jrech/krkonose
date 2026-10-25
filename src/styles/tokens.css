@@ -26,7 +26,11 @@
   --space-8: 5rem;
   --space-9: 7.5rem;
   --space-10: 10rem;
-  --section-space: clamp(5rem, 8.4vw, 7.5rem);
+  /* Section rhythm (vertical padding), picked by content: s = dense lists, m = default, l = short
+     statement sections. Desktop 120/144/160 px at 1440, tablet ~75-105 px, mobile 64/72/80 px. */
+  --section-space-s: clamp(4rem, 1.5rem + 6.67vw, 7.5rem);
+  --section-space: clamp(4.5rem, 2rem + 7.78vw, 9rem);
+  --section-space-l: clamp(5rem, 2.5rem + 8.334vw, 10rem);
   --gutter: clamp(1.25rem, 3.34vw, 4rem);
   --content-width: 90rem;
   --radius-control: .5rem;
