@@ -15,7 +15,7 @@ export const site = {
   companyId: '05593034',
   credit: 'Jonas Rech',
   creditUrl: 'https://www.jonasrech.com',
-  description: 'Prádelenský servis pro hotely, penziony, apartmány, chaty a gastro provozy. Domluvte si praní a svoz prádla v Krkonoších.',
+  description: 'Profesionální praní, sušení a mandlování prádla pro hotely, penziony a gastro provozy. Pravidelný svoz a rozvoz prádla po Krkonoších.',
 };
 
 export const navigation = [
