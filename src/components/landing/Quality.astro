@@ -1,12 +1,12 @@
 ---
 import { Image } from 'astro:assets';
-import delivery from '../../assets/images/delivery.webp';
+import warehouse from '../../assets/images/warehouse.webp';
 import { quality } from '../../data/site';
 import Icon from '../ui/Icon.astro';
 ---
 <section class="quality" aria-labelledby="quality-title">
   <div class="container quality-layout">
-  <figure class="quality-photo" data-reveal="image"><Image src={delivery} alt="Ilustrační fotografie složeného prádla na vozíku připraveného k naložení do dodávky" widths={[480, 720, 1080]} sizes="(max-width: 900px) calc(100vw - 40px), 45vw" format="webp" loading="lazy" /><figcaption><span aria-hidden="true"></span>Každodenní provoz</figcaption></figure>
+  <figure class="quality-photo" data-reveal="image"><Image src={warehouse} alt="Sklad prádelny s klecovými vozíky plnými čistého prádla a regály se zabaleným textilem" widths={[480, 720, 1024]} sizes="(max-width: 900px) calc(100vw - 40px), 45vw" format="webp" loading="lazy" /></figure>
   <div><p class="eyebrow" data-reveal>05 / Spolupráce</p><h2 id="quality-title" data-reveal="heading"><span class="reveal-line">Spolehlivý servis,</span> <span class="reveal-line">na který se můžete připravit.</span></h2><p class="intro" data-reveal>Pravidelný svoz, profesionální péče o prádlo a spolupráce přizpůsobená vašemu provozu.</p>
     <ul>{quality.map((item, i) => <li data-reveal="card" style={`--item: ${i}`}><span class="quality-icon"><Icon name={item.icon} /></span><div><h3>{item.title}</h3><p>{item.text}</p></div></li>)}</ul>
   </div>
@@ -17,9 +17,7 @@ import Icon from '../ui/Icon.astro';
   .quality-layout { display: grid; grid-template-columns: minmax(0, 632fr) minmax(0, 616fr); align-items: center; gap: clamp(40px, 4.5vw, 64px); }
   /* The photo sits first in the DOM but follows the heading on screen. */
   .quality-photo { --rv-radius: 12px; --reveal-delay: calc(var(--motion-stagger) * 2); position: relative; margin: 0; height: 100%; min-height: 480px; max-height: 620px; border-radius: 12px; overflow: hidden; outline: 1px solid #ffffff1f; outline-offset: -.5px; }
-  .quality-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  figcaption { position: absolute; left: 16px; top: 16px; display: flex; align-items: center; gap: 16px; padding: 8px 16px; border-radius: 6px; background: var(--pk-deep-teal); font-size: 12px; line-height: 17px; letter-spacing: .08em; text-transform: uppercase; }
-  figcaption span { width: 6px; height: 6px; border-radius: 50%; background: var(--pk-yellow); }
+  .quality-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 58%; display: block; }
   .quality h2 { margin-bottom: 32px; font-size: var(--text-h2); }
   .intro { color: var(--pk-dark-muted); max-width: 46ch; }
   .quality .eyebrow { color: var(--pk-dark-muted); margin-bottom: 32px; } .quality .eyebrow::before { background: var(--pk-yellow); }
