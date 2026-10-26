@@ -5,14 +5,13 @@ import InquiryForm from '../components/contact/InquiryForm.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import Icon from '../components/ui/Icon.astro';
 import ConsentEmbed from '../components/consent/ConsentEmbed.astro';
-import { site } from '../data/site';
+import { addressLine, site } from '../data/site';
 
 // No response time is promised until the owner confirms it (WEBSITE_SPEC §6).
 const nextSteps = ['Pošlete základní údaje', 'Probereme rozsah a místo svozu', 'Domluvíme konkrétní podmínky'];
 
-// Laundry address, confirmed by the owner on 2026-10-23.
 // The embed sets Google cookies, so it loads only after consent (components/consent/ConsentEmbed).
-const address = 'Kpt. Jaroše 496, 543 01 Vrchlabí';
+const address = addressLine;
 const mapEmbed = `https://maps.google.com/maps?q=${encodeURIComponent(address)}&z=15&hl=cs&output=embed`;
 const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 ---
@@ -74,7 +73,9 @@ const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComp
   dl div { display: grid; gap: 8px; }
   dt { font-size: 12px; line-height: 17px; letter-spacing: 1px; text-transform: uppercase; color: var(--pk-dark-muted); }
   dd { margin: 0; }
-  dd a { text-decoration: none; overflow-wrap: anywhere; }
+  /* Padding grows the hit area to the 24 px WCAG 2.2 minimum; the negative margin keeps the layout. */
+  dd a { text-decoration: none; overflow-wrap: anywhere; padding-block: 4px; }
+  .map-caption a { padding-block: 4px; margin-block: -4px; }
   dd a:hover { text-decoration: underline; text-underline-offset: 5px; }
   .direct-phone { font-size: 24px; line-height: 31px; font-weight: 500; letter-spacing: -.035em; }
   .direct :focus-visible { outline-color: var(--pk-yellow); }

@@ -8,6 +8,7 @@ zerops:
       deployFiles:
         - dist
         - package.json
+        - server.mjs
         - node_modules
     run:
       base: nodejs@24

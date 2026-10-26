@@ -1,7 +1,7 @@
 @import './tokens.css';
-@font-face { font-family: 'Rethink Sans'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/rethink-sans-400.ttf') format('truetype'); }
-@font-face { font-family: 'Rethink Sans'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/rethink-sans-500.ttf') format('truetype'); }
-@font-face { font-family: 'Rethink Sans'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/rethink-sans-600.ttf') format('truetype'); }
+@font-face { font-family: 'Rethink Sans'; font-style: normal; font-weight: 400; font-display: swap; src: url('/fonts/rethink-sans-400.woff2') format('woff2'); }
+@font-face { font-family: 'Rethink Sans'; font-style: normal; font-weight: 500; font-display: swap; src: url('/fonts/rethink-sans-500.woff2') format('woff2'); }
+@font-face { font-family: 'Rethink Sans'; font-style: normal; font-weight: 600; font-display: swap; src: url('/fonts/rethink-sans-600.woff2') format('woff2'); }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h, 0px) + 24px); }
 body { margin: 0; background: var(--pk-paper); color: var(--pk-ink); font-family: var(--font-sans); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }

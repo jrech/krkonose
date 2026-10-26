@@ -1,16 +1,16 @@
 ---
-import { navigation, site } from '../data/site';
+import { addressLine, navigation, site } from '../data/site';
 import Icon from './ui/Icon.astro';
 // Section anchors point back to the landing page when the footer renders on another page.
 const onLanding = Astro.url.pathname === '/';
 const link = (href: string) => (!onLanding && href.startsWith('#') ? `/${href}` : href);
-const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent('Kpt. Jaroše 496, 543 01 Vrchlabí')}`;
+const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressLine)}`;
 ---
 <footer class="footer"><div class="container">
   <div class="footer-top">
     <div class="footer-brand"><a href={link("#uvod")} aria-label="Prádelna Krkonoše — úvod"><img src="/logo-white.svg" alt="Prádelna Krkonoše" width="148" height="76" loading="lazy" /></a><p>Prádelenský servis z Vrchlabí pro hotely, penziony a gastro v Krkonoších.</p></div>
     <nav aria-labelledby="footer-links"><p id="footer-links" class="footer-heading">Rychlé odkazy</p>{navigation.map(item => <a class="link-line" href={link(item.href)}>{item.label}</a>)}</nav>
-    <div class="footer-contact"><p class="footer-heading">Kontakt</p><a href={site.phoneHref}><Icon name="phone" />{site.phone}</a><a href={`mailto:${site.email}`}><Icon name="mail" />{site.email}</a><a href={mapUrl} target="_blank" rel="noopener noreferrer"><Icon name="map-pin" />Kpt. Jaroše 496, 543 01 Vrchlabí<span class="visually-hidden"> (otevře se v novém okně)</span></a></div>
+    <div class="footer-contact"><p class="footer-heading">Kontakt</p><a href={site.phoneHref}><Icon name="phone" />{site.phone}</a><a href={`mailto:${site.email}`}><Icon name="mail" />{site.email}</a><a href={mapUrl} target="_blank" rel="noopener noreferrer"><Icon name="map-pin" />{addressLine}<span class="visually-hidden"> (otevře se v novém okně)</span></a></div>
   </div>
   <div class="footer-bottom"><span>© {new Date().getFullYear()} {site.name} · IČO: {site.companyId}</span><span class="footer-legal"><a class="link-line" href="/ochrana-osobnich-udaju/">Ochrana osobních údajů</a><a class="link-line" href="/cookies/">Cookies</a><button type="button" class="link-line footer-consent" data-consent-open hidden>Nastavení cookies</button></span><span>Vytvořeno: <a class="link-line footer-credit" href={site.creditUrl} target="_blank" rel="noopener">{site.credit}<span class="visually-hidden"> (otevře se v novém okně)</span></a></span></div>
 </div></footer>
@@ -35,6 +35,8 @@ const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICompo
   .footer-contact :global(.icon) { width: 18px; height: 18px; }
   .footer-bottom { border-top: 1px solid #ffffff26; padding-top: 24px; display: flex; justify-content: space-between; gap: 24px; color: #ffffffb8; font-size: 13px; line-height: 20px; }
   .footer-legal { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-right: auto; } .footer-legal a, .footer-consent { color: inherit; } .footer-consent { padding: 0; border: 0; background-color: transparent; font: inherit; cursor: pointer; } @media (hover: hover) { .footer-consent:hover { color: var(--pk-yellow); } }
+  /* 13 px legal links: padding lifts the hit area past the 24 px WCAG 2.2 minimum, the margin keeps the line. */
+  .footer-bottom a, .footer-bottom .footer-consent { padding-block: 4px; margin-block: -4px; }
   @media (max-width: 900px) { .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; } .footer-brand { grid-column: 1 / -1; } }
   @media (max-width: 760px) { .footer { padding-top: 64px; } }
   @media (max-width: 480px) { .footer-top { grid-template-columns: 1fr; gap: 32px; } .footer-bottom { flex-direction: column; gap: 8px; } }

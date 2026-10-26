@@ -8,7 +8,7 @@
     "build": "astro build",
     "preview": "astro preview --host 127.0.0.1",
     "check": "astro check",
-    "start": "node ./dist/server/entry.mjs"
+    "start": "node ./server.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.9",

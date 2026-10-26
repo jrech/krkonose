@@ -1,14 +1,13 @@
 // Legal pages (Ochrana osobních údajů, Cookies). These texts are a template and need a legal review
 // before launch. Nothing here is confirmed by the owner yet: fill the TODO fields, never guess them.
-import { site } from './site';
+import { addressLine, site } from './site';
 
 export const controller = {
   // TODO: exact legal name of the operator (company or sole trader) from the business register.
   legalName: site.name,
   // IČO comes from the Refresh 02 design and is not verified yet (see site.ts).
   companyId: site.companyId,
-  // Address taken from the Pen design (also used on /kontakt/). Confirm with the owner before launch.
-  address: 'Kpt. Jaroše 496, 543 01 Vrchlabí',
+  address: addressLine,
   email: site.email,
   phone: site.phone,
   phoneHref: site.phoneHref,

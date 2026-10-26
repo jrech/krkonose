@@ -6,13 +6,20 @@ interface Props { title?: string; description?: string; noindex?: boolean }
 const { title = 'Prádelna Krkonoše | Praní prádla pro hotely a penziony', description = site.description, noindex = false } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
 const imageUrl = Astro.site ? new URL('/og-image.jpg', Astro.site) : undefined;
+// LocalBusiness subtype; add openingHoursSpecification once the owner confirms opening hours.
+const jsonLd = canonical && {
+  '@context': 'https://schema.org', '@type': 'DryCleaningOrLaundry', name: site.name, url: Astro.site, image: imageUrl,
+  logo: new URL('/logo.svg', Astro.site), telephone: site.phone, email: site.email, description: site.description,
+  address: { '@type': 'PostalAddress', streetAddress: site.address.street, postalCode: site.address.postalCode, addressLocality: site.address.city, addressCountry: 'CZ' },
+  areaServed: { '@type': 'Place', name: 'Krkonoše' },
+};
 ---
 <!doctype html>
-<html lang="cs"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>{title}</title><meta name="description" content={description} /><meta name="theme-color" content="#092e32" /><link rel="icon" href="/favicon.svg" type="image/svg+xml" /><link rel="preload" href="/fonts/rethink-sans-500.ttf" as="font" type="font/ttf" crossorigin />
+<html lang="cs"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>{title}</title><meta name="description" content={description} /><meta name="theme-color" content="#092e32" /><link rel="icon" href="/favicon.svg" type="image/svg+xml" /><link rel="preload" href="/fonts/rethink-sans-500.woff2" as="font" type="font/woff2" crossorigin />
   <script is:inline>(() => { const d = document.documentElement; d.classList.add('nav-ready'); /* collapse the header menu before first paint (SiteHeader) */ if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return; d.classList.add('motion'); setTimeout(() => { if (!d.classList.contains('motion-live')) d.classList.remove('motion'); }, 2500); })();</script>
   {canonical && !noindex ? <link rel="canonical" href={canonical} /> : <meta name="robots" content="noindex, nofollow" />}
   <meta property="og:type" content="website" /><meta property="og:locale" content="cs_CZ" /><meta property="og:site_name" content={site.name} /><meta property="og:title" content={title} /><meta property="og:description" content={description} />
   {canonical && <meta property="og:url" content={canonical} />}{imageUrl && <><meta property="og:image" content={imageUrl} /><meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" /><meta property="og:image:alt" content="Dodávka Prádelny Krkonoše" /></>}
   <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content={title} /><meta name="twitter:description" content={description} />{imageUrl && <meta name="twitter:image" content={imageUrl} />}
-  {canonical && <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@type': 'Organization', name: site.name, url: Astro.site, telephone: site.phone, email: site.email }).replace(/</g, '\\u003c')} />}
+  {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />}
 </head><body id="uvod"><a class="skip-link" href="#main">Přejít na obsah</a><slot /><CookieConsent /><script>import '../scripts/header'; import '../scripts/reveal';</script></body></html>
