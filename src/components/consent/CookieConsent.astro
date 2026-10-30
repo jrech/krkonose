@@ -82,7 +82,7 @@ const categories = [
       if (!bar.getAnimations().length) done(); else setTimeout(done, 500);
     };
     // Let the header and hero entrance play first; the bar is fixed, so it never shifts the layout.
-    if (!readConsent()) setTimeout(() => { if (!readConsent()) bar.hidden = false; }, 900);
+    if (!readConsent()) setTimeout(() => { if (!readConsent()) bar.hidden = false; }, 2200);
 
     const openSettings = () => { fillForm(); if (!dialog.open) dialog.showModal(); };
     document.addEventListener(OPEN_SETTINGS_EVENT, openSettings);

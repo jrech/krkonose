@@ -28,7 +28,8 @@ if (root.classList.contains('motion')) {
     if (batch.length) revealBatch(batch);
   }, { threshold: [0, 0.05, 0.1, 0.15], rootMargin: '0px 0px -5% 0px' });
 
-  document.querySelectorAll('[data-reveal]').forEach(element => {
+  // Above-the-fold blocks (hero) ship with .is-revealed and animate from first paint; skip them.
+  document.querySelectorAll('[data-reveal]:not(.is-revealed)').forEach(element => {
     // Already scrolled past (reload mid-page, anchor jump): show it without replaying.
     const rect = element.getBoundingClientRect();
     if (rect.height && rect.bottom <= 0) element.classList.add('is-revealed', 'reveal-instant');

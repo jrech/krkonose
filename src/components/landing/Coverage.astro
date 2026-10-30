@@ -34,7 +34,7 @@ assertServiceArea();
   .coverage-layout { display: grid; grid-template-columns: minmax(0, 736fr) minmax(0, 528fr); gap: 48px; align-items: start; }
   .coverage-panel { padding-top: 0; }
   /* The map is one visual that follows the heading; its places fade in after it (CoverageMap). */
-  .coverage-layout > :global(figure) { --reveal-delay: calc(var(--motion-stagger) * 2); }
+  @media (min-width: 1101px) { .coverage-layout > :global(figure) { --reveal-delay: calc(var(--motion-stagger) * 2); } }
   .coverage h2 { margin-bottom: 24px; }
   .coverage .lead { max-width: 42ch; }
   @media (max-width: 1100px) {
