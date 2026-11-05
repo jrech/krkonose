@@ -34,6 +34,28 @@
   --gutter: clamp(1.25rem, 3.34vw, 4rem);
   --content-width: 90rem;
   --radius-control: .5rem;
+  --radius-button: 14px;
+  --radius-field: var(--radius-button); /* inputs, selects, textareas and the address dropdown match the buttons */
+  /* Warm gold button (Warm gold — Button states / 06). Surface = 3-stop vertical gradient, edge = 2-stop
+     gradient border, plus a solid 2px "lip" shadow under the button. States: default, hover, pressed. */
+  --btn-gold-ink: #35250d;
+  --btn-gold-ink-pressed: #30210c;
+  --btn-gold-1: #ffd875; --btn-gold-2: #ffc64d; --btn-gold-3: #f8b32a;
+  --btn-gold-edge-1: #ebc16b; --btn-gold-edge-2: #cb901e;
+  --btn-gold-hover-1: #ffe08a; --btn-gold-hover-2: #ffcd58; --btn-gold-hover-3: #ffbd32;
+  --btn-gold-hover-edge-1: #eec064; --btn-gold-hover-edge-2: #c1871c;
+  --btn-gold-pressed-1: #ecab2d; --btn-gold-pressed-2: #f6b838; --btn-gold-pressed-3: #f9c24c;
+  --btn-gold-pressed-edge-1: #c18a28; --btn-gold-pressed-edge-2: #d49b32;
+  --btn-shadow: 0 8px 16px #915e1626, 0 2px 2px #7b4d1926, 0 2px 0 #b98122, inset 0 1px 1px #fff5d7d9, inset 0 -1px 1px #d88c193d;
+  --btn-shadow-hover: 0 10px 20px #9e681333, 0 3px 4px #7b4d1926, 0 3px 0 #b67c1e, inset 0 1px 1px #fff8e5e6, inset 0 -1px 1px #d88c1933;
+  --btn-shadow-pressed: 0 0 0 transparent, 0 0 0 transparent, 0 1px 2px #7b4d191a, inset 0 2px 4px #87510d40, inset 0 -1px 1px #ffe7a199;
+  --btn-shadow-focus: 0 0 0 transparent, 0 2px 4px #7b4d1926, 0 0 0 transparent, inset 0 1px 1px #fff5d7d9, inset 0 -1px 1px #d88c193d;
+  --btn-ring: #72501c; /* keyboard focus ring on light surfaces; dark sections override with --pk-yellow */
+  --btn-ghost-ink: #785018;
+  --btn-ghost-edge: #d5b476 #c8a25f #b98f48; /* top, sides, bottom: the fine gold outline, shaded top to bottom */
+  --btn-disabled-bg: #e9eae5;
+  --btn-disabled-line: #dbded6;
+  --btn-disabled-ink: #8a8f82;
   --radius-image: 1rem;
   --ease-out: cubic-bezier(.22, 1, .36, 1);
   /* Motion: one curve, four speeds. Reveal variants live in global.css, timing in scripts/reveal.ts. */
@@ -49,6 +71,10 @@
   --motion-shift-heading: 22px;
   --motion-shift-card: 18px;
   --motion-image-scale: 1.04;
+  /* Separator rules draw as one slow, even stroke (scripts/rules.ts); same on every screen size. */
+  --motion-rule: 1400ms;
+  --motion-rule-stagger: 60ms;
+  --ease-rule: cubic-bezier(.455, .03, .515, .955); /* ease-in-out quad */
   --header-entrance: 160ms; /* hero reveals start once the header has begun settling */
 }
 @media (max-width: 760px) {

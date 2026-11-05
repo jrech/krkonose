@@ -77,7 +77,7 @@
 
 ## 5. Tvary, fotografie a ikony
 
-- Tlačítka a formulářová pole: radius 8 px.
+- Tlačítka i formulářová pole: radius 14 px (`--radius-button`, pole přes `--radius-field`), aby input a tlačítko pod ním držely stejný tvar.
 - Fotografie: radius 12–16 px; důsledně opakovat zvolenou hodnotu v rámci jedné sekce.
 - Závěrečná CTA karta: šířka obsahového kontejneru, radius 16 px (`--radius-image`), překrývá předěl světlé sekce nad ní a tmavé patičky.
 - Linky: 1 px, barva `--pk-line`.
@@ -94,17 +94,21 @@
 ## 6. Komponenty a stavy
 
 ### Tlačítka
-- **Primary:** žlutá plocha, ink text, radius 8 px, výška 56 px desktop / nejméně 48 px mobil.
-- **Secondary:** klidná světlá nebo transparentní varianta s jasným okrajem či textovým kontrastem; použij pro alternativní akci.
+Zdroj stavů: `Warm gold — Button states-export.html` (Button states / 06). Font zůstává Rethink Sans 16 px / 600, ne Inter z exportu. Hodnoty jsou tokeny `--btn-*` v `tokens.css`, pravidla v `global.css`.
+- **Primary (warm gold):** třístupňový zlatý gradient, gradientní okraj 1 px, jemný bevel a 2px „lip“ stín pod tlačítkem, text `#35250D`, radius 14 px (`--radius-button`), výška 56 px desktop / nejméně 48 px mobil.
+- **Hover:** světlejší gradient, zvednutí o 2 px, větší stín; jen na zařízeních s hoverem. Popisek se zároveň odroluje (text-roll).
+- **Pressed (:active):** tmavší „propadlý“ gradient, vnitřní stín, posun o 2 px dolů, rychlejší přechod (90 ms).
+- **Keyboard focus:** obrys 2 px `#72501C` s odstupem 3 px, kopíruje radius; stín se zmenší. Na tmavé ploše (kontaktní karta) je obrys žlutý přes `--btn-ring`.
+- **Ghost (`.button--secondary`):** průhledná plocha, jemný zlatý okraj 1,5 px, text `#785018`; hover lehký zlatý nádech.
+- **Disabled (`:disabled`, `aria-disabled="true"`):** `#E9EAE5` plocha, `#DBDED6` okraj, text `#8A8F82` / 500, bez stínu, hoveru a posunu.
+- Barvy gradientu se mezi stavy plynule prolínají (registrované `@property`); `prefers-reduced-motion` vypíná přechody i posuny.
 - **Text link:** tyrkysový odkaz, podtržení na hover/focus; vhodný pro navigaci a sekundární odkazy.
-- Hover: přechod k odpovídajícímu tmavšímu žlutému nebo tyrkysovému tokenu, 160–200 ms.
-- Focus: viditelný obrys 3 px s odstupem 3 px; nikdy nespoléhat pouze na změnu barvy.
-- Disabled: ztlumený text i plocha, bez hover efektu.
+- Cookie lišta (`.cc-btn`) má vlastní styl pro tmavý pruh a warm gold nepoužívá.
 - V jednom obsahovém bloku má být nejvýše jedna vizuálně dominantní primary akce.
 
 ### Formulářová pole
 - Label vždy viditelný nad polem; placeholder není náhradou labelu.
-- Pole bílá, ink text, line `--pk-line`, radius 8 px; standardní text nejméně 16 px.
+- Pole bílá, ink text, line `--pk-line`, radius 14 px (`--radius-field`); standardní text nejméně 16 px.
 - Focus má zřetelný outline/ring.
 - Chybu popsat textem i barvou; uveď, jak ji napravit.
 - Po úspěšném odeslání zobrazit potvrzení a další očekávaný krok.

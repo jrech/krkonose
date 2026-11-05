@@ -12,7 +12,7 @@ const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICompo
     <nav aria-labelledby="footer-links"><p id="footer-links" class="footer-heading">Rychlé odkazy</p>{navigation.map(item => <a class="link-line" href={link(item.href)}>{item.label}</a>)}</nav>
     <div class="footer-contact"><p class="footer-heading">Kontakt</p><a href={site.phoneHref}><Icon name="phone" />{site.phone}</a><a href={`mailto:${site.email}`}><Icon name="mail" />{site.email}</a><a href={mapUrl} target="_blank" rel="noopener noreferrer"><Icon name="map-pin" />{addressLine}<span class="visually-hidden"> (otevře se v novém okně)</span></a></div>
   </div>
-  <div class="footer-bottom"><span>© {new Date().getFullYear()} {site.name} · IČO: {site.companyId}</span><span class="footer-legal"><a class="link-line" href="/ochrana-osobnich-udaju/">Ochrana osobních údajů</a><a class="link-line" href="/cookies/">Cookies</a><button type="button" class="link-line footer-consent" data-consent-open hidden>Nastavení cookies</button></span><span>Vytvořeno: <a class="link-line footer-credit" href={site.creditUrl} target="_blank" rel="noopener">{site.credit}<span class="visually-hidden"> (otevře se v novém okně)</span></a></span></div>
+  <div class="footer-bottom" data-rule="top"><span>© {new Date().getFullYear()} {site.name} · IČO: {site.companyId}</span><span class="footer-legal"><a class="link-line" href="/ochrana-osobnich-udaju/">Ochrana osobních údajů</a><a class="link-line" href="/cookies/">Cookies</a><button type="button" class="link-line footer-consent" data-consent-open hidden>Nastavení cookies</button></span><span>Vytvořeno: <a class="link-line footer-credit" href={site.creditUrl} target="_blank" rel="noopener">{site.credit}<span class="visually-hidden"> (otevře se v novém okně)</span></a></span></div>
 </div></footer>
 <style>
   /* Same ink as the strip around the closing CTA card, so the CTA and footer read as one dark block. */
@@ -33,7 +33,7 @@ const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURICompo
   @media (hover: hover) { .footer a:hover { color: var(--pk-yellow); } }
   .footer a:focus-visible { color: var(--pk-yellow); }
   .footer-contact :global(.icon) { width: 18px; height: 18px; }
-  .footer-bottom { border-top: 1px solid #ffffff26; padding-top: 24px; display: flex; justify-content: space-between; gap: 24px; color: #ffffffb8; font-size: 13px; line-height: 20px; }
+  .footer-bottom { border-top: 1px solid #ffffff26; --rule-color: #ffffff26; padding-top: 24px; display: flex; justify-content: space-between; gap: 24px; color: #ffffffb8; font-size: 13px; line-height: 20px; }
   .footer-legal { display: flex; flex-wrap: wrap; gap: 8px 24px; margin-right: auto; } .footer-legal a, .footer-consent { color: inherit; } .footer-consent { padding: 0; border: 0; background-color: transparent; font: inherit; cursor: pointer; } @media (hover: hover) { .footer-consent:hover { color: var(--pk-yellow); } }
   /* 13 px legal links: padding lifts the hit area past the 24 px WCAG 2.2 minimum, the margin keeps the line. */
   .footer-bottom a, .footer-bottom .footer-consent { padding-block: 4px; margin-block: -4px; }

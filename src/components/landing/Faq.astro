@@ -5,7 +5,7 @@ import Icon from '../ui/Icon.astro';
 ---
 <section class="section faq" aria-labelledby="faq-title"><div class="container faq-layout">
   <div><p class="eyebrow" data-reveal>{showTestimonial ? '07' : '06'} / Časté dotazy</p><h2 id="faq-title" data-reveal="heading">Před prvním svozem.</h2><p class="lead" data-reveal>Odpovědi na to, co provozy řeší nejčastěji. Konkrétní podmínky potvrdíme při poptávce.</p></div>
-  <div class="faq-list" data-reveal="card">{faqs.map((faq, i) => <details name="faq" open={i === 0}><summary>{faq.question}<Icon name="plus" /></summary><p>{faq.answer}</p></details>)}</div>
+  <div class="faq-list" data-reveal="card">{faqs.map((faq, i) => <details data-rule="bottom" name="faq" open={i === 0}><summary>{faq.question}<Icon name="plus" /></summary><p>{faq.answer}</p></details>)}</div>
 </div></section>
 <style>
   .faq { background: var(--pk-paper); padding-block: var(--section-space-s); }
