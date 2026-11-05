@@ -49,7 +49,7 @@ const LABEL_GAP = 12;
   <figcaption class="map-note">{mapLabels.note} <span>{mapLabels.attribution}</span></figcaption>
 </figure>
 <style>
-  .coverage-map { position: relative; margin: 0; width: 100%; border-radius: 8px; background: var(--pk-paper); overflow: hidden; }
+  .coverage-map { position: relative; margin: 0; width: 100%; border-radius: var(--card-radius); border: 1px solid var(--card-line); box-shadow: 0 8px 24px #163f300d; background: var(--pk-paper); overflow: hidden; }
   .coverage-map svg { display: block; width: 100%; height: auto; aspect-ratio: 736 / 536; }
   .map-abroad { fill: #e9eeea; }
   .map-land { fill: var(--pk-paper); }
@@ -106,7 +106,7 @@ const LABEL_GAP = 12;
     .map-halo, .map-glow { r: 16px; }
     .map-focus { r: 21px; }
     .map-title { top: 16px; left: 16px; }
-    .map-note { position: static; padding: 12px 16px 14px; border-top: 1px solid var(--pk-line); font-size: 12px; }
+    .map-note { position: static; padding: 12px 16px 14px; background: #f7f9f6; border-top: 1px solid var(--card-line); font-size: 12px; }
     .map-note span { display: block; }
   }
 </style>

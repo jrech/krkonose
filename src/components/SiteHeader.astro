@@ -54,15 +54,15 @@ import Button from './ui/Button.astro';
   }
 </script>
 <style>
-  .site-header { --ease-sheet: cubic-bezier(.32, .72, 0, 1); border-bottom: 1px solid var(--pk-line); background: var(--pk-paper); }
+  .site-header { --ease-sheet: cubic-bezier(.32, .72, 0, 1); }
   .header-inner { display: flex; align-items: center; justify-content: flex-end; gap: 32px; min-height: 104px; }
   .brand { margin-right: auto; }
   .brand { flex: 0 0 auto; } .brand img { width: 97px; height: auto; }
   .desktop-nav { display: flex; align-items: center; gap: 24px; }
   .desktop-nav a { font-size: 16px; font-weight: 400; white-space: nowrap; padding-block: 2px; }
   .desktop-nav a:hover { color: var(--pk-teal); }
-  .header-phone { min-height: 56px; padding-left: 32px; border-left: 1px solid var(--pk-line); display: inline-flex; align-items: center; gap: 8px; font-size: 14px; text-decoration: none; white-space: nowrap; }
-  .header-phone :global(.icon) { width: 20px; height: 20px; color: var(--pk-teal); }
+  .header-phone { min-height: 56px; padding-left: 32px; border-left: 1px solid var(--pk-line); display: inline-flex; align-items: center; gap: 8px; font-size: 16px; text-decoration: none; white-space: nowrap; }
+  .header-phone :global(.icon) { width: 16px; height: 16px; color: var(--pk-deep-teal); }
   .header-phone { transition: color var(--motion-hover) var(--ease-out); }
   .header-phone:hover { color: var(--pk-teal); }
   .menu-toggle { border: 1px solid var(--pk-line); border-radius: 8px; padding: 12px; background: transparent; color: var(--pk-ink); align-items: center; gap: 8px; cursor: pointer; font: inherit; }

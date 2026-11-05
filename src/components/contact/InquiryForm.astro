@@ -188,7 +188,7 @@ const operations = [...segments.map(segment => ({ id: segment.id, label: segment
 </script>
 
 <style>
-  .inquiry-card { background: var(--pk-white); border: 1px solid var(--pk-line); border-radius: 12px; padding: 48px; }
+  .inquiry-card { box-shadow: none; background: var(--pk-white); border: 1px solid var(--pk-line); border-radius: 12px; padding: 48px; }
   .inquiry-form, .form-result { display: grid; gap: 32px; }
   .form-head { display: grid; gap: 8px; }
   .inquiry-card h2 { font-size: 32px; line-height: 1.19; letter-spacing: -.033em; }
@@ -197,10 +197,12 @@ const operations = [...segments.map(segment => ({ id: segment.id, label: segment
   .field { display: grid; gap: 8px; align-content: start; }
   label { font-size: 14px; line-height: 20px; }
   .optional { color: var(--pk-muted); }
-  input, select, textarea { width: 100%; min-height: 56px; padding: 14px 16px; border: 1px solid #b9cdca; border-radius: var(--radius-field); background: var(--pk-white); color: var(--pk-ink); font: inherit; font-size: 16px; line-height: 26px; transition: border-color 180ms ease; }
+  input, select, textarea { width: 100%; min-height: 56px; padding: 14px 16px; border: 1px solid var(--pk-field-line); border-radius: var(--radius-field); background: var(--pk-field); color: var(--pk-ink); font: inherit; font-size: 16px; line-height: 26px; -webkit-appearance: none; appearance: none; box-shadow: none; transition: border-color var(--motion-fast) var(--ease-out), background-color var(--motion-fast) var(--ease-out); }
   textarea { min-height: 116px; resize: vertical; }
   input::placeholder, textarea::placeholder { color: var(--pk-muted); opacity: 1; }
-  input:hover, select:hover, textarea:hover { border-color: var(--pk-teal); }
+  /* Soft filled fields: hover darkens the hairline, focus lifts the fill to white with a teal ring. No shadows. */
+  input:hover, select:hover, textarea:hover { border-color: #b9cdca; }
+  input:focus, select:focus, textarea:focus { background-color: var(--pk-white); }
   input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--pk-teal); outline-offset: 1px; border-color: var(--pk-teal); }
   [aria-invalid='true'] { border-color: var(--pk-error); }
   .select-wrap { position: relative; }

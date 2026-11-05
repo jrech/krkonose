@@ -1,20 +1,24 @@
 ---
+// Phone, mail, map pin and the service/quality icons are the filled Phosphor glyphs from krkonose_new.html
+// (ph-*.svg, fill = currentColor); the rest stay outline.
 import arrowUpRight from '../../assets/icons/arrow-up-right.svg?raw';
 import arrowRight from '../../assets/icons/arrow-right.svg?raw';
-import phone from '../../assets/icons/phone.svg?raw';
-import mail from '../../assets/icons/mail.svg?raw';
-import truck from '../../assets/icons/truck.svg?raw';
+import phone from '../../assets/icons/ph-phone.svg?raw';
+import mail from '../../assets/icons/ph-mail.svg?raw';
+import truck from '../../assets/icons/ph-truck.svg?raw';
 import washingMachine from '../../assets/icons/washing-machine.svg?raw';
-import packageCheck from '../../assets/icons/package-check.svg?raw';
-import mapPin from '../../assets/icons/map-pin.svg?raw';
+import packageCheck from '../../assets/icons/ph-check.svg?raw';
+import mapPin from '../../assets/icons/ph-map-pin.svg?raw';
 import plus from '../../assets/icons/plus.svg?raw';
 import menu from '../../assets/icons/menu.svg?raw';
 import close from '../../assets/icons/x.svg?raw';
-import shirt from '../../assets/icons/shirt.svg?raw';
-import clipboardCheck from '../../assets/icons/clipboard-check.svg?raw';
-import calendarClock from '../../assets/icons/calendar-clock.svg?raw';
+import shirt from '../../assets/icons/ph-shirt.svg?raw';
+import clipboardCheck from '../../assets/icons/ph-clipboard.svg?raw';
+import calendarClock from '../../assets/icons/ph-calendar.svg?raw';
+import phPlus from '../../assets/icons/ph-plus.svg?raw';
+import phMinus from '../../assets/icons/ph-minus.svg?raw';
 import search from '../../assets/icons/search.svg?raw';
-const icons = { 'arrow-up-right': arrowUpRight, 'arrow-right': arrowRight, phone, mail, truck, 'washing-machine': washingMachine, 'package-check': packageCheck, 'map-pin': mapPin, plus, menu, close, shirt, 'clipboard-check': clipboardCheck, 'calendar-clock': calendarClock, search };
+const icons = { 'arrow-up-right': arrowUpRight, 'arrow-right': arrowRight, phone, mail, truck, 'washing-machine': washingMachine, 'package-check': packageCheck, 'map-pin': mapPin, plus, menu, close, shirt, 'clipboard-check': clipboardCheck, 'calendar-clock': calendarClock, search, 'ph-plus': phPlus, 'ph-minus': phMinus };
 export type IconName = keyof typeof icons;
 interface Props { name: IconName; class?: string }
 const { name, class: className } = Astro.props;

@@ -48,6 +48,14 @@ footer :focus-visible, .process :focus-visible { outline-color: var(--pk-yellow)
 .button--secondary:not(:disabled, [aria-disabled='true']):active { color: var(--btn-ghost-ink); background-color: #ffc64d38; box-shadow: none; transform: translateY(1px); }
 /* Disabled: muted palette, no elevation, no hover/press. aria-disabled covers link buttons. */
 .button:is(:disabled, [aria-disabled='true']) { color: var(--btn-disabled-ink); background: var(--btn-disabled-bg); border-color: var(--btn-disabled-line); box-shadow: none; font-weight: 500; transform: none; cursor: not-allowed; }
+/* Icon tile: the one rounded square behind every icon and step number (Služby, Péče o textil, Tři kroky,
+   Kontakt). Colours come from the variant; --tile-size / --tile-icon shrink it where space is tight. */
+.tile { --tile-bg: var(--tile-teal-bg); --tile-line: var(--tile-teal-line); --tile-ink: var(--tile-teal-ink); flex: 0 0 auto; width: var(--tile-size); height: var(--tile-size); display: inline-grid; place-items: center; border-radius: var(--tile-radius); background: var(--tile-bg); border: 1px solid var(--tile-line); color: var(--tile-ink); font-size: 28px; line-height: 1; font-weight: 500; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.tile span.icon { width: var(--tile-icon); height: var(--tile-icon); }
+.tile--dark { --tile-bg: var(--tile-dark-bg); --tile-line: var(--tile-dark-line); --tile-ink: var(--tile-dark-ink); }
+.tile--gold { --tile-bg: var(--tile-gold-bg); --tile-line: var(--tile-gold-line); --tile-ink: var(--tile-gold-ink); }
+.tile--s { --tile-size: 44px; --tile-radius: 13px; --tile-icon: 20px; font-size: 17px; letter-spacing: -.01em; }
+@media (max-width: 600px) { .tile:not(.tile--s) { --tile-size: 56px; --tile-radius: 16px; --tile-icon: 24px; font-size: 24px; } }
 /* Link hover: colour eases in, an underline draws from the left and retracts to the right. */
 .link-line { text-decoration: none; background: linear-gradient(currentColor, currentColor) no-repeat 100% 100% / 0 1px; transition: color var(--motion-hover) var(--ease-out), background-size var(--motion-hover) var(--ease-out); }
 @media (hover: hover) { .link-line:hover { background-size: 100% 1px; background-position: 0 100%; } }
@@ -56,10 +64,11 @@ footer :focus-visible, .process :focus-visible { outline-color: var(--pk-yellow)
 .text-link:hover { color: var(--pk-teal-hover); }
 input { width: 100%; min-width: 0; padding: 14px 16px; border: 1px solid var(--pk-line); background: var(--pk-white); color: var(--pk-ink); border-radius: var(--radius-field); min-height: 52px; }
 input::placeholder { color: var(--pk-muted); }
-/* Sticky header: paper at the top of the page, white with a soft lift once scrolled (scripts/header.ts).
+/* Sticky header: a white surface with a hairline and a faint shadow; once scrolled the lift deepens a
+   little (scripts/header.ts).
    On load its items settle in from above in the same curve as the hero, which starts right after. */
-[data-site-header] { position: sticky; top: 0; z-index: 20; transition: background-color 300ms var(--ease-out), box-shadow 300ms var(--ease-out); }
-html [data-site-header].is-scrolled { background: var(--pk-white); box-shadow: 0 12px 32px -28px rgb(9 46 50 / .45); }
+[data-site-header] { position: sticky; top: 0; z-index: 20; background: var(--pk-white); border-bottom: 1px solid var(--header-line); box-shadow: var(--header-shadow); transition: box-shadow 300ms var(--ease-out); }
+html [data-site-header].is-scrolled { box-shadow: var(--header-shadow), 0 12px 32px -28px rgb(9 46 50 / .45); }
 .motion [data-site-header] .header-inner > * { animation: rv-rise var(--motion-text) var(--ease-out) backwards; --rv-shift: calc(var(--motion-shift-text) * -.6); }
 .motion [data-site-header] .header-inner > :nth-child(2) { animation-delay: 60ms; }
 .motion [data-site-header] .header-inner > :nth-child(n + 3) { animation-delay: 120ms; }

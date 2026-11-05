@@ -10,13 +10,13 @@ assertServiceArea();
 ---
 <section class="coverage" id="svozova-oblast" aria-labelledby="coverage-title">
   <div class="container">
-    <p class="eyebrow" data-reveal>03 / Svozová oblast</p>
+    <h2 id="coverage-title" data-reveal="heading">Kam přesně svážíme?</h2>
     <div class="coverage-layout">
       {coverageMapVariant === 'image'
         ? <><CoverageMapImage class="map-wide" /><CoverageMap class="map-narrow" /></>
         : <CoverageMap />}
       <div class="coverage-panel">
-        <h2 id="coverage-title" data-reveal="heading">Jezdíme i k vám?</h2>
+        <h3 class="panel-title" data-reveal="heading">Jezdíme i k vám?</h3>
         <p class="lead" data-reveal>Zadejte adresu svého provozu. Ověříme možnosti svozu a navrhneme řešení podle vaší lokality.</p>
         <div data-reveal><AddressSearch /></div>
       </div>
@@ -29,17 +29,25 @@ assertServiceArea();
 </script>
 <style>
   .coverage { background: var(--pk-white); padding-block: var(--section-space); }
-  .coverage .eyebrow { margin-bottom: 40px; }
-  /* 736 : 528 ≈ 58 % map / 42 % content, as in Refresh 02. */
-  .coverage-layout { display: grid; grid-template-columns: minmax(0, 736fr) minmax(0, 528fr); gap: 48px; align-items: start; }
-  .coverage-panel { padding-top: 0; }
+  .coverage > .container > h2 { margin-bottom: 48px; }
+  /* 721 : 531 map / address card (krkonose_new); both are cards of the same height on desktop. */
+  .coverage-layout { display: grid; grid-template-columns: minmax(0, 721fr) minmax(0, 531fr); gap: 32px; align-items: stretch; }
+  /* Deep teal card for the address check; the white popup and result keep ink text. */
+  .coverage-panel { --btn-ring: var(--pk-yellow); display: flex; flex-direction: column; justify-content: center; padding: 36px; border-radius: var(--card-radius); background: var(--pk-deep-teal); color: var(--pk-white); outline: 1px solid #ffffff24; outline-offset: -.5px; box-shadow: 0 10px 24px #0b3f391f, inset 0 1px 1px #ffffff1f; }
+  .coverage-panel :focus-visible { outline-color: var(--pk-yellow); }
+  .coverage-panel :global(label) { color: #e9f2ec; font-weight: 600; }
+  .coverage-panel :global(.popup), .coverage-panel :global(.result) { color: var(--pk-ink); }
+  .coverage .coverage-panel :global(form) { margin-top: 20px; gap: 12px; }
+  .coverage .coverage-panel :global(form .button) { margin-top: 0; }
+  .coverage .coverage-panel :global(.field input:not(:focus)) { background: #f7f9f6; border-color: #d6e1d8; }
+  .panel-title { margin-bottom: 20px; font-size: clamp(32px, 2.8vw, 40px); line-height: 1.125; letter-spacing: -.03em; font-weight: 500; }
   /* The map is one visual that follows the heading; its places fade in after it (CoverageMap). */
   @media (min-width: 1101px) { .coverage-layout > :global(figure) { --reveal-delay: calc(var(--motion-stagger) * 2); } }
-  .coverage h2 { margin-bottom: 24px; }
-  .coverage .lead { max-width: 42ch; }
+  .coverage .lead { color: #d0e2da; font-size: 17px; line-height: 27px; }
   @media (max-width: 1100px) {
     .coverage-layout { grid-template-columns: 1fr; gap: 40px; }
     .coverage-panel { order: -1; max-width: 640px; }
+    .coverage > .container > h2 { margin-bottom: 32px; }
     .coverage-layout > :global(figure) { max-width: 736px; }
   }
   /* The illustrated map has baked-in labels that get unreadable when small; phones get the SVG. */
@@ -47,7 +55,7 @@ assertServiceArea();
   @media (max-width: 760px) {
     .coverage-layout > :global(.map-wide) { display: none; }
     .coverage-layout > :global(.map-narrow) { display: block; }
-    .coverage .eyebrow { margin-bottom: 24px; }
-    .coverage-layout { gap: 32px; }
+    .coverage-layout { gap: 24px; }
+    .coverage-panel { padding: 28px 20px; }
   }
 </style>
