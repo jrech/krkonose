@@ -98,7 +98,7 @@
 ### Tlačítka
 Zdroj stavů: `Warm gold — Button states-export.html` (Button states / 06). Font zůstává Rethink Sans 16 px / 600, ne Inter z exportu. Hodnoty jsou tokeny `--btn-*` v `tokens.css`, pravidla v `global.css`.
 - **Primary (warm gold):** třístupňový zlatý gradient, gradientní okraj 1 px, jemný bevel a 2px „lip“ stín pod tlačítkem, text `#35250D`, radius 14 px (`--radius-button`), výška 56 px desktop / nejméně 48 px mobil.
-- **Hover:** světlejší gradient, zvednutí o 2 px, větší stín; jen na zařízeních s hoverem. Popisek se zároveň odroluje (text-roll).
+- **Hover (zjemněný 2026-11-05):** světlejší gradient se prolne za 250 ms (`--motion-btn`), zvednutí jen o 1 px, mírně větší stín; popisek se odroluje o jeden řádek za 300 ms (`--motion-roll`). Vše ease-out, jen pro `(hover: hover)`. Ghost se nezvedá, jen dostane zlatý nádech.
 - **Pressed (:active):** tmavší „propadlý“ gradient, vnitřní stín, posun o 2 px dolů, rychlejší přechod (90 ms).
 - **Keyboard focus:** obrys 2 px `#72501C` s odstupem 3 px, kopíruje radius; stín se zmenší. Na tmavé ploše (kontaktní karta) je obrys žlutý přes `--btn-ring`.
 - **Ghost (`.button--secondary`):** průhledná plocha, jemný zlatý okraj 1,5 px, text `#785018`; hover lehký zlatý nádech.

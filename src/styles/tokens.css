@@ -49,7 +49,7 @@
   --btn-gold-pressed-1: #ecab2d; --btn-gold-pressed-2: #f6b838; --btn-gold-pressed-3: #f9c24c;
   --btn-gold-pressed-edge-1: #c18a28; --btn-gold-pressed-edge-2: #d49b32;
   --btn-shadow: 0 8px 16px #915e1626, 0 2px 2px #7b4d1926, 0 2px 0 #b98122, inset 0 1px 1px #fff5d7d9, inset 0 -1px 1px #d88c193d;
-  --btn-shadow-hover: 0 10px 20px #9e681333, 0 3px 4px #7b4d1926, 0 3px 0 #b67c1e, inset 0 1px 1px #fff8e5e6, inset 0 -1px 1px #d88c1933;
+  --btn-shadow-hover: 0 9px 18px #9e68132e, 0 2px 3px #7b4d1926, 0 2px 0 #b67c1e, inset 0 1px 1px #fff8e5e6, inset 0 -1px 1px #d88c1933;
   --btn-shadow-pressed: 0 0 0 transparent, 0 0 0 transparent, 0 1px 2px #7b4d191a, inset 0 2px 4px #87510d40, inset 0 -1px 1px #ffe7a199;
   --btn-shadow-focus: 0 0 0 transparent, 0 2px 4px #7b4d1926, 0 0 0 transparent, inset 0 1px 1px #fff5d7d9, inset 0 -1px 1px #d88c193d;
   --btn-ring: #72501c; /* keyboard focus ring on light surfaces; dark sections override with --pk-yellow */
@@ -80,6 +80,8 @@
   --motion-card: 750ms;
   --motion-image: 1100ms;
   --motion-stagger: 90ms;
+  --motion-btn: 250ms; /* CTA hover: gradient blend, lift and shadow */
+  --motion-roll: 300ms; /* CTA label roll: one full line, so it stays crisp but short */
   --motion-line-stagger: 110ms;
   --motion-shift-text: 14px;
   --motion-shift-heading: 22px;
