@@ -61,9 +61,9 @@
   --radius-image: 1rem;
   /* Icon tiles (krkonose_new): one rounded square for every icon or step number. Teal on light
      surfaces, translucent white on deep teal, warm gold for the step numbers. */
-  --tile-size: 64px;
-  --tile-radius: 18px;
-  --tile-icon: 28px;
+  --tile-size: 45px; /* 64 px in krkonose_new, scaled down 30 % on Jonas's request (2026-11-05) */
+  --tile-radius: 13px;
+  --tile-icon: 20px;
   --tile-teal-bg: #087f8614; --tile-teal-line: #087f8629; --tile-teal-ink: var(--pk-deep-teal);
   --tile-dark-bg: #ffffff14; --tile-dark-line: #ffffff26; --tile-dark-ink: var(--pk-yellow);
   --tile-gold-bg: #ffe8b7; --tile-gold-line: #ead29c; --tile-gold-ink: #77521a;

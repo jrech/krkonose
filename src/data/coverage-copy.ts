@@ -1,9 +1,10 @@
 import type { ResultCopy, ResultKey } from '../lib/address/combobox';
 import type { MunicipalityStatus } from './service-area';
+import { noOrphans } from '../lib/typography';
 
 // Visitor-facing result messages. `available` can only appear after a server check against an
 // approved service area (src/data/service-area.ts); everything else leads to a personal answer.
-export const coverageCopy: Record<ResultKey, ResultCopy> = {
+const rawCoverageCopy: Record<ResultKey, ResultCopy> = {
   available: { title: 'Na tuto adresu svážíme.', text: 'Četnost a termíny svozu domluvíme v poptávce.' },
   unavailable: { title: 'Mimo oblast.', text: 'Tato adresa je mimo naši svozovou oblast a svoz sem zatím nenabízíme. Máte-li dotaz, napište nám.' },
   manual_review: { title: 'Individuálně po domluvě.', text: 'Tato adresa je mimo naši běžnou svozovou oblast, svoz ale můžeme domluvit individuálně. Využijte náš kontaktní formulář.' },
@@ -24,8 +25,14 @@ export interface PlaceCopy {
 }
 
 // Picking a town on the map answers for the town as a whole, never for a specific address.
-export const placeCopy: Record<MunicipalityStatus, PlaceCopy> = {
+const rawPlaceCopy: Record<MunicipalityStatus, PlaceCopy> = {
   available: { label: 'Svážíme', title: '{place}: svážíme.', text: 'Četnost a termíny svozu domluvíme v poptávce. Přesnou adresu provozu potvrdíme v odpovědi.', cta: 'Poptat svoz' },
   individual: { label: 'Individuálně po domluvě', title: '{place}: individuálně po domluvě.', text: 'Svoz sem domluvíme podle vašeho provozu. Využijte náš kontaktní formulář.', cta: 'Domluvit svoz' },
   unavailable: { label: 'Mimo oblast', title: '{place}: mimo oblast.', text: 'Svoz sem zatím nenabízíme. Máte-li dotaz, napište nám.', cta: 'Napsat nám' },
 };
+
+// Copy inserted by the browser bypasses the middleware, so it gets the same no-orphan spacing here.
+const tidy = <T extends Record<string, Record<string, string>>>(copy: T): T =>
+  Object.fromEntries(Object.entries(copy).map(([key, entry]) => [key, Object.fromEntries(Object.entries(entry).map(([field, value]) => [field, noOrphans(value)]))])) as T;
+export const coverageCopy = tidy(rawCoverageCopy);
+export const placeCopy = tidy(rawPlaceCopy);

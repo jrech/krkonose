@@ -83,7 +83,7 @@
 - Linky: 1 px, barva `--pk-line`.
 - Stíny pouze pro prvek, který se skutečně vznáší nad obsahem (například sticky navigace); žádné plošné stínování všech karet.
 - Ikonografie: střídmé outline ikony dle exportu, velikost 24 px a jednotná tloušťka. Používat funkčně; ikona nesmí nahrazovat srozumitelný popisek.
-- Ikonové dlaždice (`krkonose_new.html`): každá ikona i číslo kroku sedí ve stejném zaobleném čtverci `.tile` (64 × 64 px, radius 18 px, okraj 1 px, ikona 28 px; na mobilu 56 px). Varianty: tyrkysová na světlé ploše (Služby, „Co bude dál“), `.tile--dark` s průsvitně bílou plochou a žlutou ikonou na deep teal (Péče o textil, kontaktní karty), `.tile--gold` pro čísla kroků (Tři kroky). `.tile--s` (44 px) jen tam, kde je málo místa (kontakt). Tokeny `--tile-*` v `tokens.css`.
+- Ikonové dlaždice (`krkonose_new.html`): každá ikona i číslo kroku sedí ve stejném zaobleném čtverci `.tile` (45 × 45 px, radius 13 px, okraj 1 px, ikona 20 px; na mobilu 40 px; o 30 % menší než 64px dlaždice v exportu, na Jonasovo přání). Varianty: tyrkysová na světlé ploše (Služby, „Co bude dál“), `.tile--dark` s průsvitně bílou plochou a žlutou ikonou na deep teal (Péče o textil, kontaktní karty), `.tile--gold` pro čísla kroků (Tři kroky). `.tile--s` (31 px) jen tam, kde je málo místa (kontakt). Tokeny `--tile-*` v `tokens.css`.
 - Karty (Svozová oblast, FAQ): radius 20 px (`--card-radius`), okraj `--card-line` (#DCE5DF). Gradienty jen u warm gold CTA, nikde jinde.
 - Fotky nikdy násilně neroztahovat. Zachovat přirozený poměr stran a použít `object-fit: cover` jen v definovaném rámu s promyšleným `object-position`.
 - Hero Refresh 02 používá editorial sazbu: velký titulek a poptávku vedle sebe nad širokou panoramatickou fotografií; na mobilu se obsah skládá svisle.

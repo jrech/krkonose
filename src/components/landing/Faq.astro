@@ -4,7 +4,7 @@ import Icon from '../ui/Icon.astro';
 ---
 <section class="section faq" aria-labelledby="faq-title"><div class="container faq-layout">
   <div class="faq-intro"><h2 id="faq-title" data-reveal="heading">Před prvním svozem.</h2><p class="lead" data-reveal>Odpovědi na to, co provozy řeší nejčastěji. Konkrétní podmínky potvrdíme při poptávce.</p></div>
-  <div class="faq-list" data-reveal="card">{faqs.map((faq, i) => <details data-rule="bottom" name="faq" open={i === 0}><summary>{faq.question}<span class="faq-toggle"><Icon name="ph-plus" class="faq-plus" /><Icon name="ph-minus" class="faq-minus" /></span></summary><p>{faq.answer}</p></details>)}</div>
+  <div class="faq-list">{faqs.map((faq, i) => <details data-reveal data-rule="bottom" name="faq" open={i === 0} style={`--i: ${i}`}><summary>{faq.question}<span class="faq-toggle"><Icon name="ph-plus" class="faq-plus" /><Icon name="ph-minus" class="faq-minus" /></span></summary><p>{faq.answer}</p></details>)}</div>
 </div></section>
 <style>
   /* krkonose_new: centred introduction above one white card; rows split by hairlines, the open row
@@ -14,6 +14,10 @@ import Icon from '../ui/Icon.astro';
   .faq-intro { text-align: center; max-width: 660px; }
   h2 { margin-bottom: 20px; }
   .faq .lead { font-size: 17px; line-height: 1.6; max-width: 38ch; margin-inline: auto; }
+  /* Reveal: the card stays put and its questions rise one by one, 70 ms apart (reduced motion: global
+     reveal rules show them at once). On phones rows enter the viewport separately, so the shared
+     reveal.ts batch order handles them. */
+  @media (min-width: 761px) { .faq-list details { --reveal-delay: calc(120ms + var(--i, 0) * 70ms); } }
   .faq-list { width: 100%; max-width: 1284px; background: var(--pk-white); border: 1px solid var(--card-line); border-radius: var(--card-radius); overflow: hidden; }
   details { --rule-color: #e1e8e2; border-bottom: 1px solid #e1e8e2; transition: background-color var(--motion-fast) var(--ease-out); }
   details:last-child { --rule-color: transparent; border-bottom: 0; }
