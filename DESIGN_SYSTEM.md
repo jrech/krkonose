@@ -77,7 +77,7 @@
 
 ## 5. Tvary, fotografie a ikony
 
-- Tlačítka i formulářová pole: radius 14 px (`--radius-button`, pole přes `--radius-field`), aby input a tlačítko pod ním držely stejný tvar.
+- Tlačítka i formulářová pole: radius 8 px (`--radius-button`, pole přes `--radius-field`), aby input a tlačítko pod ním držely stejný tvar. (Do 2026-11-06 bylo 14 px.)
 - Fotografie: radius 12–16 px; důsledně opakovat zvolenou hodnotu v rámci jedné sekce.
 - Závěrečná CTA karta: šířka obsahového kontejneru, radius 16 px (`--radius-image`), překrývá předěl světlé sekce nad ní a tmavé patičky.
 - Linky: 1 px, barva `--pk-line`.
@@ -96,13 +96,13 @@
 ## 6. Komponenty a stavy
 
 ### Tlačítka
-Zdroj stavů: `Warm gold — Button states-export.html` (Button states / 06). Font zůstává Rethink Sans 16 px / 600, ne Inter z exportu. Hodnoty jsou tokeny `--btn-*` v `tokens.css`, pravidla v `global.css`.
-- **Primary (warm gold):** třístupňový zlatý gradient, gradientní okraj 1 px, jemný bevel a 2px „lip“ stín pod tlačítkem, text `#35250D`, radius 14 px (`--radius-button`), výška 56 px desktop / nejméně 48 px mobil.
-- **Hover (zjemněný 2026-11-05):** světlejší gradient se prolne za 250 ms (`--motion-btn`), zvednutí jen o 1 px, mírně větší stín; popisek se odroluje o jeden řádek za 300 ms (`--motion-roll`). Vše ease-out, jen pro `(hover: hover)`. Ghost se nezvedá, jen dostane zlatý nádech.
-- **Pressed (:active):** tmavší „propadlý“ gradient, vnitřní stín, posun o 2 px dolů, rychlejší přechod (90 ms).
-- **Keyboard focus:** obrys 2 px `#72501C` s odstupem 3 px, kopíruje radius; stín se zmenší. Na tmavé ploše (kontaktní karta) je obrys žlutý přes `--btn-ring`.
-- **Ghost (`.button--secondary`):** průhledná plocha, jemný zlatý okraj 1,5 px, text `#785018`; hover lehký zlatý nádech.
-- **Disabled (`:disabled`, `aria-disabled="true"`):** `#E9EAE5` plocha, `#DBDED6` okraj, text `#8A8F82` / 500, bez stínu, hoveru a posunu.
+Zdroj stavů: `button_update.html` (Warm gold — Button states / 06, zjemněná verze z 2026-11-06; nahrazuje `Warm gold — Button states-export.html`, které bylo moc 3D a hravé). Font zůstává Rethink Sans 16 px / 600, ne Inter z exportu. Hodnoty jsou tokeny `--btn-*` v `tokens.css`, pravidla v `global.css`.
+- **Primary (warm gold):** jemný dvoubodový gradient `#F8CE77 → #F2BF55`, průsvitný okraj 1 px `#C58D254D`, jeden měkký stín `0 1px 3px` a slabé horní světlo (inset 1 px). Žádný bevel ani „lip“. Text `#35250D`, radius 8 px (`--radius-button`), výška 52 px desktop / 48 px mobil.
+- **Hover:** o chlup světlejší gradient (`#FBD17B → #F3BD4D`), sytější okraj, stín `0 2px 5px`, zvednutí o 1 px; prolnutí 250 ms (`--motion-btn`), popisek se odroluje o jeden řádek za 300 ms (`--motion-roll`). Vše ease-out, jen pro `(hover: hover)`. Ghost se nezvedá, jen dostane zlatý nádech.
+- **Pressed (:active):** hlubší zlatá (`#E9B449 → #ECBA54`), jen jemný vnitřní stín, bez vnějšího stínu, zpátky na základní linii (žádný propad), přechod 90 ms.
+- **Keyboard focus:** obrys 2 px `#72501C` s odstupem 3 px, kopíruje radius. Na tmavé ploše (kontaktní karta, mapa) je obrys žlutý přes `--btn-ring`.
+- **Ghost (`.button--secondary`):** průhledná plocha, okraj 1 px `#B98F48`, text `#785018`; hover lehký zlatý nádech.
+- **Disabled (`:disabled`, `aria-disabled="true"`):** plocha `#E9EAE5` bez okraje, text `#8A8F82` / 500, bez stínu, hoveru a posunu.
 - Barvy gradientu se mezi stavy plynule prolínají (registrované `@property`); `prefers-reduced-motion` vypíná přechody i posuny.
 - **Text link:** tyrkysový odkaz, podtržení na hover/focus; vhodný pro navigaci a sekundární odkazy.
 - Cookie lišta (`.cc-btn`) má vlastní styl pro tmavý pruh a warm gold nepoužívá.

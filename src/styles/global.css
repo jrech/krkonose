@@ -26,19 +26,16 @@ footer :focus-visible, .process :focus-visible { outline-color: var(--pk-yellow)
 .eyebrow { display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 20px; letter-spacing: .08em; text-transform: uppercase; font-weight: 400; color: var(--pk-teal); margin-bottom: 20px; }
 .eyebrow::before { content: ""; display: block; flex: 0 0 32px; height: 2px; background: var(--pk-teal); }
 .actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-/* Warm gold button. Surface and edge gradients read registered colour properties, so state changes
-   ease between gradients instead of snapping (browsers without @property simply swap them). The edge
-   is a gradient border: surface on padding-box, edge on border-box under a transparent border. */
+/* Warm gold button (subtle). Surface gradient reads registered colour properties, so state changes
+   ease between gradients instead of snapping (browsers without @property simply swap them). The edge is
+   a translucent 1px border over the page; the surface sits on padding-box. */
 @property --btn-1 { syntax: '<color>'; inherits: false; initial-value: transparent; }
 @property --btn-2 { syntax: '<color>'; inherits: false; initial-value: transparent; }
-@property --btn-3 { syntax: '<color>'; inherits: false; initial-value: transparent; }
-@property --btn-edge-1 { syntax: '<color>'; inherits: false; initial-value: transparent; }
-@property --btn-edge-2 { syntax: '<color>'; inherits: false; initial-value: transparent; }
-.button { --btn-1: var(--btn-gold-1); --btn-2: var(--btn-gold-2); --btn-3: var(--btn-gold-3); --btn-edge-1: var(--btn-gold-edge-1); --btn-edge-2: var(--btn-gold-edge-2); --btn-speed: var(--motion-btn); min-height: 56px; display: inline-flex; align-items: center; justify-content: center; gap: 14px; padding: 14px 22px; color: var(--btn-gold-ink); background: linear-gradient(180deg, var(--btn-1), var(--btn-2) 50%, var(--btn-3)) padding-box, linear-gradient(180deg, var(--btn-edge-1), var(--btn-edge-2)) border-box; border: 1px solid transparent; border-radius: var(--radius-button); box-shadow: var(--btn-shadow); text-decoration: none; font-size: 16px; font-weight: 600; letter-spacing: -.015em; cursor: pointer; transition-property: --btn-1, --btn-2, --btn-3, --btn-edge-1, --btn-edge-2, box-shadow, transform, color, background-color, border-color; transition-duration: var(--btn-speed); transition-timing-function: var(--ease-out); }
-@media (hover: hover) { .button:not(:disabled, [aria-disabled='true']):hover { --btn-1: var(--btn-gold-hover-1); --btn-2: var(--btn-gold-hover-2); --btn-3: var(--btn-gold-hover-3); --btn-edge-1: var(--btn-gold-hover-edge-1); --btn-edge-2: var(--btn-gold-hover-edge-2); box-shadow: var(--btn-shadow-hover); transform: translateY(-1px); } }
-.button:focus-visible { outline: 2px solid var(--btn-ring); outline-offset: 3px; box-shadow: var(--btn-shadow-focus); }
-/* Pressed sinks into its lip: faster, so the click answers immediately. */
-.button:not(:disabled, [aria-disabled='true']):active { --btn-speed: 90ms; --btn-1: var(--btn-gold-pressed-1); --btn-2: var(--btn-gold-pressed-2); --btn-3: var(--btn-gold-pressed-3); --btn-edge-1: var(--btn-gold-pressed-edge-1); --btn-edge-2: var(--btn-gold-pressed-edge-2); color: var(--btn-gold-ink-pressed); box-shadow: var(--btn-shadow-pressed); transform: translateY(2px); }
+.button { --btn-1: var(--btn-gold-1); --btn-2: var(--btn-gold-2); --btn-speed: var(--motion-btn); min-height: 52px; display: inline-flex; align-items: center; justify-content: center; gap: 14px; padding: 12px 24px; color: var(--btn-gold-ink); background: linear-gradient(180deg, var(--btn-1), var(--btn-2)) padding-box; border: 1px solid var(--btn-gold-edge); border-radius: var(--radius-button); box-shadow: var(--btn-shadow); text-decoration: none; font-size: 16px; font-weight: 600; letter-spacing: -.015em; cursor: pointer; transition-property: --btn-1, --btn-2, box-shadow, transform, color, background-color, border-color; transition-duration: var(--btn-speed); transition-timing-function: var(--ease-out); }
+@media (hover: hover) { .button:not(:disabled, [aria-disabled='true']):hover { --btn-1: var(--btn-gold-hover-1); --btn-2: var(--btn-gold-hover-2); border-color: var(--btn-gold-hover-edge); box-shadow: var(--btn-shadow-hover); transform: translateY(-1px); } }
+.button:focus-visible { outline: 2px solid var(--btn-ring); outline-offset: 3px; }
+/* Pressed: deeper gold, a gentle inset, back down to the baseline. Faster, so the click answers at once. */
+.button:not(:disabled, [aria-disabled='true']):active { --btn-speed: 90ms; --btn-1: var(--btn-gold-pressed-1); --btn-2: var(--btn-gold-pressed-2); border-color: var(--btn-gold-pressed-edge); color: var(--btn-gold-ink-pressed); box-shadow: var(--btn-shadow-pressed); transform: none; }
 /* Hover stays quiet: one gentle gradient blend, a 1px lift and a short label roll, all on one curve.
    Text roll: the label sits in a one-line mask; its copy is a text-shadow one line below (never read
    aloud, follows any label change). Hover or keyboard focus rolls both up by exactly one line. */
@@ -47,12 +44,12 @@ footer :focus-visible, .process :focus-visible { outline-color: var(--pk-yellow)
 @media (hover: hover) { .button:not(:disabled):hover .button-label-text { transform: translateY(calc(var(--roll) * -1)); } }
 .button:not(:disabled):focus-visible .button-label-text { transform: translateY(calc(var(--roll) * -1)); }
 /* Ghost: transparent surface, fine gold outline, no elevation. */
-.button--secondary { color: var(--btn-ghost-ink); background: transparent; border: 1.5px solid; border-color: var(--btn-ghost-edge); box-shadow: none; }
+.button--secondary { color: var(--btn-ghost-ink); background: transparent; border: 1px solid var(--btn-ghost-edge); box-shadow: none; }
 @media (hover: hover) { .button--secondary:not(:disabled, [aria-disabled='true']):hover { background-color: #ffc64d1f; box-shadow: none; transform: none; } }
 .button--secondary:focus-visible { box-shadow: none; }
-.button--secondary:not(:disabled, [aria-disabled='true']):active { color: var(--btn-ghost-ink); background-color: #ffc64d38; box-shadow: none; transform: translateY(1px); }
+.button--secondary:not(:disabled, [aria-disabled='true']):active { color: var(--btn-ghost-ink); background-color: #ffc64d38; box-shadow: none; transform: none; }
 /* Disabled: muted palette, no elevation, no hover/press. aria-disabled covers link buttons. */
-.button:is(:disabled, [aria-disabled='true']) { color: var(--btn-disabled-ink); background: var(--btn-disabled-bg); border-color: var(--btn-disabled-line); box-shadow: none; font-weight: 500; transform: none; cursor: not-allowed; }
+.button:is(:disabled, [aria-disabled='true']) { color: var(--btn-disabled-ink); background: var(--btn-disabled-bg); border-color: transparent; box-shadow: none; font-weight: 500; transform: none; cursor: not-allowed; }
 /* Icon tile: the one rounded square behind every icon and step number (Služby, Péče o textil, Tři kroky,
    Kontakt). Colours come from the variant; --tile-size / --tile-icon shrink it where space is tight.
    Sizes are 70 % of the export (64 → 45 px), as Jonas asked. */

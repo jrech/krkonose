@@ -36,27 +36,23 @@
   --gutter: clamp(1.25rem, 3.34vw, 4rem);
   --content-width: 90rem;
   --radius-control: .5rem;
-  --radius-button: 14px;
+  --radius-button: 8px; /* button_update (2026-11-06): calmer, less "toy" than the old 14 px */
   --radius-field: var(--radius-button); /* inputs, selects, textareas and the address dropdown match the buttons */
-  /* Warm gold button (Warm gold — Button states / 06). Surface = 3-stop vertical gradient, edge = 2-stop
-     gradient border, plus a solid 2px "lip" shadow under the button. States: default, hover, pressed. */
+  /* Warm gold button, subtle variant (button_update.html, 2026-11-06). Flat-ish 2-stop gold, translucent
+     1px edge, one soft drop shadow and a faint top highlight. No lip, no bevel. States: default, hover, pressed. */
   --btn-gold-ink: #35250d;
   --btn-gold-ink-pressed: #30210c;
-  --btn-gold-1: #ffd875; --btn-gold-2: #ffc64d; --btn-gold-3: #f8b32a;
-  --btn-gold-edge-1: #ebc16b; --btn-gold-edge-2: #cb901e;
-  --btn-gold-hover-1: #ffe08a; --btn-gold-hover-2: #ffcd58; --btn-gold-hover-3: #ffbd32;
-  --btn-gold-hover-edge-1: #eec064; --btn-gold-hover-edge-2: #c1871c;
-  --btn-gold-pressed-1: #ecab2d; --btn-gold-pressed-2: #f6b838; --btn-gold-pressed-3: #f9c24c;
-  --btn-gold-pressed-edge-1: #c18a28; --btn-gold-pressed-edge-2: #d49b32;
-  --btn-shadow: 0 8px 16px #915e1626, 0 2px 2px #7b4d1926, 0 2px 0 #b98122, inset 0 1px 1px #fff5d7d9, inset 0 -1px 1px #d88c193d;
-  --btn-shadow-hover: 0 9px 18px #9e68132e, 0 2px 3px #7b4d1926, 0 2px 0 #b67c1e, inset 0 1px 1px #fff8e5e6, inset 0 -1px 1px #d88c1933;
-  --btn-shadow-pressed: 0 0 0 transparent, 0 0 0 transparent, 0 1px 2px #7b4d191a, inset 0 2px 4px #87510d40, inset 0 -1px 1px #ffe7a199;
-  --btn-shadow-focus: 0 0 0 transparent, 0 2px 4px #7b4d1926, 0 0 0 transparent, inset 0 1px 1px #fff5d7d9, inset 0 -1px 1px #d88c193d;
+  --btn-gold-1: #f8ce77; --btn-gold-2: #f2bf55; --btn-gold-edge: #c58d254d;
+  --btn-gold-hover-1: #fbd17b; --btn-gold-hover-2: #f3bd4d; --btn-gold-hover-edge: #c58d2566;
+  --btn-gold-pressed-1: #e9b449; --btn-gold-pressed-2: #ecba54; --btn-gold-pressed-edge: #b9832859;
+  /* Three slots everywhere (drop, top highlight, inset press) so shadows interpolate between states. */
+  --btn-shadow: 0 1px 3px #7b4d191a, inset 0 1px 1px #fff8e066, inset 0 1px 2px #8a601500;
+  --btn-shadow-hover: 0 2px 5px #7b4d1921, inset 0 1px 1px #fff8e066, inset 0 1px 2px #8a601500;
+  --btn-shadow-pressed: 0 0 0 #7b4d1900, inset 0 1px 1px #fff8e000, inset 0 1px 2px #8a60151f;
   --btn-ring: #72501c; /* keyboard focus ring on light surfaces; dark sections override with --pk-yellow */
   --btn-ghost-ink: #785018;
-  --btn-ghost-edge: #d5b476 #c8a25f #b98f48; /* top, sides, bottom: the fine gold outline, shaded top to bottom */
+  --btn-ghost-edge: #b98f48; /* fine gold outline */
   --btn-disabled-bg: #e9eae5;
-  --btn-disabled-line: #dbded6;
   --btn-disabled-ink: #8a8f82;
   --radius-image: 1rem;
   /* Icon tiles (krkonose_new): one rounded square for every icon or step number. Teal on light
