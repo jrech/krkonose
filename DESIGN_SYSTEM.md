@@ -71,17 +71,20 @@
 - Tablet: 8 sloupců, mezera 24 px, okraje 32 px.
 - Mobil: 4 sloupce, mezera 16 px, okraje 20–24 px.
 - Maximální šířka obsahu podle exportu: 1440 px. Obsah centrovat; na širokém monitoru neprotahovat fotografie ani text přes celou plochu.
-- Vertikální odstup sekcí: desktop 120–160 px, tablet 80–96 px, mobil 64–80 px.
+- Vertikální odstup sekcí: desktop 120–160 px, tablet 80–96 px, mobil 64–80 px. V kódu tři tokeny v `tokens.css`: `--section-space-s` (120 px, husté seznamy typu FAQ), `--section-space` (144 px, výchozí) a `--section-space-l` (160 px, krátké sekce s jedním sdělením: Kvalita, Reference, Kontakt).
 - Vnitřní rytmus sekcí: 16/24/32/48 px. Větší mezery používej jen pro skutečné skupiny obsahu.
 - Při přepočtu layoutu upřednostni čitelnou délku řádku a skutečný obsah před mechanickým zachováním 12sloupcové mřížky.
 
 ## 5. Tvary, fotografie a ikony
 
-- Tlačítka a formulářová pole: radius 8 px.
+- Tlačítka i formulářová pole: radius 8 px (`--radius-button`, pole přes `--radius-field`), aby input a tlačítko pod ním držely stejný tvar. (Do 2026-11-06 bylo 14 px.)
 - Fotografie: radius 12–16 px; důsledně opakovat zvolenou hodnotu v rámci jedné sekce.
+- Závěrečná CTA karta: šířka obsahového kontejneru, radius 16 px (`--radius-image`), překrývá předěl světlé sekce nad ní a tmavé patičky.
 - Linky: 1 px, barva `--pk-line`.
 - Stíny pouze pro prvek, který se skutečně vznáší nad obsahem (například sticky navigace); žádné plošné stínování všech karet.
 - Ikonografie: střídmé outline ikony dle exportu, velikost 24 px a jednotná tloušťka. Používat funkčně; ikona nesmí nahrazovat srozumitelný popisek.
+- Ikonové dlaždice (`krkonose_new.html`): každá ikona i číslo kroku sedí ve stejném zaobleném čtverci `.tile` (45 × 45 px, radius 13 px, okraj 1 px, ikona 20 px; na mobilu 40 px; o 30 % menší než 64px dlaždice v exportu, na Jonasovo přání). Varianty: tyrkysová na světlé ploše (Služby, „Co bude dál“), `.tile--dark` s průsvitně bílou plochou a žlutou ikonou na deep teal (Péče o textil, kontaktní karty), `.tile--gold` pro čísla kroků (Tři kroky). `.tile--s` (31 px) jen tam, kde je málo místa (kontakt). Tokeny `--tile-*` v `tokens.css`.
+- Karty (Svozová oblast, FAQ): radius 20 px (`--card-radius`), okraj `--card-line` (#DCE5DF). Gradienty jen u warm gold CTA, nikde jinde.
 - Fotky nikdy násilně neroztahovat. Zachovat přirozený poměr stran a použít `object-fit: cover` jen v definovaném rámu s promyšleným `object-position`.
 - Hero Refresh 02 používá editorial sazbu: velký titulek a poptávku vedle sebe nad širokou panoramatickou fotografií; na mobilu se obsah skládá svisle.
 - Karty provozů mají na desktopu fotografii vedle textu a mohou se vrstvit sticky; na mobilu se zobrazí jako samostatné bílé karty v běžném toku.
@@ -93,17 +96,21 @@
 ## 6. Komponenty a stavy
 
 ### Tlačítka
-- **Primary:** žlutá plocha, ink text, radius 8 px, výška 56 px desktop / nejméně 48 px mobil.
-- **Secondary:** klidná světlá nebo transparentní varianta s jasným okrajem či textovým kontrastem; použij pro alternativní akci.
+Zdroj stavů: `button_update.html` (Warm gold — Button states / 06, zjemněná verze z 2026-11-06; nahrazuje `Warm gold — Button states-export.html`, které bylo moc 3D a hravé). Font zůstává Rethink Sans 16 px / 600, ne Inter z exportu. Hodnoty jsou tokeny `--btn-*` v `tokens.css`, pravidla v `global.css`.
+- **Primary (warm gold):** jemný dvoubodový gradient `#F8CE77 → #F2BF55`, průsvitný okraj 1 px `#C58D254D`, jeden měkký stín `0 1px 3px` a slabé horní světlo (inset 1 px). Žádný bevel ani „lip“. Text `#35250D`, radius 8 px (`--radius-button`), výška 52 px desktop / 48 px mobil.
+- **Hover:** o chlup světlejší gradient (`#FBD17B → #F3BD4D`), sytější okraj, stín `0 2px 5px`, zvednutí o 1 px; prolnutí 250 ms (`--motion-btn`), popisek se odroluje o jeden řádek za 300 ms (`--motion-roll`). Vše ease-out, jen pro `(hover: hover)`. Ghost se nezvedá, jen dostane zlatý nádech.
+- **Pressed (:active):** hlubší zlatá (`#E9B449 → #ECBA54`), jen jemný vnitřní stín, bez vnějšího stínu, zpátky na základní linii (žádný propad), přechod 90 ms.
+- **Keyboard focus:** obrys 2 px `#72501C` s odstupem 3 px, kopíruje radius. Na tmavé ploše (kontaktní karta, mapa) je obrys žlutý přes `--btn-ring`.
+- **Ghost (`.button--secondary`):** průhledná plocha, okraj 1 px `#B98F48`, text `#785018`; hover lehký zlatý nádech.
+- **Disabled (`:disabled`, `aria-disabled="true"`):** plocha `#E9EAE5` bez okraje, text `#8A8F82` / 500, bez stínu, hoveru a posunu.
+- Barvy gradientu se mezi stavy plynule prolínají (registrované `@property`); `prefers-reduced-motion` vypíná přechody i posuny.
 - **Text link:** tyrkysový odkaz, podtržení na hover/focus; vhodný pro navigaci a sekundární odkazy.
-- Hover: přechod k odpovídajícímu tmavšímu žlutému nebo tyrkysovému tokenu, 160–200 ms.
-- Focus: viditelný obrys 3 px s odstupem 3 px; nikdy nespoléhat pouze na změnu barvy.
-- Disabled: ztlumený text i plocha, bez hover efektu.
+- Cookie lišta (`.cc-btn`) má vlastní styl pro tmavý pruh a warm gold nepoužívá.
 - V jednom obsahovém bloku má být nejvýše jedna vizuálně dominantní primary akce.
 
 ### Formulářová pole
 - Label vždy viditelný nad polem; placeholder není náhradou labelu.
-- Pole bílá, ink text, line `--pk-line`, radius 8 px; standardní text nejméně 16 px.
+- Pole se světlým šedozeleným fillem `--pk-field` (#F3F6F4) a jemnou linkou `--pk-field-line` (#DFE7E3), bez stínů (i iOS vnitřní stín je vypnutý); při focusu bílý fill + tyrkysový obrys. Ink text, radius 14 px (`--radius-field`); standardní text nejméně 16 px.
 - Focus má zřetelný outline/ring.
 - Chybu popsat textem i barvou; uveď, jak ji napravit.
 - Po úspěšném odeslání zobrazit potvrzení a další očekávaný krok.
@@ -112,6 +119,7 @@
 
 ### Navigace
 - Jednoduchá a přehledná; na desktopu nabídni telefon jako sekundární přímou cestu a poptávku jako hlavní akci stránky.
+- Lišta je bílá plocha s linkou `--header-line` (#CAD8D4) a jemným stínem `--header-shadow`; po odscrollování se stín mírně prohloubí. Telefon 16 px s ikonou v deep teal.
 - Svozovou oblast zobraz jako orientační diagram s jasným upozorněním, že vyznačená místa nepotvrzují dostupnost svozu.
 - Na mobilu nabídnout ovladatelné menu s přístupným názvem, stavy a klávesnicovou obsluhou.
 

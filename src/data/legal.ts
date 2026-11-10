@@ -1,21 +1,20 @@
 // Legal pages (Ochrana osobních údajů, Cookies). These texts are a template and need a legal review
 // before launch. Nothing here is confirmed by the owner yet: fill the TODO fields, never guess them.
-import { site } from './site';
+import { addressLine, site } from './site';
 
 export const controller = {
   // TODO: exact legal name of the operator (company or sole trader) from the business register.
   legalName: site.name,
   // IČO comes from the Refresh 02 design and is not verified yet (see site.ts).
   companyId: site.companyId,
-  // Address taken from the Pen design (also used on /kontakt/). Confirm with the owner before launch.
-  address: 'Kpt. Jaroše 496, 543 01 Vrchlabí',
+  address: addressLine,
   email: site.email,
   phone: site.phone,
   phoneHref: site.phoneHref,
 };
 
-// The site is deployed to Cloudflare Workers (wrangler.jsonc).
-export const hostingProvider: string | null = 'Cloudflare, Inc.';
+// The site is hosted on Zerops (deploys from codex/zerops-deploy). Add the company name once confirmed.
+export const hostingProvider: string | null = 'Zerops';
 
 // Shown as "Poslední aktualizace" on both legal pages. Update whenever the content changes.
 export const legalUpdated = { privacy: 'říjen 2026', cookies: 'říjen 2026' };

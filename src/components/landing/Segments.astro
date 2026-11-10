@@ -5,7 +5,7 @@ import Icon from '../ui/Icon.astro';
 ---
 <section class="section segments" id="pro-koho" aria-labelledby="segments-title">
   <div class="container">
-    <div class="section-heading"><p class="eyebrow" data-reveal>02 / Pro koho pereme</p><h2 id="segments-title" data-reveal="heading"><span class="reveal-line">Každý provoz má jiné nároky.</span> <span class="reveal-line">My se jim přizpůsobíme.</span></h2><p class="lead" data-reveal>Od menších penzionů po vytížené hotely. Domluvíme způsob spolupráce podle potřeb vašeho provozu.</p></div>
+    <div class="section-heading"><h2 id="segments-title" data-reveal="heading"><span class="reveal-line">Každý provoz má jiné nároky.</span> <span class="reveal-line">My se jim přizpůsobíme.</span></h2><p class="lead" data-reveal>Od menších penzionů po vytížené hotely. Domluvíme způsob spolupráce podle potřeb vašeho provozu.</p></div>
     <div class="segment-stack">{segments.map((segment, i) => <article class="segment-card" data-reveal="card" style={`--card-index: ${i}`} aria-labelledby={`segment-${segment.id}`}>
       <div class="segment-copy">
         <p class="segment-label">0{i + 1} / {segment.category}</p>

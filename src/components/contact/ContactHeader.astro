@@ -21,7 +21,7 @@ const { current = true } = Astro.props;
   </div>
 </header>
 <style>
-  .contact-header { border-bottom: 1px solid var(--pk-line); background: var(--pk-paper); }
+  /* Surface, hairline and shadow come from [data-site-header] in global.css. */
   .header-inner { display: flex; align-items: center; gap: 32px; min-height: 104px; }
   .brand { margin-right: auto; flex: 0 0 auto; } .brand img { display: block; width: 97px; height: auto; }
   .back-nav { display: flex; align-items: center; gap: 24px; }
@@ -32,8 +32,8 @@ const { current = true } = Astro.props;
   .back-link, .header-phone { transition: color var(--motion-hover) var(--ease-out); }
   .back-link { display: none; align-items: center; gap: 8px; }
   .back-link :global(.back-icon) { width: 20px; height: 20px; transform: scaleX(-1); color: var(--pk-teal); }
-  .header-phone { min-height: 56px; padding-left: 32px; border-left: 1px solid var(--pk-line); display: inline-flex; align-items: center; gap: 8px; font-size: 14px; text-decoration: none; white-space: nowrap; }
-  .header-phone :global(.icon) { width: 20px; height: 20px; color: var(--pk-teal); }
+  .header-phone { min-height: 56px; padding-left: 32px; border-left: 1px solid var(--pk-line); display: inline-flex; align-items: center; gap: 8px; font-size: 16px; text-decoration: none; white-space: nowrap; }
+  .header-phone :global(.icon) { width: 16px; height: 16px; color: var(--pk-deep-teal); }
   @media (max-width: 1199px) { .back-nav { display: none; } .back-link { display: inline-flex; } .header-phone { padding-left: 16px; } }
   @media (max-width: 600px) { .header-inner { min-height: 88px; gap: 16px; } .header-phone span { display: none; } .header-phone { min-height: 48px; min-width: 48px; justify-content: center; } }
 </style>

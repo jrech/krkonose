@@ -59,10 +59,10 @@ import { site } from '../../data/site';
   .field input:focus-visible { outline-offset: 0; border-color: var(--pk-teal); }
   form .button { width: 100%; margin-top: 16px; }
   /* Overlays the button below instead of pushing content: no layout shift. */
-  .popup { position: absolute; z-index: 5; top: calc(100% + 4px); left: 0; right: 0; max-height: min(320px, 50vh); overflow-y: auto; overscroll-behavior: contain; background: var(--pk-white); border: 1px solid var(--pk-line); border-radius: var(--radius-control); padding: 4px; }
+  .popup { position: absolute; z-index: 5; top: calc(100% + 4px); left: 0; right: 0; max-height: min(320px, 50vh); overflow-y: auto; overscroll-behavior: contain; background: var(--pk-white); border: 1px solid var(--pk-line); border-radius: var(--radius-field); padding: 4px; }
   [role='listbox'] { list-style: none; margin: 0; padding: 0; }
   [role='listbox']:empty { display: none; }
-  [role='listbox'] :global([role='option']) { display: grid; gap: 2px; min-height: 48px; align-content: center; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 15px; line-height: 20px; }
+  [role='listbox'] :global([role='option']) { display: grid; gap: 2px; min-height: 48px; align-content: center; padding: 8px 12px; border-radius: 10px; cursor: pointer; font-size: 15px; line-height: 20px; }
   [role='listbox'] :global([aria-selected='true']) { background: var(--pk-paper); color: var(--pk-deep-teal); }
   [role='listbox'] :global(.option-detail) { color: var(--pk-muted); font-size: 13px; line-height: 18px; }
   .popup-status { margin: 0; padding: 12px; color: var(--pk-muted); font-size: 14px; line-height: 20px; }

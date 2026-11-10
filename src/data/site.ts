@@ -9,14 +9,18 @@ export const site = {
   inquiryEndpoint: import.meta.env.PUBLIC_INQUIRY_ENDPOINT?.trim() || 'https://formspree.io/f/xojpnvyz',
   // Google Analytics 4 property. Loads only after analytics consent (lib/consent/analytics.ts).
   // PUBLIC_GA_ID can override it, e.g. a test property; PUBLIC_GA_ID=off turns GA off.
-  gaId: import.meta.env.PUBLIC_GA_ID?.trim() || 'G-MH7HJD691L',
+  gaId: import.meta.env.PUBLIC_GA_ID?.trim() || 'G-16WF2MW333',
   area: 'Vrchlabí · Krkonoše',
+  // Laundry address, confirmed by the owner on 2026-10-23 (footer, /kontakt/, legal pages, JSON-LD).
+  address: { street: 'Kpt. Jaroše 496', postalCode: '543 01', city: 'Vrchlabí' },
   // IČO taken from the Refresh 02 design. Confirm against the business register before launch.
   companyId: '05593034',
   credit: 'Jonas Rech',
   creditUrl: 'https://www.jonasrech.com',
-  description: 'Prádelenský servis pro hotely, penziony, apartmány, chaty a gastro provozy. Domluvte si praní a svoz prádla v Krkonoších.',
+  description: 'Profesionální praní, sušení a mandlování prádla pro hotely, penziony a gastro provozy. Pravidelný svoz a rozvoz prádla po Krkonoších.',
 };
+
+export const addressLine = `${site.address.street}, ${site.address.postalCode} ${site.address.city}`;
 
 export const navigation = [
   { label: 'Služby', href: '#sluzby' },

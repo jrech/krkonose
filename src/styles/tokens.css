@@ -9,6 +9,8 @@
   --pk-white: #fff;
   --pk-muted: #53696b;
   --pk-line: #d6e1de;
+  --pk-field: #f3f6f4; /* form field fill: light grey-green on white cards */
+  --pk-field-line: #dfe7e3;
   --pk-error: #b63838;
   --pk-success: #236a4b;
   --pk-dark-muted: #d6e1de;
@@ -26,11 +28,45 @@
   --space-8: 5rem;
   --space-9: 7.5rem;
   --space-10: 10rem;
-  --section-space: clamp(5rem, 8.4vw, 7.5rem);
+  /* Section rhythm (vertical padding), picked by content: s = dense lists, m = default, l = short
+     statement sections. Desktop 120/144/160 px at 1440, tablet ~75-105 px, mobile 64/72/80 px. */
+  --section-space-s: clamp(4rem, 1.5rem + 6.67vw, 7.5rem);
+  --section-space: clamp(4.5rem, 2rem + 7.78vw, 9rem);
+  --section-space-l: clamp(5rem, 2.5rem + 8.334vw, 10rem);
   --gutter: clamp(1.25rem, 3.34vw, 4rem);
   --content-width: 90rem;
   --radius-control: .5rem;
+  --radius-button: 8px; /* button_update (2026-11-06): calmer, less "toy" than the old 14 px */
+  --radius-field: var(--radius-button); /* inputs, selects, textareas and the address dropdown match the buttons */
+  /* Warm gold button, subtle variant (button_update.html, 2026-11-06). Flat-ish 2-stop gold, translucent
+     1px edge, one soft drop shadow and a faint top highlight. No lip, no bevel. States: default, hover, pressed. */
+  --btn-gold-ink: #35250d;
+  --btn-gold-ink-pressed: #30210c;
+  --btn-gold-1: #f8ce77; --btn-gold-2: #f2bf55; --btn-gold-edge: #c58d254d;
+  --btn-gold-hover-1: #fbd17b; --btn-gold-hover-2: #f3bd4d; --btn-gold-hover-edge: #c58d2566;
+  --btn-gold-pressed-1: #e9b449; --btn-gold-pressed-2: #ecba54; --btn-gold-pressed-edge: #b9832859;
+  /* Three slots everywhere (drop, top highlight, inset press) so shadows interpolate between states. */
+  --btn-shadow: 0 1px 3px #7b4d191a, inset 0 1px 1px #fff8e066, inset 0 1px 2px #8a601500;
+  --btn-shadow-hover: 0 2px 5px #7b4d1921, inset 0 1px 1px #fff8e066, inset 0 1px 2px #8a601500;
+  --btn-shadow-pressed: 0 0 0 #7b4d1900, inset 0 1px 1px #fff8e000, inset 0 1px 2px #8a60151f;
+  --btn-ring: #72501c; /* keyboard focus ring on light surfaces; dark sections override with --pk-yellow */
+  --btn-ghost-ink: #785018;
+  --btn-ghost-edge: #b98f48; /* fine gold outline */
+  --btn-disabled-bg: #e9eae5;
+  --btn-disabled-ink: #8a8f82;
   --radius-image: 1rem;
+  /* Icon tiles (krkonose_new): one rounded square for every icon or step number. Teal on light
+     surfaces, translucent white on deep teal, warm gold for the step numbers. */
+  --tile-size: 45px; /* 64 px in krkonose_new, scaled down 30 % on Jonas's request (2026-11-05) */
+  --tile-radius: 13px;
+  --tile-icon: 20px;
+  --tile-teal-bg: #087f8614; --tile-teal-line: #087f8629; --tile-teal-ink: var(--pk-deep-teal);
+  --tile-dark-bg: #ffffff14; --tile-dark-line: #ffffff26; --tile-dark-ink: var(--pk-yellow);
+  --tile-gold-bg: #ffe8b7; --tile-gold-line: #ead29c; --tile-gold-ink: #77521a;
+  --header-line: #cad8d4;
+  --header-shadow: 0 4px 16px #092e320a;
+  --card-line: #dce5df;
+  --card-radius: 20px;
   --ease-out: cubic-bezier(.22, 1, .36, 1);
   /* Motion: one curve, four speeds. Reveal variants live in global.css, timing in scripts/reveal.ts. */
   --motion-fast: 200ms;
@@ -40,11 +76,17 @@
   --motion-card: 750ms;
   --motion-image: 1100ms;
   --motion-stagger: 90ms;
+  --motion-btn: 250ms; /* CTA hover: gradient blend, lift and shadow */
+  --motion-roll: 300ms; /* CTA label roll: one full line, so it stays crisp but short */
   --motion-line-stagger: 110ms;
   --motion-shift-text: 14px;
   --motion-shift-heading: 22px;
   --motion-shift-card: 18px;
   --motion-image-scale: 1.04;
+  /* Separator rules draw as one slow, even stroke (scripts/rules.ts); same on every screen size. */
+  --motion-rule: 1400ms;
+  --motion-rule-stagger: 60ms;
+  --ease-rule: cubic-bezier(.455, .03, .515, .955); /* ease-in-out quad */
   --header-entrance: 160ms; /* hero reveals start once the header has begun settling */
 }
 @media (max-width: 760px) {

@@ -92,6 +92,7 @@ export const serviceArea: ServiceAreaConfig = {
 - Nasazení: `npm run build` a `npx wrangler deploy`, nebo Cloudflare Workers Builds napojené na repozitář (build `npm run build`, deploy `npx wrangler deploy`). Konfigurace je ve `wrangler.jsonc`.
 - Rate limiting: binding `ADDRESS_LIMITER` ve `wrangler.jsonc` (20 požadavků za 60 s na IP z `CF-Connecting-IP`, společně pro `suggest` i `check`). Kontrola běží v endpointu před voláním Mapy.com, při překročení vrací 429 s `Retry-After`. Limit je per Cloudflare lokace. Bez bindingu se limiter přeskočí jen v `astro dev`, nasazený Worker vrátí 503.
 - Mapy.com se volá s timeoutem 3 s, našeptávač vrací nejvýše 5 návrhů, klient čeká 350 ms po posledním znaku a od 3 znaků hledá. Při 429 se v poli zobrazí „Příliš mnoho dotazů…“ a další dotazy se pozdrží o `Retry-After`.
+- Našeptávač nabízí jen adresy v oblasti `searchArea` (`service-area.ts`: Krkonoše a Podkrkonoší s rezervou, zhruba 15,25–16,15 E a 50,40–50,92 N). Mapy.com nemá pevný filtr oblasti, takže se filtruje na serveru (z Mapy.com se bere 15 shod a ponechá se max. 5 uvnitř). Když shody existují jen mimo oblast (Praha, Brno…), server vrátí `outsideArea: true` a pole zobrazí „Do této lokality nesvážíme…“. Ručně podvržená adresa mimo oblast dostane z `/check/` stav `unavailable`.
 - V produkci logujeme jen chyby poskytovatele, ne adresy.
 
 ## Mapa: zdroje dat a licence

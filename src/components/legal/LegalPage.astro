@@ -20,7 +20,7 @@ const { title, description, noindex, eyebrow, heading, lead, updated, toc = [] }
 <BaseLayout title={title} description={description ?? lead} noindex={noindex}>
   <ContactHeader current={false} />
   <main id="main">
-    <section class="legal-intro container" aria-labelledby="legal-title">
+    <section class="legal-intro container" aria-labelledby="legal-title" data-rule="bottom">
       <p class="eyebrow" data-reveal>{eyebrow}</p>
       <div class="intro-row">
         <h1 id="legal-title" data-reveal="heading">{heading.map(line => <span class="reveal-line">{line}</span>)}</h1>
