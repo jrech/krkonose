@@ -9,14 +9,18 @@ export const site = {
   inquiryEndpoint: import.meta.env.PUBLIC_INQUIRY_ENDPOINT?.trim() || 'https://formspree.io/f/xojpnvyz',
   // Google Analytics 4 property. Loads only after analytics consent (lib/consent/analytics.ts).
   // PUBLIC_GA_ID can override it, e.g. a test property; PUBLIC_GA_ID=off turns GA off.
-  gaId: import.meta.env.PUBLIC_GA_ID?.trim() || 'G-MH7HJD691L',
+  gaId: import.meta.env.PUBLIC_GA_ID?.trim() || 'G-16WF2MW333',
   area: 'Vrchlabí · Krkonoše',
+  // Laundry address, confirmed by the owner on 2026-10-23 (footer, /kontakt/, legal pages, JSON-LD).
+  address: { street: 'Kpt. Jaroše 496', postalCode: '543 01', city: 'Vrchlabí' },
   // IČO taken from the Refresh 02 design. Confirm against the business register before launch.
   companyId: '05593034',
   credit: 'Jonas Rech',
   creditUrl: 'https://www.jonasrech.com',
-  description: 'Prádelenský servis pro hotely, penziony, apartmány, chaty a gastro provozy. Domluvte si praní a svoz prádla v Krkonoších.',
+  description: 'Profesionální praní, sušení a mandlování prádla pro hotely, penziony a gastro provozy. Pravidelný svoz a rozvoz prádla po Krkonoších.',
 };
+
+export const addressLine = `${site.address.street}, ${site.address.postalCode} ${site.address.city}`;
 
 export const navigation = [
   { label: 'Služby', href: '#sluzby' },
@@ -27,9 +31,9 @@ export const navigation = [
 ];
 
 export const services = [
-  { title: 'Svoz a rozvoz', icon: 'truck', text: 'Režim svozu domluvíme podle vašeho provozu. Sezónní vytížení a případné navýšení kapacity probereme předem.' },
-  { title: 'Praní a mandlování', icon: 'shirt', text: 'Prádlo pravidelně vypereme, usušíme a vyžehlíme na mandlu, aby bylo připravené k použití.' },
-  { title: 'Připravené prádlo', icon: 'package-check', text: 'Prádlo vracíme přehledně složené a připravené pro další hosty i provoz. Ušetří čas personálu při přípravě.' },
+  { title: 'Svoz a rozvoz', icon: 'truck', text: 'Prádlo vyzvedneme přímo u vás a čisté ho zase přivezeme. Frekvenci svozu přizpůsobíme vašemu provozu.' },
+  { title: 'Praní a mandlování', icon: 'shirt', text: 'Prádlo profesionálně vypereme, usušíme a vymandlujeme, aby bylo čisté a připravené k dalšímu použití.' },
+  { title: 'Skládání a příprava prádla', icon: 'package-check', text: 'Čisté prádlo pečlivě složíme a připravíme k předání. Vašemu personálu tak ušetříme čas při přípravě pokojů.' },
 ] as const;
 
 export const process = [

@@ -16,6 +16,7 @@ const placeNames = places.map(place => place.name).join(', ');
 const { width, height } = illustrationFrame;
 ---
 <figure class:list={['coverage-map-image', className]} data-reveal="card" data-coverage-map>
+  <div class="map-canvas">
   <Picture
     src={mapImage}
     formats={['avif', 'webp']}
@@ -42,12 +43,16 @@ const { width, height } = illustrationFrame;
     })}
   </svg>
   <CoverageMapTooltip />
+  </div>
   <figcaption class="map-note">Ilustrační mapa, nikoli hranice svozu.</figcaption>
 </figure>
 <style>
-  .coverage-map-image { position: relative; margin: 0; width: 100%; aspect-ratio: 1663 / 945; border-radius: 8px; overflow: hidden; background: #f3f5f3; }
+  /* Card (krkonose_new): the map on top, a quiet disclaimer strip under it. The canvas is the first
+     child and spans the full width, so hotspot and tooltip maths against the figure still hold. */
+  .coverage-map-image { position: relative; margin: 0; width: 100%; display: flex; flex-direction: column; border-radius: var(--card-radius); overflow: hidden; background: #f3f5f3; border: 1px solid var(--card-line); box-shadow: 0 8px 24px #163f300d; }
+  .map-canvas { position: relative; width: 100%; aspect-ratio: 1663 / 945; }
   .coverage-map-image :global(img) { display: block; width: 100%; height: 100%; object-fit: cover; }
-  .map-note { position: absolute; left: 32px; bottom: 20px; margin: 0; color: var(--pk-muted); font-size: 12px; line-height: 1.4; pointer-events: none; }
+  .map-note { flex: 1 0 auto; display: flex; align-items: center; margin: 0; padding: 11px 20px; background: #f7f9f6; border-top: 1px solid var(--card-line); color: #60756d; font-size: 12px; line-height: 1.4; }
   /* Same box and aspect ratio as the image, so viewBox units are image pixels. */
   .map-hotspots { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
   .hotspot { cursor: pointer; outline: none; -webkit-tap-highlight-color: transparent; }

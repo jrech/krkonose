@@ -14,7 +14,7 @@ export const segments = [
     text: 'Od pokojů po wellness. Postaráme se o hotelové prádlo a svoz přizpůsobíme chodu vašeho provozu.',
     textiles: ['Ložní prádlo', 'Ručníky', 'Osušky', 'Župany', 'Wellness textil'], textilesVerified: false,
     cta: 'Poptat praní pro hotel',
-    image: hotel, focus: '30%', alt: 'Ilustrační fotografie hotelové budovy v horském městě',
+    image: hotel, focus: '50%', alt: 'Ilustrační fotografie hotelové budovy v horském městě',
   },
   {
     id: 'penziony', category: 'Menší ubytování', title: 'Penziony / apartmány', inquiry: 'Penzion / apartmány',

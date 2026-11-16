@@ -24,6 +24,11 @@ const fromMunicipality: Record<MunicipalityStatus, CoverageStatus> = {
 export function checkCoverage(address: ResolvedAddress, area: ServiceAreaConfig): CoverageResult {
   const areaVersion = area.version || undefined;
   if (!Number.isFinite(address.lat) || !Number.isFinite(address.lng)) return { status: 'unknown', reason: 'lookup_failed', areaVersion };
+  // Never suggested by the form, but a hand-made request must not be told "manual review" for Brno.
+  const { searchArea: box } = area;
+  if (address.lng < box.west || address.lng > box.east || address.lat < box.south || address.lat > box.north) {
+    return { status: 'unavailable', reason: 'outside_search_area', areaVersion };
+  }
   const areaApproved = area.status === 'approved' && area.zones.features.length > 0;
 
   if (areaApproved) {

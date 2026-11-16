@@ -34,6 +34,9 @@ export interface MunicipalityRule {
   approvedAt?: string;
 }
 
+/** Where the address search looks: Krkonoše and Podkrkonoší with a margin. Addresses elsewhere are not suggested. */
+export interface SearchArea { west: number; east: number; south: number; north: number }
+
 export interface ServiceAreaConfig {
   status: 'not_configured' | 'draft' | 'approved';
   /** Bump on every boundary change, e.g. '2026-11-01'. Returned with each check for support. */
@@ -44,6 +47,8 @@ export interface ServiceAreaConfig {
   zones: { type: 'FeatureCollection'; features: ServiceZone[] };
   /** Postcode exceptions (PSČ, e.g. '543 01'); they override zones. */
   postcodeRules: Partial<Record<'available' | 'manual_review' | 'unavailable', string[]>>;
+  /** Address suggestions are limited to this box (WGS 84); the form says "nesvážíme" for everything else. */
+  searchArea: SearchArea;
   /** Result for an address outside every zone: 'manual_review' = Individuálně po domluvě, 'unavailable' = Mimo oblast. */
   outsideZones: 'manual_review' | 'unavailable';
   /** Every town on the map must have a rule; other municipalities may be added by slug. */
@@ -62,6 +67,8 @@ export const serviceArea: ServiceAreaConfig = {
   // The whole area around the confirmed places counts as "ano" (tools/service-area/build-zone.mjs).
   zones: { type: 'FeatureCollection', features: [regularPickupZone] },
   postcodeRules: {},
+  // Zone 15.40–15.91 E / 50.54–50.77 N plus ~15–20 km: Podkrkonoší to Jičín, Semily and Dvůr Králové, not Jablonec.
+  searchArea: { west: 15.25, east: 16.15, south: 50.40, north: 50.92 },
   // Not sure = no refusal: the visitor is sent to the inquiry form instead of being turned away.
   outsideZones: 'manual_review',
   municipalities: {

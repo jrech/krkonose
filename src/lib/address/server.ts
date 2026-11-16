@@ -8,7 +8,8 @@ export interface LookupOptions { signal?: AbortSignal; limit: number }
 
 /** Query → suggestions. Implementations must restrict results to Czech addresses (country = cz). */
 export interface AddressAutocompleteProvider {
-  suggest(query: string, options: LookupOptions): Promise<AddressSuggestion[]>;
+  /** Only addresses inside the search area; `outsideArea` is true when matches existed but all lay outside it. */
+  suggest(query: string, options: LookupOptions): Promise<{ suggestions: AddressSuggestion[]; outsideArea: boolean }>;
 }
 
 /** Suggestion id → coordinates and normalised address. Return null when the id cannot be resolved. */
@@ -53,13 +54,13 @@ function isCzech(address: ResolvedAddress) {
 
 export function createAddressApi({ autocomplete, resolver, checker }: AddressApiDeps) {
   return {
-    /** GET ?q=… → { suggestions } */
+    /** GET ?q=… → { suggestions, outsideArea } */
     async suggest(request: Request) {
       const query = cleanQuery(new URL(request.url).searchParams.get('q'));
       if (!query) return json({ error: 'invalid_query' }, 400);
       try {
-        const suggestions = await autocomplete.suggest(query, { signal: withTimeout(request.signal), limit: SUGGESTION_LIMIT });
-        return json({ suggestions: suggestions.slice(0, SUGGESTION_LIMIT) });
+        const { suggestions, outsideArea } = await autocomplete.suggest(query, { signal: withTimeout(request.signal), limit: SUGGESTION_LIMIT });
+        return json({ suggestions: suggestions.slice(0, SUGGESTION_LIMIT), outsideArea });
       } catch (error) {
         console.error('[address] suggest failed', error);
         return json({ error: 'provider_failed' }, 502);
