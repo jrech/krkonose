@@ -31,9 +31,9 @@ export const navigation = [
 ];
 
 export const services = [
-  { title: 'Svoz a rozvoz', icon: 'truck', text: 'Režim svozu domluvíme podle vašeho provozu. Sezónní vytížení a případné navýšení kapacity probereme předem.' },
-  { title: 'Praní a mandlování', icon: 'shirt', text: 'Prádlo pravidelně vypereme, usušíme a vyžehlíme na mandlu, aby bylo připravené k použití.' },
-  { title: 'Připravené prádlo', icon: 'package-check', text: 'Prádlo vracíme přehledně složené a připravené pro další hosty i provoz. Ušetří čas personálu při přípravě.' },
+  { title: 'Svoz a rozvoz', icon: 'truck', text: 'Prádlo vyzvedneme přímo u vás a čisté ho zase přivezeme. Frekvenci svozu přizpůsobíme vašemu provozu.' },
+  { title: 'Praní a mandlování', icon: 'shirt', text: 'Prádlo profesionálně vypereme, usušíme a vymandlujeme, aby bylo čisté a připravené k dalšímu použití.' },
+  { title: 'Skládání a příprava prádla', icon: 'package-check', text: 'Čisté prádlo pečlivě složíme a připravíme k předání. Vašemu personálu tak ušetříme čas při přípravě pokojů.' },
 ] as const;
 
 export const process = [
